@@ -1,6 +1,6 @@
 object frmClientes: TfrmClientes
-  Left = 364
-  Top = 219
+  Left = 456
+  Top = 207
   Width = 663
   Height = 376
   Caption = 'Clientes'
@@ -535,7 +535,7 @@ object frmClientes: TfrmClientes
       object edtComplemento: TEdit
         Left = 264
         Top = 52
-        Width = 337
+        Width = 345
         Height = 21
         TabOrder = 3
       end
@@ -553,7 +553,7 @@ object frmClientes: TfrmClientes
       object edtCidade: TEdit
         Left = 176
         Top = 128
-        Width = 121
+        Width = 433
         Height = 21
         TabOrder = 5
       end
