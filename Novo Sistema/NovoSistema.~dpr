@@ -5,8 +5,7 @@ uses
   UPrincipalView in 'View\UPrincipalView.pas' {fmPrincipal},
   UCriptografiaUtil in 'Model\Util\UCriptografiaUtil.pas',
   UClassFuncoes in 'Model\Util\UClassFuncoes.pas',
-  UConexao in 'Model\BD\UConexao.pas',
-  Unit1 in 'Model\BD\Unit1.pas' {frmClientes};
+  UConexao in 'Model\BD\UConexao.pas';
 
 {$R *.res}
 

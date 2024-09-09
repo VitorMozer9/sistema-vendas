@@ -1,13 +1,16 @@
-unit UPrincipalView;
+unit UPrincipalView;   //nome da unit
 
 interface
 
-uses
+uses //units q serão utilizadas na classe
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Menus;
+  Dialogs, Menus, ComCtrls, ExtCtrls, pngimage;
 
 type
-  TfmPrincipal = class(TForm)
+  TfmPrincipal = class(TForm)//nome da classe
+  { componentes visuais
+    lembre-se de renomear todos os componentes que forem adicionados
+  }
     menMenu: TMainMenu;
     menCadastros: TMenuItem;
     menClientes: TMenuItem;
@@ -17,7 +20,11 @@ type
     menMovimentos: TMenuItem;
     menRelVendas: TMenuItem;
     menSair: TMenuItem;
+    stbBarraStatus: TStatusBar;
+    Image1: TImage;
+    //Métodos criados ate o momento
     procedure menSairClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -25,15 +32,23 @@ type
   end;
 
 var
-  fmPrincipal: TfmPrincipal;
+  fmPrincipal: TfmPrincipal;    //variavel do formulario
 
-implementation
+implementation    //codigo fonte
+  uses
+    UConexao; //exemplo de herança, chamou a "classe" Uconexoes
 
 {$R *.dfm}
 
 procedure TfmPrincipal.menSairClick(Sender: TObject);
 begin
   Close; //fecha o sistema
+end;
+
+procedure TfmPrincipal.FormShow(Sender: TObject);
+begin
+  stbBarraStatus.Panels[0].Text :=
+      'Caminho BD: ' + TConexao.get.getCaminhoBanco;
 end;
 
 end.
