@@ -1,6 +1,6 @@
 object frmClientes: TfrmClientes
-  Left = 433
-  Top = 168
+  Left = 364
+  Top = 219
   Width = 663
   Height = 376
   Caption = 'Clientes'
@@ -362,8 +362,8 @@ object frmClientes: TfrmClientes
     object lblCodigo: TLabel
       Left = 16
       Top = 19
-      Width = 41
-      Height = 17
+      Width = 33
+      Height = 13
       Caption = 'C'#243'digo'
     end
     object lblCPFCNPJ: TLabel
@@ -418,7 +418,7 @@ object frmClientes: TfrmClientes
       Left = 504
       Top = 20
       Width = 120
-      Height = 26
+      Height = 21
       EditMask = '000\.000\.000\-00;1;_'
       MaxLength = 14
       TabOrder = 3
@@ -551,7 +551,7 @@ object frmClientes: TfrmClientes
           'MG')
       end
       object edtCidade: TEdit
-        Left = 168
+        Left = 176
         Top = 128
         Width = 121
         Height = 21
