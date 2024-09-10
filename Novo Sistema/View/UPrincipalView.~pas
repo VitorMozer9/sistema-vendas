@@ -25,6 +25,7 @@ type
     //Métodos criados ate o momento
     procedure menSairClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure menClientesClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -36,7 +37,7 @@ var
 
 implementation    //codigo fonte
   uses
-    UConexao; //exemplo de herança, chamou a "classe" Uconexoes
+    UConexao, UClienteView; //exemplo de herança, chamou a "classe" Uconexoes
 
 {$R *.dfm}
 
@@ -49,6 +50,22 @@ procedure TfmPrincipal.FormShow(Sender: TObject);
 begin
   stbBarraStatus.Panels[0].Text :=
       'Caminho BD: ' + TConexao.get.getCaminhoBanco;
+end;
+
+procedure TfmPrincipal.menClientesClick(Sender: TObject);
+begin
+  try
+     Screen.Cursor := crHourGlass;
+
+      if frmClientes  = nil then
+         frmClientes := TfrmClientes.Create(Application);
+
+      frmClientes.Show;
+  finally
+      Screen.Cursor := crDefault;
+
+  end;
+
 end;
 
 end.
