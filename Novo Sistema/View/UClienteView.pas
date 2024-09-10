@@ -10,10 +10,10 @@ type
   TfrmClientes = class(TForm)
     stbBarraStatus: TStatusBar;
     pnlBotoes: TPanel;
-    chkAtivo: TPanel;
+    pnlArea: TPanel;
     lblCodigo: TLabel;
     edtCodigo: TEdit;
-    CheckBox1: TCheckBox;
+    chkAtivo: TCheckBox;
     rdgTipoPessoa: TRadioGroup;
     lblCPFCNPJ: TLabel;
     edtCPFCNPJ: TMaskEdit;
@@ -44,6 +44,15 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnIncluirClick(Sender: TObject);
+    procedure btnAlterarClick(Sender: TObject);
+    procedure btnExcluirClick(Sender: TObject);
+    procedure btnConsultarClick(Sender: TObject);
+    procedure btnListarClick(Sender: TObject);
+    procedure btnPesquisarClick(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
+    procedure btnSairClick(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -170,6 +179,101 @@ begin
 
    btnCancelar.Enabled :=
       vEstadoTela in [etIncluir, etAlterar, etExcluir, etConsultar];
+
+   case vEstadoTela of
+      etPadrao:
+      begin
+          CamposEnable(False);
+          LimpaTela;
+
+          stbBarraStatus.Panels[0].Text := EmptyStr;
+          stbBarraStatus.Panels[1].Text := EmptyStr;
+
+          if (frmClientes <> nil) and
+             (frmClientes.Active) and
+             (btnIncluir.CanFocus) then
+             btnIncluir.SetFocus;
+
+          Application.ProcessMessages;
+      end;
+
+      etIncluir:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Inclusão';
+         CamposEnable(True);
+
+         edtCodigo.Enabled := False;
+
+         chkAtivo.Checked := True;
+
+         if edtNome.CanFocus then
+            edtNome.SetFocus;
+
+      end;
+
+
+   end;
+
+end;
+procedure TfrmClientes.btnIncluirClick(Sender: TObject);
+begin
+   vEstadoTela := etIncluir;
+   DefineEstadoTela;
+end;
+
+procedure TfrmClientes.btnAlterarClick(Sender: TObject);
+begin
+   vEstadoTela := etAlterar;
+   DefineEstadoTela;
+end;
+
+procedure TfrmClientes.btnExcluirClick(Sender: TObject);
+begin
+   vEstadoTela := etExcluir;
+   DefineEstadoTela;
+end;
+
+procedure TfrmClientes.btnConsultarClick(Sender: TObject);
+begin
+   vEstadoTela  := etConsultar;
+   DefineEstadoTela;
+end;
+
+procedure TfrmClientes.btnListarClick(Sender: TObject);
+begin
+   vEstadoTela := etListar;
+   DefineEstadoTela;
+end;
+
+procedure TfrmClientes.btnPesquisarClick(Sender: TObject);
+begin
+   vEstadoTela := etPesquisar;
+   DefineEstadoTela;
+end;
+
+procedure TfrmClientes.btnConfirmarClick(Sender: TObject);
+begin
+   //Confirmar
+end;
+
+procedure TfrmClientes.btnCancelarClick(Sender: TObject);
+begin
+   vEstadoTela := etPadrao;
+   DefineEstadoTela;
+end;
+
+procedure TfrmClientes.btnSairClick(Sender: TObject);
+begin //para n rolar de fechar a tela sem querer
+  if (vEstadoTela <> etPadrao) then
+  begin
+     if (TMessageUtil.Pergunta('Deseja realmente abortar esta operação?')) then
+     begin
+       vEstadoTela  := etPadrao;
+       DefineEstadoTela;
+     end;
+  end
+  else;
+   Close;
 end;
 
 end.
