@@ -41,8 +41,12 @@ type
     btnConfirmar: TBitBtn;
     btnCancelar: TBitBtn;
     btnSair: TBitBtn;
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
+    vKey : Word;
+    
   public
     { Public declarations }
   end;
@@ -52,6 +56,31 @@ var
 
 implementation
 
+uses
+   uMessageUtil, Consts;
+
 {$R *.dfm}
+
+procedure TfrmClientes.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   vKey := Key;
+
+   case vKey of
+       VK_RETURN: //correspondente a tecla <Enter> toda vez q pressionar o enter
+       begin   //sistema vai pro proximo campo, pelo comando perform
+          Perform(WM_NextDlgCtl, 0, 0); //passa para o proximo campo do formulario
+       end;
+
+       VK_ESCAPE: // correspondente a tecla <ESC>
+       begin
+          if (TMessageUtil.Pergunta(
+             'Deseja realmente abortar esta opreação?')) then
+             Close;   //fecha o formulario
+       end;
+
+    end;
+
+end;
 
 end.

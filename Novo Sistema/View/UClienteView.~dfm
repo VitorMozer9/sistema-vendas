@@ -1,6 +1,6 @@
 object frmClientes: TfrmClientes
-  Left = 364
-  Top = 219
+  Left = 456
+  Top = 207
   Width = 663
   Height = 376
   Caption = 'Clientes'
@@ -10,7 +10,12 @@ object frmClientes: TfrmClientes
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
+  FormStyle = fsMDIChild
+  KeyPreview = True
   OldCreateOrder = False
+  Position = poScreenCenter
+  Visible = True
+  OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
   object stbBarraStatus: TStatusBar
@@ -417,7 +422,7 @@ object frmClientes: TfrmClientes
     object edtCPFCNPJ: TMaskEdit
       Left = 504
       Top = 20
-      Width = 120
+      Width = 113
       Height = 21
       EditMask = '000\.000\.000\-00;1;_'
       MaxLength = 14
@@ -427,7 +432,7 @@ object frmClientes: TfrmClientes
     object edtNome: TEdit
       Left = 56
       Top = 51
-      Width = 569
+      Width = 561
       Height = 21
       TabOrder = 4
     end
@@ -535,7 +540,7 @@ object frmClientes: TfrmClientes
       object edtComplemento: TEdit
         Left = 264
         Top = 52
-        Width = 337
+        Width = 345
         Height = 21
         TabOrder = 3
       end
@@ -553,7 +558,7 @@ object frmClientes: TfrmClientes
       object edtCidade: TEdit
         Left = 176
         Top = 128
-        Width = 121
+        Width = 433
         Height = 21
         TabOrder = 5
       end

@@ -6,7 +6,10 @@ uses
   UCriptografiaUtil in 'Model\Util\UCriptografiaUtil.pas',
   UClassFuncoes in 'Model\Util\UClassFuncoes.pas',
   UConexao in 'Model\BD\UConexao.pas',
-  Unit1 in 'Model\BD\Unit1.pas' {frmClientes};
+  UClienteView in 'View\UClienteView.pas' {frmClientes},
+  uMessageUtil in 'Model\Util\uMessageUtil.pas',
+  Consts in 'Model\Util\Consts.pas',
+  UEnumerationUtil in 'Model\Util\UEnumerationUtil.pas';
 
 {$R *.res}
 

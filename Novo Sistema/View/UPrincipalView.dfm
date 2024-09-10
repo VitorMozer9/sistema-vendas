@@ -1,6 +1,6 @@
 object fmPrincipal: TfmPrincipal
-  Left = 177
-  Top = 188
+  Left = 207
+  Top = 198
   Width = 928
   Height = 480
   Caption = 'Novo Sistema'
@@ -868,6 +868,7 @@ object fmPrincipal: TfmPrincipal
       Caption = 'Cadastros'
       object menClientes: TMenuItem
         Caption = 'Clientes'
+        OnClick = menClientesClick
       end
       object menProdutos: TMenuItem
         Caption = 'Produtos'

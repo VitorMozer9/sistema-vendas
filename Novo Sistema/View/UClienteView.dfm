@@ -10,7 +10,13 @@ object frmClientes: TfrmClientes
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
+  FormStyle = fsMDIChild
+  KeyPreview = True
   OldCreateOrder = False
+  Position = poScreenCenter
+  Visible = True
+  OnClose = FormClose
+  OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
   object stbBarraStatus: TStatusBar
@@ -417,7 +423,7 @@ object frmClientes: TfrmClientes
     object edtCPFCNPJ: TMaskEdit
       Left = 504
       Top = 20
-      Width = 120
+      Width = 113
       Height = 21
       EditMask = '000\.000\.000\-00;1;_'
       MaxLength = 14
@@ -427,7 +433,7 @@ object frmClientes: TfrmClientes
     object edtNome: TEdit
       Left = 56
       Top = 51
-      Width = 569
+      Width = 561
       Height = 21
       TabOrder = 4
     end

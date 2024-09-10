@@ -5,7 +5,10 @@ uses
   UPrincipalView in 'View\UPrincipalView.pas' {fmPrincipal},
   UCriptografiaUtil in 'Model\Util\UCriptografiaUtil.pas',
   UClassFuncoes in 'Model\Util\UClassFuncoes.pas',
-  UConexao in 'Model\BD\UConexao.pas';
+  UConexao in 'Model\BD\UConexao.pas',
+  UClienteView in 'View\UClienteView.pas' {frmClientes},
+  uMessageUtil in 'Model\Util\uMessageUtil.pas',
+  Consts in 'Model\Util\Consts.pas';
 
 {$R *.res}
 

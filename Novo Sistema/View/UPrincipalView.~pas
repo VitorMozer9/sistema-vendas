@@ -1,13 +1,16 @@
-unit UPrincipalView;
+unit UPrincipalView;   //nome da unit
 
 interface
 
-uses
+uses //units q serão utilizadas na classe
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Menus, ComCtrls, ExtCtrls, pngimage;
 
 type
-  TfmPrincipal = class(TForm)
+  TfmPrincipal = class(TForm)//nome da classe
+  { componentes visuais
+    lembre-se de renomear todos os componentes que forem adicionados
+  }
     menMenu: TMainMenu;
     menCadastros: TMenuItem;
     menClientes: TMenuItem;
@@ -19,6 +22,7 @@ type
     menSair: TMenuItem;
     stbBarraStatus: TStatusBar;
     Image1: TImage;
+    //Métodos criados ate o momento
     procedure menSairClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
@@ -28,11 +32,11 @@ type
   end;
 
 var
-  fmPrincipal: TfmPrincipal;
+  fmPrincipal: TfmPrincipal;    //variavel do formulario
 
-implementation
+implementation    //codigo fonte
   uses
-    UConexao;
+    UConexao; //exemplo de herança, chamou a "classe" Uconexoes
 
 {$R *.dfm}
 
