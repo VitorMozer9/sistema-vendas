@@ -53,6 +53,8 @@ type
     procedure btnConfirmarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
     procedure btnSairClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -274,6 +276,16 @@ begin //para n rolar de fechar a tela sem querer
   end
   else;
    Close;
+end;
+
+procedure TfrmClientes.FormCreate(Sender: TObject);
+begin
+   vEstadoTela := etPadrao;
+end;
+
+procedure TfrmClientes.FormShow(Sender: TObject);
+begin
+   DefineEstadoTela;
 end;
 
 end.
