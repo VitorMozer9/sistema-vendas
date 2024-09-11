@@ -55,6 +55,8 @@ type
     procedure btnSairClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     vKey : Word;
@@ -65,6 +67,16 @@ type
     procedure CamposEnable(pOpcao: Boolean);
     procedure LimpaTela; //não precisa de parametro pois a unica função é limpar a tela
     procedure DefineEstadoTela;
+
+    function ProcessaConfirmacao : Boolean; //função sem parametro com retorno T or F
+    function ProcessaInclusao    : Boolean;
+    function ProcessaCliente     : Boolean;
+
+    function ProcessaPessoa      : Boolean;
+    function ProcessaEndereco    : Boolean;  //todos esses metodos tem como função
+                                             //capturar a informação dos metodos(leitura cin)
+                                             // e passar esses resultados para os objetos
+
   public
     { Public declarations }
   end;
@@ -266,7 +278,7 @@ end;
 
 procedure TfrmClientes.btnConfirmarClick(Sender: TObject);
 begin
-   //Confirmar
+   ProcessaConfirmacao;
 end;
 
 procedure TfrmClientes.btnCancelarClick(Sender: TObject);
@@ -299,4 +311,127 @@ begin
    DefineEstadoTela;
 end;
 
+procedure TfrmClientes.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);      //quando vc pressiona a tecla e keyUp é quando vc solta a tecla, quando não esta mais clicada
+begin
+   vKey := VK_CLEAR; //LIMPA A VARIAVEL QUE ESTAVA NO KEYDOWN
+end;
+
+function TfrmClientes.ProcessaConfirmacao: Boolean;
+begin
+   Result := False;
+
+   try
+      case vEstadoTela of
+         etIncluir: Result := ProcessaInclusao;
+
+      end;
+
+      if not Result then
+         Exit;
+   except
+      on E: Exception do
+         TMessageUtil.Alerta(E.Message);
+
+   end;
+
+   Result := True;
+end;
+
+function TfrmClientes.ProcessaInclusao: Boolean;
+begin
+
+   try
+     Result := False;
+
+     if ProcessaCliente then
+     begin
+        TMessageUtil.Informacao(
+        'Cliente cadastrado com sucesso'#13+
+           'Código cadastrado: ');
+
+        vEstadoTela := etPadrao;
+        DefineEstadoTela;
+
+        Result := True;
+     end;
+
+   except
+      on E: Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao incluir os dados do cliente[View]: '#13 +
+            e.Message);
+
+      end;
+   end;
+
+end;
+
+function TfrmClientes.ProcessaCliente: Boolean;
+begin
+
+   try
+     if(ProcessaPessoa) and
+       (ProcessaEndereco) then
+       begin
+         //Gravação no Banco de Dados
+
+         Result := True;
+       end;
+
+
+
+
+   except
+      on E : Exception do
+         Raise Exception.Create(
+            'Falha ao gravar os dados do cliente [View]: '#13+
+             e.Message );
+
+   end;  
+end;
+
+function TfrmClientes.ProcessaPessoa: Boolean;
+begin
+   try
+      Result := False;
+
+//      if not ValidaCliente then
+//      Exit;
+
+      Result := True;
+
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+         'Falha ao processar os dados da Pessoa[View]'#13 +
+         e.Message);
+      end;
+
+
+   end;  
+
+end;
+
+function TfrmClientes.ProcessaEndereco: Boolean;
+begin
+   try
+     Result := False;
+
+     Result := True;
+
+   except
+     on E : Exception do
+     begin
+        Raise Exception.Create(
+        'Falha ao preencher os dados de endereço do cliente[View]'#13 +
+        e.Message);
+     end;
+
+   end;  
+end;
+
 end.
+

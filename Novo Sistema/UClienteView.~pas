@@ -92,13 +92,24 @@ begin
 
        VK_ESCAPE: //correspondente a tecla <ESC>
        begin
-          if (TMessageUtil.Pergunta(
-             'Deseja realmente abortar esta opreação?')) then
-             Close;   //fecha o formulario
+          if (vEstadoTela <> etPadrao) then
+          begin
+             if(TMessageUtil.Pergunta(
+                'Deseja realmente abortar esta operação?')) then
+             begin
+               vEstadoTela := etPadrao;
+               DefineEstadoTela;
+             end;
+          end
+
+          else
+          begin
+            if (TMessageUtil.Pergunta(
+               'Deseja sair da rotina?')) then
+               Close;   //fecha o formulario
+          end;
        end;
-
     end;
-
 end;
 
 procedure TfrmClientes.FormClose(Sender: TObject;
@@ -265,7 +276,7 @@ begin
 end;
 
 procedure TfrmClientes.btnSairClick(Sender: TObject);
-begin //para n rolar de fechar a tela sem querer
+begin //para n rolar de fechar a tela sem querer e perder os dados
   if (vEstadoTela <> etPadrao) then
   begin
      if (TMessageUtil.Pergunta('Deseja realmente abortar esta operação?')) then

@@ -1,6 +1,6 @@
 object frmClientes: TfrmClientes
-  Left = 417
-  Top = 120
+  Left = 586
+  Top = 148
   Width = 663
   Height = 376
   Caption = 'Clientes'
@@ -18,6 +18,7 @@ object frmClientes: TfrmClientes
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
