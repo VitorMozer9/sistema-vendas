@@ -54,13 +54,14 @@ end;
 
 procedure TfmPrincipal.menClientesClick(Sender: TObject);
 begin
-  try
-     Screen.Cursor := crHourGlass;
+  try       // try e finally são usados para executar um bloco
+           //de codigos com segurança
+     Screen.Cursor := crHourGlass;  //chama a tela de clientes
 
       if frmClientes  = nil then
          frmClientes := TfrmClientes.Create(Application);
 
-      frmClientes.Show;
+      frmClientes.Show;  //mostra a tela de clientes
   finally
       Screen.Cursor := crDefault;
 
