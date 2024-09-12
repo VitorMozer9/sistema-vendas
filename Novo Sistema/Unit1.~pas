@@ -58,7 +58,7 @@ end;
 
 procedure TColPessoa.Adiciona(pPessoa: TPessoa);
 begin
-   Self.Add(TPessoa(pPessoa));
+
 end;
 
 function TColPessoa.Retorna(pIndex: Integer): TPessoa;
