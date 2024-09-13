@@ -10,7 +10,10 @@ uses
   uMessageUtil in 'Model\Util\uMessageUtil.pas',
   Consts in 'Model\Util\Consts.pas',
   UEnumerationUtil in 'Model\Util\UEnumerationUtil.pas',
-  Unit1 in 'Unit1.pas';
+  UPessoa in 'Model\UPessoa.pas',
+  UPessoaDAO in 'Model\UPessoaDAO.pas',
+  UGenericDAO in 'Model\BD\UGenericDAO.pas',
+  UCliente in 'Model\UCliente.pas';
 
 {$R *.res}
 

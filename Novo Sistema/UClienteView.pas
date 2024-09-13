@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons, Mask , UEnumerationUtil;
+  Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons, Mask , UEnumerationUtil,
+  UCliente;
 
 type
   TfrmClientes = class(TForm)
@@ -63,6 +64,7 @@ type
 
     //variaveis de classe
     vEstadoTela : TEstadoTela;
+    vObjCliente : TCliente;
 
     procedure CamposEnable(pOpcao: Boolean);
     procedure LimpaTela; //não precisa de parametro pois a unica função é limpar a tela
@@ -376,6 +378,7 @@ begin
        (ProcessaEndereco) then
        begin
          //Gravação no Banco de Dados
+         
 
          Result := True;
        end;
@@ -399,6 +402,27 @@ begin
 
 //      if not ValidaCliente then
 //      Exit;
+
+      if vEstadoTela = etIncluir then
+      begin
+         if vObjCliente = nil then
+            vObjCliente := TCliente.Create;
+      end
+      else
+      if vEstadoTela = etAlterar then
+      begin
+         if vObjCliente = nil then
+            Exit;
+      end;
+
+      if (vObjCliente = nil) then
+            Exit;
+
+      vObjCliente.Tipo_Pessoa         := 0; //representa um cliente
+      vObjCliente.Nome                := edtNome.Text;
+      vObjCliente.Fisica_Juridica     :=  rdgTipoPessoa.ItemIndex;
+      vObjCliente.Ativo               := chkAtivo.Checked;
+      vObjCliente.IdentificadorPessoa := edtCPFCNPJ.Text;
 
       Result := True;
 

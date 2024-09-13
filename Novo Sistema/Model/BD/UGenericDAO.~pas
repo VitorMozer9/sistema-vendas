@@ -35,7 +35,7 @@ uses
 type
    TGenericDAO = class
    protected
-      vClass: TClass;             //pessoadao tem acesso a todas essas variaveis
+      vClass: TClass;
       vEntidade: String;
       vConexao: TSQLConnection;
 

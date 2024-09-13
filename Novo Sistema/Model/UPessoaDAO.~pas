@@ -10,10 +10,12 @@ type
 
   TPessoaDAO = class(TGenericDAO)
      public
-       constructor Create(pConexao : TSQLConnesction);
+       constructor Create(pConexao : TSQLConnection);
        function Insere(pPessoa : TPessoa) : Boolean; //a variavel pPessoa terá todos os atributos da classe pessoa
        function InsereLista(pColPessoa : TColPessoa) : Boolean;
        function Atualiza(pPessoa : TPessoa; pCondicao : String) : Boolean;
+       function Retorna(pCondicao : String) : TPessoa;
+       function RetornaLista(pCondicao : String = '') : TColPessoa; 
 
   end;
 
@@ -27,7 +29,7 @@ begin
 
 end;
 
-constructor TPessoaDAO.Create(pConexao: TSQLConnesction);
+constructor TPessoaDAO.Create(pConexao: TSQLConnection);
 begin
    inherited  Create;
    vEntidade := 'PESSOA';
@@ -44,6 +46,11 @@ end;
 function TPessoaDAO.InsereLista(pColPessoa: TColPessoa): Boolean;
 begin
    Result := inherited InsereLista(pColPessoa);
+end;
+
+function TPessoaDAO.Retorna(pCondicao: String): TPessoa;
+begin
+   Result := TPeessoa(inherited Retorna(pCondicao));
 end;
 
 end.

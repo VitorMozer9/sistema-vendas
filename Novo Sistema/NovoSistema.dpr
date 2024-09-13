@@ -12,7 +12,9 @@ uses
   UEnumerationUtil in 'Model\Util\UEnumerationUtil.pas',
   UPessoa in 'Model\UPessoa.pas',
   UPessoaDAO in 'Model\UPessoaDAO.pas',
-  UGenericDAO in 'Model\BD\UGenericDAO.pas';
+  UGenericDAO in 'Model\BD\UGenericDAO.pas',
+  UCliente in 'Model\UCliente.pas',
+  UPessoaController in 'Controller\UPessoaController.pas';
 
 {$R *.res}
 

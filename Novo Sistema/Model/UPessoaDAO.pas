@@ -15,6 +15,7 @@ type
        function InsereLista(pColPessoa : TColPessoa) : Boolean;
        function Atualiza(pPessoa : TPessoa; pCondicao : String) : Boolean;
        function Retorna(pCondicao : String) : TPessoa;
+       function RetornaLista(pCondicao : String = '') : TColPessoa; 
 
   end;
 
@@ -49,7 +50,12 @@ end;
 
 function TPessoaDAO.Retorna(pCondicao: String): TPessoa;
 begin
-   Result :=
+   Result := TPessoa(inherited Retorna(pCondicao));
+end;
+
+function TPessoaDAO.RetornaLista(pCondicao: String): TColPessoa;
+begin
+   Result := TColPessoa(inherited RetornaLista(pCondicao));
 end;
 
 end.
