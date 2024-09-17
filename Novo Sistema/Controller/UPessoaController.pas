@@ -11,6 +11,8 @@ type
        function GravaPessoa(
                    pPessoa : TPessoa) : Boolean;
 
+       function BuscaPessoa(pID : Integer) : TPessoa;  
+
        function RetornaCondicaoPessoa(pID_Pessoa : Integer) : String;
 
      published
@@ -25,6 +27,32 @@ var
   _instance : TPessoaController;
 
 { TPessoaController }
+
+function TPessoaController.BuscaPessoa(pID: Integer): TPessoa;
+var
+   xPessoaDAO : TPessoaDAO;
+begin
+   try
+      try
+         Result := nil; //o Create cria uma nova instancia criando uma conexão com o banco de dados
+
+         xPessoaDAO := TPessoaDAO.Create(TConexao.getInstance.getConn);
+         Result := xPessoaDAO.Retorna(RetornaCondicaoPessoa(pID));
+      finally
+         if (xPessoaDAO <> nil) then
+            FreeAndNil(xPessoaDAO);
+
+
+      end;
+   except
+      on E: Exception do //O Raise serve para gerar exceções de erro explicitas
+      begin
+         Raise Exception.Create(
+            'Falha ao buscar dados da pessoa. [Controller]' #13 +
+            e.Message);
+      end;
+   end;
+end;
 
 constructor TPessoaController.Create;
 begin

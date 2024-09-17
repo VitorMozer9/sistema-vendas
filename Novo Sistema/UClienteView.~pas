@@ -72,13 +72,14 @@ type
 
     function ProcessaConfirmacao : Boolean; //função sem parametro com retorno T or F
     function ProcessaInclusao    : Boolean;
+    function ProcessaConsulta    : Boolean;
     function ProcessaCliente     : Boolean;
 
     function ProcessaPessoa      : Boolean;
     function ProcessaEndereco    : Boolean;  //todos esses metodos tem como função
                                              //capturar a informação dos metodos(leitura cin)
                                              // e passar esses resultados para os objetos
-
+    function ValidaCliente       : Boolean;
   public
     { Public declarations }
   end;
@@ -238,10 +239,35 @@ begin
 
       end;
 
+      etConsultar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Consulta';
 
+         CamposEnable(False);
+
+         if (edtCodigo.Text <> EmptyStr) then
+         begin
+            edtCodigo.Enabled    := False;
+            btnAlterar.Enabled   := True;
+            btnExcluir.Enabled   := True;
+            btnListar.Enabled    := True;
+            btnConfirmar.Enabled := False;
+
+            if (btnAlterar.CanFocus) then
+               btnAlterar.SetFocus;
+         end
+         else
+         begin
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
+
+            if edtCodigo.CanFocus then
+               edtCodigo.SetFocus;
+         end;
+      end;
    end;
-
 end;
+
 procedure TfrmClientes.btnIncluirClick(Sender: TObject);
 begin
    vEstadoTela := etIncluir;
@@ -325,8 +351,8 @@ begin
 
    try
       case vEstadoTela of
-         etIncluir: Result := ProcessaInclusao;
-
+         etIncluir:   Result := ProcessaInclusao;
+         etConsultar: Result := ProcessaInclusao;
       end;
 
       if not Result then
@@ -372,28 +398,20 @@ end;
 
 function TfrmClientes.ProcessaCliente: Boolean;
 begin
-
    try
-     if(ProcessaPessoa) and
-       (ProcessaEndereco) then
-       begin
+      if(ProcessaPessoa) and (ProcessaEndereco) then
+      begin
          //Gravação no Banco de Dados
          TPessoaController.getInstancia.GravaPessoa(vObjCliente);
-         
-
          Result := True;
-       end;
-
-
-
+      end;
 
    except
       on E : Exception do
          Raise Exception.Create(
-            'Falha ao gravar os dados do cliente [View]: '#13+
-             e.Message );
-
-   end;  
+         'Falha ao gravar os dados do cliente [View]: '#13+
+          e.Message );
+   end;
 end;
 
 function TfrmClientes.ProcessaPessoa: Boolean;
@@ -401,8 +419,8 @@ begin
    try
       Result := False;
 
-//      if not ValidaCliente then
-//      Exit;
+      if not ValidaCliente then
+         exit;
 
       if vEstadoTela = etIncluir then
       begin
@@ -413,16 +431,17 @@ begin
       if vEstadoTela = etAlterar then
       begin
          if vObjCliente = nil then
-            Exit;
+            exit;
       end;
 
-      if (vObjCliente = nil) then
-            Exit;
+      if vObjCliente = nil then
+         exit;
 
       vObjCliente.Tipo_Pessoa         := 0; //representa um cliente
       vObjCliente.Nome                := edtNome.Text;
       vObjCliente.Fisica_Juridica     :=  rdgTipoPessoa.ItemIndex;
       vObjCliente.Ativo               := chkAtivo.Checked;
+//      vObjCliente.IdentificadorPessoa := 'S';
       vObjCliente.IdentificadorPessoa := edtCPFCNPJ.Text;
 
       Result := True;
@@ -456,6 +475,45 @@ begin
      end;
 
    end;  
+end;
+
+function TfrmClientes.ValidaCliente: Boolean;
+begin
+   Result := False;
+
+   if (edtNome.Text = EmptyStr) then
+   begin
+      TMessageUtil.Alerta('Nome do cliente não pode ficar em branco.');
+
+      if edtNome.CanFocus then
+         edtNome.SetFocus;
+      exit;
+   end;
+
+   Result := True;
+end;
+
+function TfrmClientes.ProcessaConsulta: Boolean;
+begin
+   try
+      Result := False;
+
+      if (edtCodigo.Text = EmptyStr) then
+      begin
+         TMessageUtil.Alerta('Codigo do cliente não pode ficar em brando');
+
+         if (edtCodigo.CanFocus) then
+            edtCodigo.SetFocus;
+      end;
+
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+         'Falha ao consultar os dados do cliente [View]'#13 +
+         e.Message);
+      end;
+   end;
 end;
 
 end.
