@@ -527,7 +527,7 @@ begin
          if (edtCodigo.CanFocus) then
             edtCodigo.SetFocus;
 
-         Ex it;
+         Exit;
       end;
 
       DefineEstadoTela;
