@@ -70,6 +70,9 @@ type
     procedure LimpaTela; //não precisa de parametro pois a unica função é limpar a tela
     procedure DefineEstadoTela;
 
+    //Carrega Dados Padrão na Tela
+    procedure CarregaDadosTela;
+
     function ProcessaConfirmacao : Boolean; //função sem parametro com retorno T or F
     function ProcessaInclusao    : Boolean;
     function ProcessaConsulta    : Boolean;
@@ -352,7 +355,7 @@ begin
    try
       case vEstadoTela of
          etIncluir:   Result := ProcessaInclusao;
-         etConsultar: Result := ProcessaInclusao;
+         etConsultar: Result := ProcessaConsulta;
       end;
 
       if not Result then
@@ -500,20 +503,58 @@ begin
 
       if (edtCodigo.Text = EmptyStr) then
       begin
-         TMessageUtil.Alerta('Codigo do cliente não pode ficar em brando');
+         TMessageUtil.Alerta('Codigo do cliente não pode ficar em branco.');
 
          if (edtCodigo.CanFocus) then
             edtCodigo.SetFocus;
+
+         exit;
       end;
+
+      vObjCliente :=
+         TCliente(TPessoaController.getInstancia.BuscaPessoa(
+            StrToIntDef(edtCodigo.Text, 0)));
+
+      if (vObjCliente <> nil) then
+         CarregaDadosTela
+      else
+      begin
+         TMessageUtil.Alerta(
+            'Nenhum cliente encontrado para o código informado.');
+
+         LimpaTela;
+
+         if (edtCodigo.CanFocus) then
+            edtCodigo.SetFocus;
+
+         Ex it;
+      end;
+
+      DefineEstadoTela;
+
+      Result := True;
 
    except
       on E: Exception do
       begin
          raise Exception.Create(
-         'Falha ao consultar os dados do cliente [View]'#13 +
+         'Falha ao consultar os dados do cliente [View]:'#13 +
          e.Message);
       end;
    end;
+end;
+
+procedure TfrmClientes.CarregaDadosTela;
+begin
+   if (vObjCliente = nil) then
+   exit;
+
+   edtCodigo.Text          := IntToStr(vObjCliente.Id);
+   rdgTipoPessoa.ItemIndex := vObjCliente.Fisica_Juridica;
+   edtNome.Text            := vObjCliente.Nome;
+   chkAtivo.Checked        := vObjCliente.Ativo;
+   edtCPFCNPJ.Text         := vObjCliente.IdentificadorPessoa;
+
 end;
 
 end.

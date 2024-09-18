@@ -30,7 +30,7 @@ var
 
 function TPessoaController.BuscaPessoa(pID: Integer): TPessoa;
 var
-   xPessoaDAO : TPessoaDAO;
+   xPessoaDAO : TPessoaDAO; //objeto temporario
 begin
    try
       try
@@ -41,14 +41,12 @@ begin
       finally
          if (xPessoaDAO <> nil) then
             FreeAndNil(xPessoaDAO);
-
-
       end;
    except
       on E: Exception do //O Raise serve para gerar exceções de erro explicitas
       begin
-         Raise Exception.Create(
-            'Falha ao buscar dados da pessoa. [Controller]' #13 +
+         raise Exception.Create(
+            'Falha ao buscar dados da pessoa. [Controller] '#13 +
             e.Message);
       end;
    end;
