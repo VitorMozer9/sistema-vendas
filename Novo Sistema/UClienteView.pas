@@ -77,6 +77,7 @@ type
     function ProcessaConfirmacao : Boolean; //função sem parametro com retorno T or F
     function ProcessaInclusao    : Boolean;
     function ProcessaAlteracao   : Boolean;
+    function ProcessaExclusao    : Boolean;
     function ProcessaConsulta    : Boolean;
     function ProcessaCliente     : Boolean;
 
@@ -270,6 +271,23 @@ begin
                edtCodigo.SetFocus;
          end;
       end;
+
+      etExcluir:
+      begin
+         stbBarraSatatus.Panels[0].Text := 'Exclusão';
+
+         if (edtCodigo.Text <> EmptyStr) then
+            ProcessaExclusao
+         else
+         begin
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
+
+            if (edtCodigo.CanFocus) then
+               edtCodigo.SetFocus;
+         end;
+      end;
+
 
       etConsultar:
       begin
@@ -618,6 +636,52 @@ begin
       ProcessaConsulta;
 
    vKey := VK_CLEAR;
+end;
+
+function TfrmClientes.ProcessaExclusao: Boolean;
+begin
+   try
+      Result := False;
+
+      if (vObjCliente = nil) then
+      begin
+         TMessageUtil.Alerta(
+         'Não foi possível carregar todos os dados cadastrados do cliente.');
+
+         LimpaTela;
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         Exit;
+      end;
+
+      try
+         if TMessageUtil.Pergunta('Confirma a exclusão do cliente?') then
+         begin
+            //Exclusão
+         end
+         else
+         begin
+            LimpaTela;
+            vEstadoTela := etPadrao;
+            DefineEstadoTela;
+            Exit;
+         end;
+      finally
+
+      end;
+
+      Result := True;
+
+   except
+
+      on E: Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao excluir os dados do cliente [View] .'#13 +
+            e.Message);
+      end;
+
+   end;
 end;
 
 end.

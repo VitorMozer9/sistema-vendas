@@ -616,6 +616,8 @@ procedure TfrmClientes.edtCodigoExit(Sender: TObject);
 begin
    if vKey = VK_RETURN then
       ProcessaConsulta;
+
+   vKey := VK_CLEAR;
 end;
 
 end.
