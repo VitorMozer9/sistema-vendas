@@ -11,6 +11,8 @@ type
        function GravaPessoa(
                    pPessoa : TPessoa) : Boolean;
 
+       function ExcluiPessoa(pPessoa : TPessoa) : Boolean;
+
        function BuscaPessoa(pID : Integer) : TPessoa;  
 
        function RetornaCondicaoPessoa(pID_Pessoa : Integer) : String;
@@ -46,7 +48,7 @@ begin
       on E: Exception do //O Raise serve para gerar exceções de erro explicitas
       begin
          raise Exception.Create(
-            'Falha ao buscar dados da pessoa. [Controller]' #13 +
+            'Falha ao buscar dados da pessoa. [Controller] '#13 +
             e.Message);
       end;
    end;
@@ -55,6 +57,26 @@ end;
 constructor TPessoaController.Create;
 begin
    inherited Create;
+end;
+
+function TPessoaController.ExcluiPessoa(pPessoa: TPessoa): Boolean;
+var
+   xPessoaDAO : TPessoaDAO;
+begin
+   try
+      try
+
+      finally
+
+      end;
+   except
+      on E: Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao excluir os dados da pessoa. [Controller]'#13+
+            e.Message);
+      end;
+   end;
 end;
 
 class function TPessoaController.getInstancia: TPessoaController;
@@ -68,13 +90,13 @@ end;
 function TPessoaController.GravaPessoa(pPessoa: TPessoa): Boolean;
 var
   xPessoaDAO : TPessoaDAO;
-  xAux : Integer;
 begin
    try
      try
         TConexao.get.iniciaTransacao;
 
         Result := False;
+        xPessoaDAO := nil;
 
         xPessoaDAO :=    // aq estou passando a conexao do banco que estava na UpessoaDao para o objeto xPessoaDAO
            TPessoaDAO.Create(TConexao.get.getConn);

@@ -658,6 +658,9 @@ begin
          if TMessageUtil.Pergunta('Confirma a exclusão do cliente?') then
          begin
             //Exclusão
+            Screen.Cursor := crHourGlass;
+            TPessoaController.getInstancia.ExcluiPessoa(vObjCliente);
+
          end
          else
          begin
@@ -667,6 +670,8 @@ begin
             Exit;
          end;
       finally
+         Screen.Cursor := crDefault;
+         Application.ProcessMessages;
 
       end;
 

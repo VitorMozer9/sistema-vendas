@@ -11,6 +11,8 @@ type
        function GravaPessoa(
                    pPessoa : TPessoa) : Boolean;
 
+       function ExcluiPessoa(pPessoa : TPessoa) : Boolean;
+
        function BuscaPessoa(pID : Integer) : TPessoa;  
 
        function RetornaCondicaoPessoa(pID_Pessoa : Integer) : String;
@@ -57,6 +59,43 @@ begin
    inherited Create;
 end;
 
+function TPessoaController.ExcluiPessoa(pPessoa: TPessoa): Boolean;
+var
+   xPessoaDAO : TPessoaDAO;
+begin
+   try
+      try
+         Result := False;
+
+         TConexao.get.iniciaTransacao;
+
+         xPessoaDAO := TPessoaDAO.Create(TConexao.get.getConn);
+
+          if (pPessoa.Id = 0) then
+          Exit
+          else
+          begin
+            xPessoaDAO.Deleta(RetornaCondicaoPessoa(pPessoa.Id));
+          end;
+
+          TConexao.get.confirmaTransacao;
+
+         Result := True;
+      finally
+         if (xPessoaDAO <> nil) then
+            FreeAndNil(xPessoaDAO);
+      end;
+   except
+      on E: Exception do
+      begin
+         TConexao.get.cancelaTransacao;
+         Raise Exception.Create(
+            'Falha ao excluir os dados da pessoa. [Controller]'#13+
+            e.Message);
+      end;
+   end;
+end;
+
 class function TPessoaController.getInstancia: TPessoaController;
 begin
    if _instance = nil then
@@ -68,13 +107,14 @@ end;
 function TPessoaController.GravaPessoa(pPessoa: TPessoa): Boolean;
 var
   xPessoaDAO : TPessoaDAO;
-  xAux : Integer;
 begin
    try
      try
         TConexao.get.iniciaTransacao;
 
         Result := False;
+        //no cod diferenciei o obj de new, logo antes instancio ela como nil
+        xPessoaDAO := nil;
 
         xPessoaDAO :=    // aq estou passando a conexao do banco que estava na UpessoaDao para o objeto xPessoaDAO
            TPessoaDAO.Create(TConexao.get.getConn);
