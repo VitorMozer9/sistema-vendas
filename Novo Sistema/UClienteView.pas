@@ -58,6 +58,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure edtCodigoExit(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -75,6 +76,7 @@ type
 
     function ProcessaConfirmacao : Boolean; //função sem parametro com retorno T or F
     function ProcessaInclusao    : Boolean;
+    function ProcessaAlteracao   : Boolean;
     function ProcessaConsulta    : Boolean;
     function ProcessaCliente     : Boolean;
 
@@ -246,6 +248,7 @@ begin
       begin
          stbBarraStatus.Panels[0].Text := 'Alteração';
 
+
          if (edtCodigo.Text <> EmptyStr) then
          begin
             CamposEnable(True);
@@ -381,6 +384,7 @@ begin
    try
       case vEstadoTela of
          etIncluir:   Result := ProcessaInclusao;
+         etAlterar:   Result := ProcessaAlteracao;
          etConsultar: Result := ProcessaConsulta;
       end;
 
@@ -431,6 +435,7 @@ begin
       if(ProcessaPessoa) and (ProcessaEndereco) then
       begin
          //Gravação no Banco de Dados
+
          TPessoaController.getInstancia.GravaPessoa(vObjCliente);
          Result := True;
       end;
@@ -581,6 +586,38 @@ begin
    chkAtivo.Checked        := vObjCliente.Ativo;
    edtCPFCNPJ.Text         := vObjCliente.IdentificadorPessoa;
 
+end;
+
+function TfrmClientes.ProcessaAlteracao: Boolean;
+begin
+   try
+      Result := False;
+
+      if ProcessaCliente then
+      begin
+         TMessageUtil.Informacao('Dados alterados com sucesso.');
+
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+
+         Result := True;
+      end;
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao alterar os dados do cliente [View]: '#13+
+            e.Message);
+      end;
+   end;  
+end;
+
+procedure TfrmClientes.edtCodigoExit(Sender: TObject);
+begin
+   if vKey = VK_RETURN then
+      ProcessaConsulta;
+
+   vKey := VK_CLEAR;
 end;
 
 end.

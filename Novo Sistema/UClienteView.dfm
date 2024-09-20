@@ -410,6 +410,7 @@ object frmClientes: TfrmClientes
       Width = 90
       Height = 21
       TabOrder = 1
+      OnExit = edtCodigoExit
     end
     object chkAtivo: TCheckBox
       Left = 152
