@@ -274,7 +274,7 @@ begin
 
       etExcluir:
       begin
-         stbBarraSatatus.Panels[0].Text := 'Exclusão';
+         stbBarraStatus.Panels[0].Text := 'Exclusão';
 
          if (edtCodigo.Text <> EmptyStr) then
             ProcessaExclusao
@@ -419,32 +419,34 @@ end;
 
 function TfrmClientes.ProcessaInclusao: Boolean;
 begin
-
    try
-     Result := False;
+      try
+        Result := False;
 
-     if ProcessaCliente then
-     begin
-        TMessageUtil.Informacao(
-        'Cliente cadastrado com sucesso'#13+
-           'Código cadastrado: ' + IntToStr(vObjCliente.Id));
+        if ProcessaCliente then
+        begin
+           TMessageUtil.Informacao(
+           'Cliente cadastrado com sucesso'#13+
+              'Código cadastrado: ' + IntToStr(vObjCliente.Id));
 
-        vEstadoTela := etPadrao;
-        DefineEstadoTela;
+           vEstadoTela := etPadrao;
+           DefineEstadoTela;
+           Result := True;
+        end;
 
-        Result := True;
-     end;
-
-   except
-      on E: Exception do
-      begin
-         Raise Exception.Create(
-            'Falha ao incluir os dados do cliente[View]: '#13 +
-            e.Message);
-
+      except
+         on E: Exception do
+         begin
+            Raise Exception.Create(
+               'Falha ao incluir os dados do cliente[View]: '#13 +
+               e.Message);
+         end;
       end;
-   end;
 
+   finally
+      if vObjCliente <> nil then
+         FreeAndNil(vObjCliente);
+   end;
 end;
 
 function TfrmClientes.ProcessaCliente: Boolean;
@@ -505,10 +507,7 @@ begin
          'Falha ao processar os dados da Pessoa[View]'#13 +
          e.Message);
       end;
-
-
-   end;  
-
+   end;
 end;
 
 function TfrmClientes.ProcessaEndereco: Boolean;
@@ -676,6 +675,11 @@ begin
       end;
 
       Result := True;
+
+      TMessageUtil.Informacao('Cliente excluido com sucesso');
+      LimpaTela;
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
 
    except
 
