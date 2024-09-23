@@ -31,9 +31,11 @@ type
 
   end;
 
-  TColPessoa = class(TList)
+  TColPessoa = class(TList) //forma de manipular uma coleção de objetos da classe TPessoa
      public
-       function Retorna(pIndex : Integer) : TPessoa; //função que retorna o indicador
+        //Retorna um objeto da Calsse TPessoa (ID, nome, tipo_pessoa, etc)
+       function Retorna(pIndex : Integer) : TPessoa;
+       //Adiciona um obj TPessoa a lista (Coleção de pessoas que quermos os dados)
        procedure Adiciona(pPessoa : TPessoa);
 
   end;

@@ -1,0 +1,31 @@
+unit UEndereco;
+
+interface
+
+uses SysUtils, Classes;
+
+type
+   TEndereco = Class(TPersistent)
+      private
+         vId            : Integer;
+         // tabela de relacionamento entre pessoa e endereco
+         vID_Pessoa     : Integer;
+         vTipo_Endereco : Integer;
+         vEndereco      : String;
+         vNumero        : String;
+         vComplemento   : String;
+         vBairro        : String;
+         vUF            : String;
+         vCidade        : String;
+
+      public
+         constructor Create; //inicializar objetos
+
+      published
+      
+
+
+implementation
+
+end.
+ 
