@@ -458,7 +458,6 @@ begin
       if(ProcessaPessoa) and (ProcessaEndereco) then
       begin
          //Gravação no Banco de Dados
-
          TPessoaController.getInstancia.GravaPessoa(vObjCliente);
          Result := True;
       end;

@@ -21,5 +21,44 @@ type
 
 implementation
 
+{ TEnderecoDAO }
+
+function TEnderecoDAO.Atualiza(pEndereco: TEndereco;
+  pCondicao: String): Boolean;
+begin
+   Result := inherited Atualiza(pEndereco, TEndereco);
+end;
+
+constructor TEnderecoDAO.Create(pConexao: TSQLConnection);
+begin
+   inherited Create;   // create da GenericDAO, assim consigo inicializar os objetos da generic dao
+   vEntidade := 'ENDERECO';
+   vConexao  := pConexao;
+   vClass    := TEndereco;
+end;
+
+function TEnderecoDAO.Insere(pEndereco: TEndereco): Boolean;
+begin
+   {herdou o insere da genericDAO que na genericDAO recebe dois parametros,
+   um objeto de TEndereco e uma string 'ID'}
+   Result := inherited Insere(pEndereco, 'ID');
+end;
+
+function TEnderecoDAO.InsereLista(pColEndereco: TColEndereco): Boolean;
+begin
+   //herda da genericdao o inserelista que pede um objeto de TColEndereco
+   Result := inherited InsereLista(pColEndereco);
+end;
+
+function TEnderecoDAO.Retorna(pCondicao: String): TEndereco;
+begin
+   //Aq ja rola o seguinte na classe TEndereco, ja existe um metodo retorna,então estamos referenciando ele na genericdao pelo inherited
+   Result := TEndereco(inherited Retorna(pCondicao));
+end;
+
+function TEnderecoDAO.RetornaLista(pCondicao: String): TColEndereco;
+begin
+    Result := TColEndereco(inherited RetornaLista(pCondicao));
+end;
+
 end.
- 

@@ -58,5 +58,17 @@ begin
 
 end;
 
+{ TColEndereco }
+
+procedure TColEndereco.Adiciona(pEndereco: TEndereco);
+begin
+   Self.Add(TEndereco(pEndereco));
+end;
+
+function TColEndereco.Retorna(pIndex: Integer): TEndereco;
+begin
+   Result := TEndereco(Self[pIndex]);
+end;
+
 end.
  
