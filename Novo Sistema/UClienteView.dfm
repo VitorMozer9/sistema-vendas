@@ -543,12 +543,11 @@ object frmClientes: TfrmClientes
         Height = 21
         TabOrder = 0
       end
-      object Edit1: TEdit
+      object edtNumero: TEdit
         Left = 63
         Top = 54
         Width = 121
         Height = 21
-        ImeName = 'edtNumero'
         TabOrder = 2
       end
       object edtComplemento: TEdit

@@ -35,7 +35,7 @@ type
      public
         //Retorna um objeto da Calsse TPessoa (ID, nome, tipo_pessoa, etc)
        function Retorna(pIndex : Integer) : TPessoa;
-       //Adiciona um obj TPessoa a lista (Coleção de pessoas que quermos os dados)
+       //Adiciona um obj TPessoa a lista (Coleção de pessoas que queremos os dados)
        procedure Adiciona(pPessoa : TPessoa);
 
   end;

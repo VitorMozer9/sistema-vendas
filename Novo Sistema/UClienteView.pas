@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons, Mask , UEnumerationUtil,
-  UCliente, UPessoaController;
+  UCliente, UPessoaController, UEndereco;
 
 type
   TfrmClientes = class(TForm)
@@ -26,7 +26,7 @@ type
     lblEndereco: TLabel;
     edtEndereco: TEdit;
     lblNumero: TLabel;
-    Edit1: TEdit;
+    edtNumero: TEdit;
     lblComplemento: TLabel;
     edtComplemento: TEdit;
     lblUF: TLabel;
@@ -86,6 +86,7 @@ type
                                              //capturar a informação dos metodos(leitura cin)
                                              // e passar esses resultados para os objetos
     function ValidaCliente       : Boolean;
+    function ValidaEndereco      : Boolean;
   public
     { Public declarations }
   end;
@@ -431,6 +432,7 @@ begin
 
            vEstadoTela := etPadrao;
            DefineEstadoTela;
+
            Result := True;
         end;
 
@@ -452,14 +454,13 @@ end;
 function TfrmClientes.ProcessaCliente: Boolean;
 begin
    try
+      Result := False;
       if(ProcessaPessoa) and (ProcessaEndereco) then
       begin
          //Gravação no Banco de Dados
-
          TPessoaController.getInstancia.GravaPessoa(vObjCliente);
          Result := True;
       end;
-
    except
       on E : Exception do
          Raise Exception.Create(
@@ -511,9 +512,16 @@ begin
 end;
 
 function TfrmClientes.ProcessaEndereco: Boolean;
+var
+   xEndereco : TEndereco;
 begin
    try
      Result := False;
+
+     xEndereco := nil;
+
+     if (not ValidaEndereco) then
+     exit;
 
      Result := True;
 
@@ -693,5 +701,57 @@ begin
    end;
 end;
 
+function TfrmClientes.ValidaEndereco: Boolean;
+begin
+   Result := False;
+   //comando trim é para n gravar os espaços em branco
+   if (Trim(edtEndereco.Text) = EmptyStr) then
+   begin
+      TMessageUtil.Alerta('Endereço do cliente não pode ficar em branco.');
+
+      if edtEndereco.CanFocus then
+         edtEndereco.SetFocus;
+         exit;
+   end;
+
+   if (Trim(edtNumero.Text) = EmptyStr ) then
+   begin
+      TMessageUtil.Alerta(
+         'O número de endereço do cliente não pode ficar em branco.');
+
+      if edtNumero.CanFocus then
+         edtNumero.SetFocus;
+         exit;
+   end;
+
+   if (Trim(edtBairro.Text) = EmptyStr ) then
+   begin
+      TMessageUtil.Alerta('O Bairro do cliente não pode ficar em branco.');
+
+      if edtBairro.CanFocus then
+         edtBairro.SetFocus;
+         exit;
+   end;
+
+   if (Trim(edtCidade.Text) = EmptyStr ) then
+   begin
+      TMessageUtil.Alerta('A cidade do cliente não pode ficar em branco.');
+
+      if edtCidade.CanFocus then
+         edtCidade.SetFocus;
+         exit;
+   end;
+
+   if (Trim(cmbUF.Text) = EmptyStr) then
+   begin
+      TMessageUtil.Alerta('O estado do cliente não pode ficar em branco.');
+
+      if cmbUF.CanFocus then
+         cmbUF.SetFocus;
+         exit;
+   end;
+
+
+end;
 end.
 
