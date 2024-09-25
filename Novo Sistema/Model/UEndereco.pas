@@ -23,6 +23,7 @@ type
 
       published
          property ID                 : Integer read vID            write vID;
+         property ID_Pessoa          : Integer read vID_Pessoa     write vID_Pessoa;
          property Tipo_Endereco      : Integer read vTipo_Endereco write vTipo_Endereco;
          property Endereco           : String  read vEndereco      write vEndereco;
          property Numero             : String  read vNumero        write vNumero;

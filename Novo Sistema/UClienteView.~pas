@@ -64,8 +64,9 @@ type
     vKey : Word;
 
     //variaveis de classe
-    vEstadoTela : TEstadoTela;
-    vObjCliente : TCliente;
+    vEstadoTela     : TEstadoTela;
+    vObjCliente     : TCliente;
+    vObjColEndereco : TColEndereco;  //podem ser varios endereços
 
     procedure CamposEnable(pOpcao: Boolean);
     procedure LimpaTela; //não precisa de parametro pois a unica função é limpar a tela
@@ -458,7 +459,10 @@ begin
       if(ProcessaPessoa) and (ProcessaEndereco) then
       begin
          //Gravação no Banco de Dados
-         TPessoaController.getInstancia.GravaPessoa(vObjCliente);
+         TPessoaController.getInstancia.GravaPessoa(
+            vObjCliente, vObjColEndereco);
+
+
          Result := True;
       end;
    except
@@ -513,18 +517,39 @@ end;
 
 function TfrmClientes.ProcessaEndereco: Boolean;
 var
-   xEndereco : TEndereco;
+   xEndereco  : TEndereco;
+   xID_Pessoa : Integer;
 begin
    try
      Result := False;
 
      xEndereco := nil;
+     xID_Pessoa := 0;
 
      if (not ValidaEndereco) then
      exit;
 
-     Result := True;
+     if (vObjColEndereco <> nil) then
+        FreeAndNil(vObjColEndereco);
 
+     vObjColEndereco := TColEndereco.Create;     //criando o objeto
+
+     if vEstadoTela = etAlterar then
+        xID_Pessoa := StrToIntDef(edtCodigo.Text , 0);
+
+     xEndereco               := TEndereco.Create; //obj de apenas endereco
+     xEndereco.ID_Pessoa     := xID_Pessoa;
+     xEndereco.Tipo_Endereco := 0;
+     xEndereco.Endereco      := edtEndereco.Text;
+     xEndereco.Numero        := edtNumero.Text;
+     xEndereco.Complemento   := edtComplemento.Text;
+     xEndereco.Bairro        := edtBairro.Text;
+     xEndereco.UF            := cmbUF.Text;
+     xEndereco.Cidade        := edtCidade.Text;
+
+     vObjColEndereco.Add(xEndereco);
+
+     Result := True;
    except
      on E : Exception do
      begin
@@ -533,7 +558,7 @@ begin
         e.Message);
      end;
 
-   end;  
+   end;
 end;
 
 function TfrmClientes.ValidaCliente: Boolean;

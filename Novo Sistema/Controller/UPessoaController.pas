@@ -2,20 +2,26 @@ unit UPessoaController;
 
 interface
 
-uses SysUtils, Math, StrUtils, UConexao, UPessoa;
+uses SysUtils, Math, StrUtils, UConexao, UPessoa, UEndereco;
 
 type
   TPessoaController = class
      public
        constructor Create;
        function GravaPessoa(
-                   pPessoa : TPessoa) : Boolean;
+                   pPessoa : TPessoa;
+                   pColEndereco : TColEndereco) : Boolean;
 
        function ExcluiPessoa(pPessoa : TPessoa) : Boolean;
 
-       function BuscaPessoa(pID : Integer) : TPessoa;  
+       function BuscaPessoa(pID : Integer) : TPessoa;
+       function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
 
-       function RetornaCondicaoPessoa(pID_Pessoa : Integer) : String;
+       function RetornaCondicaoPessoa(
+                   pID_Pessoa : Integer;
+                   pRelacionada : Boolean = False ) : String;
+
+
 
      published
         class function getInstancia : TPessoaController;
@@ -23,12 +29,42 @@ type
 
 implementation
 
-uses UPessoaDAO;
+uses UPessoaDAO, UEnderecoDAO;
 
 var
   _instance : TPessoaController;
 
 { TPessoaController }
+
+function TPessoaController.BuscaEnderecoPessoa(
+  pID_Pessoa: Integer): TColEndereco;
+var
+   xEnderecoDAO : TEnderecoDAO;
+begin
+   try
+      try
+         Result := nil;
+
+         xEnderecoDAO :=
+            TEnderecoDAO.Create(TConexao.getInstance.getConn);
+
+            Result :=
+            xEnderecoDAO.RetornaLista(RetornaCondicaoPessoa(pID_Pessoa, True));
+
+      finally
+         if (xEnderecoDAO <> nil) then
+            FreeAndNil(xEnderecoDAO);
+      end;
+
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+         'Falha ao retornar dados de endereço da pessoa. [Controller]'#13 +
+         e.Message);
+      end;
+   end;
+end;
 
 function TPessoaController.BuscaPessoa(pID: Integer): TPessoa;
 var
@@ -104,24 +140,37 @@ begin
    Result := _instance;
 end;
 
-function TPessoaController.GravaPessoa(pPessoa: TPessoa): Boolean;
+function TPessoaController.GravaPessoa(
+pPessoa: TPessoa; pColEndereco : TColEndereco): Boolean;
 var
   xPessoaDAO : TPessoaDAO;
+  xEnderecoDAO : TEnderecoDAO;
+  xAux : Integer;
 begin
    try
      try
         TConexao.get.iniciaTransacao;
 
         Result := False;
-        //no cod diferenciei o obj de new, logo antes instancio ela como nil
+        //no cod diferenciei o obj de nil, logo antes instancio ela como nil
         xPessoaDAO := nil;
+
 
         xPessoaDAO :=    // aq estou passando a conexao do banco que estava na UpessoaDao para o objeto xPessoaDAO
            TPessoaDAO.Create(TConexao.get.getConn);
 
+        xEnderecoDAO :=
+         TEnderecoDAO.Create(TConexao.get.getConn);
+
         if pPessoa.Id = 0 then
         begin
            xPessoaDAO.Insere(pPessoa);
+
+           for xAux := 0 to pred(pColEndereco.Count) do
+              pColEndereco.Retorna(xAux).ID_Pessoa := pPessoa.Id; //amarra entre as tabelas
+
+           xEnderecoDAO.InsereLista(pColEndereco);
+
         end
         else
         begin
@@ -147,11 +196,14 @@ begin
 end;
 
 function TPessoaController.RetornaCondicaoPessoa(
-  pID_Pessoa: Integer): String;
+  pID_Pessoa: Integer; pRelacionada : Boolean): String;
 var
   xChave : String;
 begin
-   xChave := 'ID';
+   if (pRelacionada) then
+      xChave := 'ID_Pessoa'
+   else
+      xChave := 'ID';
 
 
    Result :=

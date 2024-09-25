@@ -459,7 +459,10 @@ begin
       if(ProcessaPessoa) and (ProcessaEndereco) then
       begin
          //Gravação no Banco de Dados
-         TPessoaController.getInstancia.GravaPessoa(vObjCliente, vObjColEndereco);
+         TPessoaController.getInstancia.GravaPessoa(
+            vObjCliente, vObjColEndereco);
+
+
          Result := True;
       end;
    except
@@ -526,7 +529,7 @@ begin
      if (not ValidaEndereco) then
      exit;
 
-     if (vObjColEndereco <> nill) then
+     if (vObjColEndereco <> nil) then
         FreeAndNil(vObjColEndereco);
 
      vObjColEndereco := TColEndereco.Create;     //criando o objeto
@@ -539,7 +542,7 @@ begin
      xEndereco.Tipo_Endereco := 0;
      xEndereco.Endereco      := edtEndereco.Text;
      xEndereco.Numero        := edtNumero.Text;
-     xEndereco.Complemento   := etdComplemento.Text;
+     xEndereco.Complemento   := edtComplemento.Text;
      xEndereco.Bairro        := edtBairro.Text;
      xEndereco.UF            := cmbUF.Text;
      xEndereco.Cidade        := edtCidade.Text;
@@ -592,6 +595,10 @@ begin
       vObjCliente :=
          TCliente(TPessoaController.getInstancia.BuscaPessoa(
             StrToIntDef(edtCodigo.Text, 0)));
+
+      vObjColEndereco :=
+         TPessoaController.getInstancia.BuscaEnderecoPessoa(
+            StrToIntDef(edtCodigo.Text, 0));
 
       if (vObjCliente <> nil) then
          CarregaDadosTela
