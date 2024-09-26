@@ -53,7 +53,7 @@ end;
 function TEnderecoDAO.Retorna(pCondicao: String): TEndereco;
 begin
    //Aq ja rola o seguinte na classe TEndereco, ja existe um metodo retorna,então estamos referenciando ele na genericdao pelo inherited
-   Result := TEndereco(inherited Retorna(pCondicao));
+   Result := TEndereco(inherited Retorna(pCondicao));  //exemplo de cast
 end;
 
 function TEnderecoDAO.RetornaLista(pCondicao: String): TColEndereco;

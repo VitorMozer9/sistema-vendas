@@ -547,7 +547,7 @@ begin
      xEndereco.UF            := cmbUF.Text;
      xEndereco.Cidade        := edtCidade.Text;
 
-     vObjColEndereco.add(xEndereco);
+     vObjColEndereco.Adiciona(xEndereco);
 
      Result := True;
    except

@@ -26,7 +26,7 @@ implementation
 function TEnderecoDAO.Atualiza(pEndereco: TEndereco;
   pCondicao: String): Boolean;
 begin
-   Result := inherited Atualiza(pEndereco, TEndereco);
+   Result := inherited Atualiza(pEndereco, pCondicao);
 end;
 
 constructor TEnderecoDAO.Create(pConexao: TSQLConnection);
