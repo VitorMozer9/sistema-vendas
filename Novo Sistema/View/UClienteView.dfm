@@ -444,7 +444,6 @@ object frmClientes: TfrmClientes
       MaxLength = 14
       TabOrder = 3
       Text = '   .   .   -  '
-      OnChange = edtCPFCNPJChange
     end
     object edtNome: TEdit
       Left = 56

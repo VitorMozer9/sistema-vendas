@@ -16,6 +16,7 @@ type
 
        function BuscaPessoa(pID : Integer) : TPessoa;
        function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
+       
 
        function RetornaCondicaoPessoa(
                    pID_Pessoa : Integer;
@@ -98,6 +99,7 @@ end;
 function TPessoaController.ExcluiPessoa(pPessoa: TPessoa): Boolean;
 var
    xPessoaDAO : TPessoaDAO;
+   xEnderecoDAO : TEnderecoDAO;
 begin
    try
       try
@@ -107,11 +109,17 @@ begin
 
          xPessoaDAO := TPessoaDAO.Create(TConexao.get.getConn);
 
+         xEnderecoDAO := TEnderecoDAO.Create(TConexao.get.getConn);
+
           if (pPessoa.Id = 0) then
           Exit
           else
           begin
             xPessoaDAO.Deleta(RetornaCondicaoPessoa(pPessoa.Id));
+
+            // ,True estamos usando a tabela relacionada e ela precisa de um resultado true pra executar (Boolean)
+            xEnderecoDAO.Deleta(RetornaCondicaoPessoa(pPessoa.Id, True));
+
           end;
 
           TConexao.get.confirmaTransacao;
@@ -120,6 +128,9 @@ begin
       finally
          if (xPessoaDAO <> nil) then
             FreeAndNil(xPessoaDAO);
+
+         if (xEnderecoDAO <> nil) then
+            FreeAndNil(xEnderecoDAO);
       end;
    except
       on E: Exception do
@@ -175,6 +186,9 @@ begin
         else
         begin
            xPessoaDAO.Atualiza(pPessoa, RetornaCondicaoPessoa(pPessoa.Id));
+
+           xEnderecoDAO.Deleta(RetornaCondicaoPessoa(pPessoa.Id, True));
+           xEnderecoDAO.InsereLista(pColEndereco);
         end;
 
         TConexao.get.confirmaTransacao;

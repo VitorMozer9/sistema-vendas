@@ -433,6 +433,7 @@ object frmClientes: TfrmClientes
         'F'#237'sica'
         'Jur'#237'dica')
       TabOrder = 0
+      OnClick = rdgTipoPessoaClick
     end
     object edtCPFCNPJ: TMaskEdit
       Left = 504
@@ -443,6 +444,7 @@ object frmClientes: TfrmClientes
       MaxLength = 14
       TabOrder = 3
       Text = '   .   .   -  '
+      OnChange = edtCPFCNPJChange
     end
     object edtNome: TEdit
       Left = 56

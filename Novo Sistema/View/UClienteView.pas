@@ -60,7 +60,7 @@ type
       Shift: TShiftState);
     procedure edtCodigoExit(Sender: TObject);
     procedure rdgTipoPessoaClick(Sender: TObject);
-    procedure edtCPFCNPJChange(Sender: TObject);
+
   private
     { Private declarations }
     vKey : Word;
@@ -813,10 +813,15 @@ end;
 procedure TfrmClientes.rdgTipoPessoaClick(Sender: TObject);
 begin
    if rdgTipoPessoa.ItemIndex = 1 then
+   begin
+      edtCPFCNPJ.Clear;
       edtCPFCNPJ.EditMask := '00\.000\.000\/0000\-00;1;_'
+   end
    else
+   begin
+      edtCPFCNPJ.Clear;
       edtCPFCNPJ.EditMask := '000\.000\.000\-00;1;_';
-
+   end;
 end;
 
 end.

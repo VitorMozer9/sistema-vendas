@@ -59,6 +59,8 @@ type
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure edtCodigoExit(Sender: TObject);
+    procedure rdgTipoPessoaClick(Sender: TObject);
+    procedure edtCPFCNPJChange(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -199,6 +201,13 @@ begin
         (Components[i] as TCheckBox).Checked := False;
 
    end;
+
+   if (vObjCliente <> nil) then
+      FreeAndNil(vObjCliente);
+
+   if (vObjColEndereco <> nil) then
+      FreeAndNil(vObjColEndereco);
+
 end;
 
 procedure TfrmClientes.DefineEstadoTela;
@@ -405,6 +414,7 @@ begin
       case vEstadoTela of
          etIncluir:   Result := ProcessaInclusao;
          etAlterar:   Result := ProcessaAlteracao;
+         etExcluir:   Result := ProcessaExclusao;
          etConsultar: Result := ProcessaConsulta;
       end;
 
@@ -696,7 +706,7 @@ begin
    try
       Result := False;
 
-      if (vObjCliente = nil) then
+      if (vObjCliente = nil) or (vObjColEndereco = nil) then
       begin
          TMessageUtil.Alerta(
          'Não foi possível carregar todos os dados cadastrados do cliente.');
@@ -800,5 +810,14 @@ begin
    Result := True;
 
 end;
+procedure TfrmClientes.rdgTipoPessoaClick(Sender: TObject);
+begin
+   if rdgTipoPessoa.ItemIndex = 1 then
+      edtCPFCNPJ.EditMask := '00\.000\.000\/0000\-00;1;_'
+   else
+      edtCPFCNPJ.EditMask := '000\.000\.000\-00;1;_';
+
+end;
+
 end.
 
