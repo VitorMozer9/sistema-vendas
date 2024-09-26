@@ -36,6 +36,7 @@ type
 
    TColEndereco = Class(TList)
       public
+         //retorna tem parametro um indice para navegar na lista, pois é uma coleção de itens
          function Retorna(pIndex : Integer) : TEndereco;
          procedure Adiciona(pEndereco : TEndereco);
 
@@ -68,7 +69,7 @@ end;
 
 function TColEndereco.Retorna(pIndex: Integer): TEndereco;
 begin
-   Result := TEndereco(Self[pIndex]);
+   Result := TEndereco(Self[pIndex]); //pega a posição que eu quero e retorna o obj
 end;
 
 end.

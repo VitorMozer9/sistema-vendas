@@ -98,7 +98,7 @@ var
 implementation
 
 uses
-   uMessageUtil, Consts;
+   uMessageUtil, Consts, UPessoa;
 
 {$R *.dfm}
 
@@ -547,7 +547,7 @@ begin
      xEndereco.UF            := cmbUF.Text;
      xEndereco.Cidade        := edtCidade.Text;
 
-     vObjColEndereco.Add(xEndereco);
+     vObjColEndereco.Adiciona(xEndereco);
 
      Result := True;
    except
@@ -630,8 +630,10 @@ begin
 end;
 
 procedure TfrmClientes.CarregaDadosTela;
+var
+   i : Integer;
 begin
-   if (vObjCliente = nil) then
+   if (vObjCliente = nil) then     //validação de objeto
    exit;
 
    edtCodigo.Text          := IntToStr(vObjCliente.Id);
@@ -640,9 +642,20 @@ begin
    chkAtivo.Checked        := vObjCliente.Ativo;
    edtCPFCNPJ.Text         := vObjCliente.IdentificadorPessoa;
 
-   if (vObjColEndereco = nil) then
+   // pelo fato de ser uma coleção devo usar o for
+   if (vObjColEndereco <> nil) then
+   begin
+      for i := 0 to pred(vObjColEndereco.Count) do
+      begin
+         edtEndereco.Text     := vObjColEndereco.Retorna(i).Endereco;
+         edtNumero.Text       := vObjColEndereco.Retorna(i).Numero;
+         edtComplemento.Text  := vObjColEndereco.Retorna(i).Complemento;
+         edtBairro.Text       := vObjColEndereco.Retorna(i).Bairro;
+         cmbUF.Text           := vObjColEndereco.Retorna(i).UF;
+         edtCidade.Text       := vObjColEndereco.Retorna(i).Cidade;
 
-   edt
+      end;
+   end;
 
 end;
 
