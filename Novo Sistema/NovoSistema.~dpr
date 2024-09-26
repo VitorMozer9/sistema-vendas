@@ -15,8 +15,8 @@ uses
   UGenericDAO in 'Model\BD\UGenericDAO.pas',
   UCliente in 'Model\UCliente.pas',
   UPessoaController in 'Controller\UPessoaController.pas',
-  UEndereco in 'Model\UEndereco.pas',
-  UEnderecoDAO in 'Model\UEnderecoDAO.pas';
+  UEnderecoDAO in 'Model\UEnderecoDAO.pas',
+  UEndereco in 'Model\UEndereco.pas';
 
 {$R *.res}
 

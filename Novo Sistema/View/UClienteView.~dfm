@@ -1,6 +1,6 @@
 object frmClientes: TfrmClientes
-  Left = 417
-  Top = 120
+  Left = 586
+  Top = 148
   Width = 663
   Height = 376
   Caption = 'Clientes'
@@ -18,6 +18,7 @@ object frmClientes: TfrmClientes
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -409,6 +410,7 @@ object frmClientes: TfrmClientes
       Width = 90
       Height = 21
       TabOrder = 1
+      OnExit = edtCodigoExit
     end
     object chkAtivo: TCheckBox
       Left = 152
@@ -541,12 +543,11 @@ object frmClientes: TfrmClientes
         Height = 21
         TabOrder = 0
       end
-      object Edit1: TEdit
+      object edtNumero: TEdit
         Left = 63
         Top = 54
         Width = 121
         Height = 21
-        ImeName = 'edtNumero'
         TabOrder = 2
       end
       object edtComplemento: TEdit
