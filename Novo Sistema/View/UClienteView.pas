@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons, Mask , UEnumerationUtil,
-  UCliente, UPessoaController, UEndereco;
+  UCliente, UPessoaController, UEndereco, UClassFuncoes;
 
 type
   TfrmClientes = class(TForm)
@@ -60,6 +60,8 @@ type
       Shift: TShiftState);
     procedure edtCodigoExit(Sender: TObject);
     procedure rdgTipoPessoaClick(Sender: TObject);
+    procedure edtCPFCNPJKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
 
   private
     { Private declarations }
@@ -472,7 +474,6 @@ begin
          TPessoaController.getInstancia.GravaPessoa(
             vObjCliente, vObjColEndereco);
 
-
          Result := True;
       end;
    except
@@ -532,6 +533,7 @@ var
 begin
    try
      Result := False;
+
 
      xEndereco := nil;
      xID_Pessoa := 0;
@@ -821,6 +823,26 @@ begin
    begin
       edtCPFCNPJ.Clear;
       edtCPFCNPJ.EditMask := '000\.000\.000\-00;1;_';
+   end;
+end;
+
+procedure TfrmClientes.edtCPFCNPJKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+   xCPFreplace : String;
+begin
+   if vKey = VK_RETURN then
+   begin
+      xCPFreplace := TFuncoes.SoNumero(edtCPFCNPJ.Text);
+
+      if not TPessoaController.getInstancia.ValidaCPFCNPJ(xCPFreplace) then
+      begin
+         TMessageUtil.Alerta('CPF inválido, Favor informar um novo número');
+
+         if edtCPFCNPJ.CanFocus then
+            edtCPFCNPJ.SetFocus;
+            exit;
+      end;
    end;
 end;
 

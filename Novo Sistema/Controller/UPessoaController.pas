@@ -16,7 +16,8 @@ type
 
        function BuscaPessoa(pID : Integer) : TPessoa;
        function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
-       
+
+       function ValidaCPFCNPJ(pCPFCNPJ : String) : Boolean;
 
        function RetornaCondicaoPessoa(
                    pID_Pessoa : Integer;
@@ -30,7 +31,7 @@ type
 
 implementation
 
-uses UPessoaDAO, UEnderecoDAO;
+uses UPessoaDAO, UEnderecoDAO, UClassFuncoes;
 
 var
   _instance : TPessoaController;
@@ -224,6 +225,71 @@ begin
    'WHERE                                                '#13+
    '   '+ xChave+ ' = '+ QuotedStr(IntToStr(pID_Pessoa))+' '#13; //função Quoted para substituir as aspas duplas / quadruplas
 
+end;
+
+function TPessoaController.ValidaCPFCNPJ(pCPFCNPJ: String): Boolean;
+var
+   xAux            : Integer;
+   xPrimeiroDigito : Integer;
+   xSegundoDigito  : Integer;
+   xRestoDivisao   : Integer;
+   xSoma           : Integer;
+   xValido         : Boolean;
+begin
+   Result := False;
+
+   xAux            := 0;
+   xPrimeiroDigito := 0;
+   xSegundoDigito  := 0;
+   xRestoDivisao   := 0;
+   xSoma           := 0;
+   xValido         := False;
+
+   //TFuncoes.SoNumero(pCPFCNPJ);
+
+   if (Length(pCPFCNPJ) <> 11) then
+      exit;
+
+
+   if (pCPFCNPJ = '00000000000') or (pCPFCNPJ = '11111111111') or
+      (pCPFCNPJ = '22222222222') or (pCPFCNPJ = '33333333333') or
+      (pCPFCNPJ = '44444444444') or (pCPFCNPJ = '55555555555') or
+      (pCPFCNPJ = '66666666666') or (pCPFCNPJ = '77777777777') or
+      (pCPFCNPJ = '88888888888') or (pCPFCNPJ = '99999999999') then
+      exit;
+
+
+   for xAux := 1 to 9 do
+      xSoma := xSoma + StrToInt(pCPFCNPJ[xAux]) * (11 - xAux);
+
+   xRestoDivisao := 11 - (xSoma mod 11);
+
+
+   if (xRestoDivisao >= 10) then
+      xPrimeiroDigito := 0
+   else
+      xPrimeiroDigito := xRestoDivisao;
+
+   if xPrimeiroDigito <> StrToInt(pCPFCNPJ[10]) then
+      exit;
+
+   xSoma := 0;
+   for xAux := 1 to 9 do
+      xSoma := xSoma + StrToInt(pCPFCNPJ[xAux]) * (12 - xAux);
+      xSoma := xSoma + (xPrimeiroDigito * 2);
+
+   xRestoDivisao := 0;
+
+   xRestoDivisao := 11 - (xSoma mod 11);
+   if (xRestoDivisao >= 10) then
+      xSegundoDigito := 0
+   else
+      xSegundoDigito := xRestoDivisao;
+
+   if xSegundoDigito <> StrToInt(pCPFCNPJ[11]) then
+   exit;
+
+   Result := True;
 end;
 
 end.

@@ -17,6 +17,9 @@ type
        function BuscaPessoa(pID : Integer) : TPessoa;
        function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
 
+       function ValidaCPFCNPJ (pCPFCNPJ : String;
+                               pPessoaFisica : Boolean) : Boolean;
+
        function RetornaCondicaoPessoa(
                    pID_Pessoa : Integer;
                    pRelacionada : Boolean = False ) : String;
@@ -29,7 +32,7 @@ type
 
 implementation
 
-uses UPessoaDAO, UEnderecoDAO;
+uses UPessoaDAO, UEnderecoDAO, UClassFuncoes, UClienteView;
 
 var
   _instance : TPessoaController;
@@ -98,6 +101,7 @@ end;
 function TPessoaController.ExcluiPessoa(pPessoa: TPessoa): Boolean;
 var
    xPessoaDAO : TPessoaDAO;
+   xEnderecoDAO : TEnderecoDAO;
 begin
    try
       try
@@ -107,11 +111,17 @@ begin
 
          xPessoaDAO := TPessoaDAO.Create(TConexao.get.getConn);
 
+         xEnderecoDAO := TEnderecoDAO.Create(TConexao.get.getConn);
+
           if (pPessoa.Id = 0) then
           Exit
           else
           begin
             xPessoaDAO.Deleta(RetornaCondicaoPessoa(pPessoa.Id));
+
+            // ,True estamos usando a tabela relacionada e ela precisa de um resultado true pra executar (Boolean)
+            xEnderecoDAO.Deleta(RetornaCondicaoPessoa(pPessoa.Id, True));
+
           end;
 
           TConexao.get.confirmaTransacao;
@@ -120,6 +130,9 @@ begin
       finally
          if (xPessoaDAO <> nil) then
             FreeAndNil(xPessoaDAO);
+
+         if (xEnderecoDAO <> nil) then
+            FreeAndNil(xEnderecoDAO);
       end;
    except
       on E: Exception do
@@ -175,6 +188,9 @@ begin
         else
         begin
            xPessoaDAO.Atualiza(pPessoa, RetornaCondicaoPessoa(pPessoa.Id));
+
+           xEnderecoDAO.Deleta(RetornaCondicaoPessoa(pPessoa.Id, True));
+           xEnderecoDAO.InsereLista(pColEndereco);
         end;
 
         TConexao.get.confirmaTransacao;
@@ -209,6 +225,37 @@ begin
    Result :=
    'WHERE                                                '#13+
    '   '+ xChave+ ' = '+ QuotedStr(IntToStr(pID_Pessoa))+' '#13; //função Quoted para substituir as aspas duplas / quadruplas
+
+end;
+
+function TPessoaController.ValidaCPFCNPJ(pCPFCNPJ: String;
+pPessoaFisica : Boolean): Boolean;
+var
+   xAux : Integer;
+   xPrimeiroDigito : Integer;
+   xSegundoDigito : Integer;
+   xRestoDivisao : Integer;
+   xValido  : Boolean;
+begin
+   Result := False;
+    TFuncoes.removeCaracterEspecial(pCPFCNPJ, True);
+
+   if pPessoaFisica then
+   begin
+
+      if (Length(pCPFCNPJ) <> 11) then
+         exit;
+
+
+      if (pCPFCNPJ = '00000000000') or (pCPFCNPJ = '11111111111') or
+         (pCPFCNPJ = '22222222222') or (pCPFCNPJ = '33333333333') or
+         (pCPFCNPJ = '44444444444') or (pCPFCNPJ = '55555555555') or
+         (pCPFCNPJ = '66666666666') or (pCPFCNPJ = '77777777777') or
+         (pCPFCNPJ = '88888888888') or (pCPFCNPJ = '99999999999') then
+         exit;
+
+   end;
+end;
 
 end;
 
