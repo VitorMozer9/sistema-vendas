@@ -17,7 +17,8 @@ type
        function BuscaPessoa(pID : Integer) : TPessoa;
        function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
 
-       function ValidaCPFCNPJ(pCPFCNPJ : String) : Boolean;
+       function ValidaCPF(pCPF : String) : Boolean;
+       function ValidaCNPJ(pCNPJ : String) : Boolean;
 
        function RetornaCondicaoPessoa(
                    pID_Pessoa : Integer;
@@ -227,14 +228,107 @@ begin
 
 end;
 
-function TPessoaController.ValidaCPFCNPJ(pCPFCNPJ: String): Boolean;
+function TPessoaController.ValidaCNPJ(pCNPJ: String): Boolean;
+var
+   xPrimeiroDigito : Integer;
+   xSegundoDigito : Integer;
+   xRestoDivisao  : Integer;
+   xSoma          : Integer;
+   I              : Integer;
+   xDecremento    : Integer;
+begin
+   Result := False;
+   xPrimeiroDigito := 0;
+   xSegundoDigito  := 0;
+   xRestoDivisao   := 0;
+   xSoma           := 0;
+   I               := 0;
+   xDecremento     := 0;
+
+
+   if Length(pCNPJ) <> 14 then
+      exit;
+
+   if (pCNPJ = '00000000000000') or (pCNPJ = '11111111111111') or
+      (pCNPJ = '22222222222222') or (pCNPJ = '33333333333333') or
+      (pCNPJ = '44444444444444') or (pCNPJ = '55555555555555') or
+      (pCNPJ = '66666666666666') or (pCNPJ = '77777777777777') or
+      (pCNPJ = '88888888888888') or (pCNPJ = '99999999999999') then
+      exit;
+
+   xDecremento := 10;
+
+   for I := 5 to 12 do
+   begin
+      xDecremento := xDecremento -1;
+      xSoma := xSoma + StrToInt(pCNPJ[I]) * (xDecremento);
+   end;
+
+   I := 0;
+   xDecremento := 6;
+   for I := 1 to 4 do
+   begin
+      xDecremento :=  xDecremento - 1;
+      xSoma := xSoma + StrToInt(pCNPJ[I]) * (xDecremento);
+   end;
+
+   xRestoDivisao := 11 - (xSoma mod 11);
+
+   if xRestoDivisao >= 10 then
+      xPrimeiroDigito := 0
+   else
+      xPrimeiroDigito := xRestoDivisao;
+
+   if xPrimeiroDigito <> StrToInt(pCNPJ[13]) then
+   exit;
+
+   xDecremento := 0;
+   I           := 0;
+   xSoma       := 0;
+
+   xDecremento := 10;
+
+   for I := 6 to 12 do
+   begin
+      xDecremento := xDecremento - 1;
+      xSoma := xSoma + StrToInt(pCNPJ[I]) * (xDecremento);
+   end;
+
+   I             := 0;
+   xDecremento   := 0;
+   xRestoDivisao := 0;
+
+   xDecremento   := 7;
+
+   for I := 1 to 5 do
+   begin
+      xDecremento := xDecremento - 1;
+      xSoma := xSoma + StrToInt(pCNPJ[I]) * (xDecremento);
+      xSoma := xSoma + (xPrimeiroDigito * 2);
+   end;
+
+   xRestoDivisao := 11 - (xSoma mod 11);
+
+   if xRestoDivisao >= 10 then
+      xSegundoDigito := 0
+   else
+      xSegundoDigito := xRestoDivisao;
+
+   if xRestoDivisao <> StrToInt(pCnpj[14]) then
+      exit;
+
+
+
+    Result := true;
+end;
+
+function TPessoaController.ValidaCPF(pCPF: String): Boolean;
 var
    xAux            : Integer;
    xPrimeiroDigito : Integer;
    xSegundoDigito  : Integer;
    xRestoDivisao   : Integer;
    xSoma           : Integer;
-   xValido         : Boolean;
 begin
    Result := False;
 
@@ -243,24 +337,22 @@ begin
    xSegundoDigito  := 0;
    xRestoDivisao   := 0;
    xSoma           := 0;
-   xValido         := False;
 
-   //TFuncoes.SoNumero(pCPFCNPJ);
 
-   if (Length(pCPFCNPJ) <> 11) then
+   if (Length(pCPF) <> 11) then
       exit;
 
 
-   if (pCPFCNPJ = '00000000000') or (pCPFCNPJ = '11111111111') or
-      (pCPFCNPJ = '22222222222') or (pCPFCNPJ = '33333333333') or
-      (pCPFCNPJ = '44444444444') or (pCPFCNPJ = '55555555555') or
-      (pCPFCNPJ = '66666666666') or (pCPFCNPJ = '77777777777') or
-      (pCPFCNPJ = '88888888888') or (pCPFCNPJ = '99999999999') then
+   if (pCPF = '00000000000') or (pCPF = '11111111111') or
+      (pCPF = '22222222222') or (pCPF = '33333333333') or
+      (pCPF = '44444444444') or (pCPF = '55555555555') or
+      (pCPF = '66666666666') or (pCPF = '77777777777') or
+      (pCPF = '88888888888') or (pCPF = '99999999999') then
       exit;
 
 
    for xAux := 1 to 9 do
-      xSoma := xSoma + StrToInt(pCPFCNPJ[xAux]) * (11 - xAux);
+      xSoma := xSoma + StrToInt(pCPF[xAux]) * (11 - xAux);
 
    xRestoDivisao := 11 - (xSoma mod 11);
 
@@ -270,12 +362,12 @@ begin
    else
       xPrimeiroDigito := xRestoDivisao;
 
-   if xPrimeiroDigito <> StrToInt(pCPFCNPJ[10]) then
+   if xPrimeiroDigito <> StrToInt(pCPF[10]) then
       exit;
 
    xSoma := 0;
    for xAux := 1 to 9 do
-      xSoma := xSoma + StrToInt(pCPFCNPJ[xAux]) * (12 - xAux);
+      xSoma := xSoma + StrToInt(pCPF[xAux]) * (12 - xAux);
       xSoma := xSoma + (xPrimeiroDigito * 2);
 
    xRestoDivisao := 0;
@@ -286,7 +378,7 @@ begin
    else
       xSegundoDigito := xRestoDivisao;
 
-   if xSegundoDigito <> StrToInt(pCPFCNPJ[11]) then
+   if xSegundoDigito <> StrToInt(pCPF[11]) then
    exit;
 
    Result := True;

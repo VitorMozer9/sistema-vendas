@@ -829,20 +829,30 @@ end;
 procedure TfrmClientes.edtCPFCNPJKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
-   xCPFreplace : String;
+   xCPFCNPJreplace  : String;
 begin
+   xCPFCNPJreplace := EmptyStr;
+
    if vKey = VK_RETURN then
    begin
-      xCPFreplace := TFuncoes.SoNumero(edtCPFCNPJ.Text);
+      xCPFCNPJreplace := TFuncoes.SoNumero(edtCPFCNPJ.Text);
 
-      if not TPessoaController.getInstancia.ValidaCPFCNPJ(xCPFreplace) then
-      begin
+      if (rdgTipoPessoa.ItemIndex = 0) then
+      if (TPessoaController.getInstancia.ValidaCPF(xCPFCNPJreplace))then
+         exit
+      else
          TMessageUtil.Alerta('CPF inválido, Favor informar um novo número');
 
-         if edtCPFCNPJ.CanFocus then
-            edtCPFCNPJ.SetFocus;
-            exit;
-      end;
+      if (rdgTipoPessoa.ItemIndex = 1) then
+      if (TPessoaController.getInstancia.ValidaCNPJ(xCPFCNPJreplace)) then
+         exit
+      else
+        TMessageUtil.Alerta('CNPJ inválido, Favor informar um novo número');
+
+      edtCPFCNPJ.Text := '';
+
+      if edtCPFCNPJ.CanFocus then
+         edtCPFCNPJ.SetFocus;
    end;
 end;
 

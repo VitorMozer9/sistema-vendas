@@ -1,6 +1,6 @@
 object frmClientes: TfrmClientes
-  Left = 557
-  Top = 203
+  Left = 667
+  Top = 140
   Width = 663
   Height = 380
   BorderIcons = [biSystemMenu, biMinimize]
