@@ -6,7 +6,6 @@ uses
   UCriptografiaUtil in 'Model\Util\UCriptografiaUtil.pas',
   UClassFuncoes in 'Model\Util\UClassFuncoes.pas',
   UConexao in 'Model\BD\UConexao.pas',
-  UClienteView in 'UClienteView.pas' {frmClientes},
   uMessageUtil in 'Model\Util\uMessageUtil.pas',
   Consts in 'Model\Util\Consts.pas',
   UEnumerationUtil in 'Model\Util\UEnumerationUtil.pas',
@@ -16,7 +15,8 @@ uses
   UCliente in 'Model\UCliente.pas',
   UPessoaController in 'Controller\UPessoaController.pas',
   UEnderecoDAO in 'Model\UEnderecoDAO.pas',
-  UEndereco in 'Model\UEndereco.pas';
+  UEndereco in 'Model\UEndereco.pas',
+  UClienteView in 'View\UClienteView.pas' {frmClientes};
 
 {$R *.res}
 

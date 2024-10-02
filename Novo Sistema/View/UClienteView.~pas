@@ -817,7 +817,7 @@ begin
    if rdgTipoPessoa.ItemIndex = 1 then
    begin
       edtCPFCNPJ.Clear;
-      edtCPFCNPJ.EditMask := '00\.000\.000\/0000\-00;1;_'
+      edtCPFCNPJ.EditMask := '##\.###\.###\/####\-##;1;_'
    end
    else
    begin
