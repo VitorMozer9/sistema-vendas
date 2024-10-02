@@ -288,7 +288,7 @@ begin
 
    xDecremento := 10;
 
-   for I := 6 to 12 do
+   for I := 6 to 13 do
    begin
       xDecremento := xDecremento - 1;
       xSoma := xSoma + StrToInt(pCNPJ[I]) * (xDecremento);
@@ -304,7 +304,7 @@ begin
    begin
       xDecremento := xDecremento - 1;
       xSoma := xSoma + StrToInt(pCNPJ[I]) * (xDecremento);
-      xSoma := xSoma + (xPrimeiroDigito * 2);
+      //xSoma := xSoma + (xPrimeiroDigito * 2);
    end;
 
    xRestoDivisao := 11 - (xSoma mod 11);
@@ -316,8 +316,6 @@ begin
 
    if xRestoDivisao <> StrToInt(pCnpj[14]) then
       exit;
-
-
 
     Result := true;
 end;
@@ -331,17 +329,14 @@ var
    xSoma           : Integer;
 begin
    Result := False;
-
    xAux            := 0;
    xPrimeiroDigito := 0;
    xSegundoDigito  := 0;
    xRestoDivisao   := 0;
    xSoma           := 0;
 
-
    if (Length(pCPF) <> 11) then
       exit;
-
 
    if (pCPF = '00000000000') or (pCPF = '11111111111') or
       (pCPF = '22222222222') or (pCPF = '33333333333') or
@@ -350,12 +345,10 @@ begin
       (pCPF = '88888888888') or (pCPF = '99999999999') then
       exit;
 
-
    for xAux := 1 to 9 do
       xSoma := xSoma + StrToInt(pCPF[xAux]) * (11 - xAux);
 
    xRestoDivisao := 11 - (xSoma mod 11);
-
 
    if (xRestoDivisao >= 10) then
       xPrimeiroDigito := 0
@@ -366,20 +359,20 @@ begin
       exit;
 
    xSoma := 0;
-   for xAux := 1 to 9 do
+
+   for xAux := 1 to 10 do
       xSoma := xSoma + StrToInt(pCPF[xAux]) * (12 - xAux);
-      xSoma := xSoma + (xPrimeiroDigito * 2);
 
    xRestoDivisao := 0;
-
    xRestoDivisao := 11 - (xSoma mod 11);
+
    if (xRestoDivisao >= 10) then
       xSegundoDigito := 0
    else
       xSegundoDigito := xRestoDivisao;
 
    if xSegundoDigito <> StrToInt(pCPF[11]) then
-   exit;
+      exit;
 
    Result := True;
 end;
