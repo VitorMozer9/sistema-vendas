@@ -317,8 +317,6 @@ begin
    if xRestoDivisao <> StrToInt(pCnpj[14]) then
       exit;
 
-
-
     Result := true;
 end;
 
@@ -362,10 +360,9 @@ begin
 
    xSoma := 0;
 
-   for xAux := 1 to 9 do
+   for xAux := 1 to 10 do
       xSoma := xSoma + StrToInt(pCPF[xAux]) * (12 - xAux);
 
-   xSoma := xSoma + (xPrimeiroDigito * 2);
    xRestoDivisao := 0;
    xRestoDivisao := 11 - (xSoma mod 11);
 

@@ -66,7 +66,7 @@ begin
 
       VK_UP:
       begin
-         vKey := VK_CLEAR:
+         vKey := VK_CLEAR;
 
          if (ActiveControl = dbgCliente) then
             exit;

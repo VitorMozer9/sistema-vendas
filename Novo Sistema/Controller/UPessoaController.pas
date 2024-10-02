@@ -15,6 +15,7 @@ type
        function ExcluiPessoa(pPessoa : TPessoa) : Boolean;
 
        function BuscaPessoa(pID : Integer) : TPessoa;
+       function PesquisaPessoa(pNome : String) : TColPessoa;
        function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
 
        function ValidaCPF(pCPF : String) : Boolean;
@@ -209,6 +210,11 @@ begin
       end;
 
    end;
+end;
+
+function TPessoaController.PesquisaPessoa(pNome: String): TColPessoa;
+begin
+
 end;
 
 function TPessoaController.RetornaCondicaoPessoa(
