@@ -102,7 +102,7 @@ var
 implementation
 
 uses
-   uMessageUtil, Consts, UPessoa;
+   uMessageUtil, Consts, UPessoa, UClientesPesqView;
 
 {$R *.dfm}
 
@@ -328,6 +328,17 @@ begin
                edtCodigo.SetFocus;
          end;
       end;
+
+      etPesquisar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Pesquisa';
+
+         if (frmClientesPesq = nil) then
+            frmClientesPesq := TfrmClientesPesq.Create(Application);
+
+         frmClientesPesq.ShowModal;
+
+      end;
    end;
 end;
 
@@ -457,7 +468,6 @@ begin
                e.Message);
          end;
       end;
-
    finally
       if vObjCliente <> nil then
          FreeAndNil(vObjCliente);

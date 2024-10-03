@@ -31,6 +31,14 @@ type
     cdsClienteDescricaoAtivo: TStringField;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure btnFiltrarClick(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
+    procedure btnLimparClick(Sender: TObject);
+    procedure btnSairClick(Sender: TObject);
+    procedure cdsClienteBeforeDelete(DataSet: TDataSet);
+    procedure dbgClienteDblClick(Sender: TObject);
+    procedure dbgClienteKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
    
   private
     { Private declarations }
@@ -38,6 +46,7 @@ type
 
    procedure LimparTela;
    procedure ProcessaPesquisa;
+   procedure ProcessaConfirmacao;
   public
     { Public declarations }
     mClienteID   : Integer;
@@ -99,7 +108,25 @@ begin
    if (edtNome.CanFocus) then
       edtNome.SetFocus;
 
+end;
 
+procedure TfrmClientesPesq.ProcessaConfirmacao;
+begin
+   if not cdsCliente.IsEmpty then
+   begin
+      mClienteID       := cdsClienteID.Value;
+      mClienteNome     := cdsClienteNome.Value;
+      Self.ModalResult := mrOk;
+      LimparTela;
+      Close;
+   end
+   else
+   begin
+      TMessageUtil.Alerta('Nenhum cliente selecionado.');
+
+      if edtNome.CanFocus then
+         edtNome.SetFocus;
+   end;
 end;
 
 procedure TfrmClientesPesq.ProcessaPesquisa;
@@ -129,7 +156,7 @@ begin
 
                cdsClienteDescricaoAtivo.Value :=
                   IfThen(
-                     xListaCliente.Retorna(xAux).DescricaoAtivo, 'Sim', 'Não');
+                     xListaCliente.Retorna(xAux).Ativo, 'Sim', 'Não');
                cdsCliente.Post;
             end;
          end;
@@ -160,6 +187,51 @@ begin
             e.Message);
       end;
    end;
+end;
+
+procedure TfrmClientesPesq.btnFiltrarClick(Sender: TObject);
+begin
+   mClienteID := 0;
+   mClienteNome := EmptyStr;
+   ProcessaPesquisa;
+end;
+
+procedure TfrmClientesPesq.btnConfirmarClick(Sender: TObject);
+begin
+   mClienteID := 0;
+   mClienteNome := EmptyStr;
+   ProcessaConfirmacao;
+end;
+
+procedure TfrmClientesPesq.btnLimparClick(Sender: TObject);
+begin
+   LimparTela;
+end;
+
+procedure TfrmClientesPesq.btnSairClick(Sender: TObject);
+begin
+   mClienteID := 0;
+   mClienteNome := EmptyStr;
+   LimparTela;
+   Close;
+end;
+
+procedure TfrmClientesPesq.cdsClienteBeforeDelete(DataSet: TDataSet);
+begin
+   Abort;
+end;
+
+procedure TfrmClientesPesq.dbgClienteDblClick(Sender: TObject);
+begin
+   ProcessaConfirmacao;
+end;
+
+procedure TfrmClientesPesq.dbgClienteKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+   if (Key = VK_RETURN) and
+      (btnConfirmar.CanFocus) then
+      btnConfirmar.SetFocus;
 end;
 
 end.
