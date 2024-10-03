@@ -1,8 +1,8 @@
 object frmClientes: TfrmClientes
-  Left = 667
-  Top = 140
+  Left = 433
+  Top = 191
   Width = 663
-  Height = 380
+  Height = 375
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Clientes'
   Color = clBtnFace
@@ -25,7 +25,7 @@ object frmClientes: TfrmClientes
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 322
+    Top = 317
     Width = 647
     Height = 19
     Panels = <
@@ -38,7 +38,7 @@ object frmClientes: TfrmClientes
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 252
+    Top = 247
     Width = 647
     Height = 70
     Align = alBottom
@@ -375,7 +375,7 @@ object frmClientes: TfrmClientes
     Left = 0
     Top = 0
     Width = 647
-    Height = 252
+    Height = 247
     Align = alClient
     TabOrder = 0
     object lblCodigo: TLabel

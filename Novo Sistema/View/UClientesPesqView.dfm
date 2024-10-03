@@ -1,8 +1,8 @@
 object frmClientesPesq: TfrmClientesPesq
-  Left = 305
-  Top = 238
-  Width = 647
-  Height = 335
+  Left = 523
+  Top = 212
+  Width = 656
+  Height = 325
   Caption = 'Pesquisa de Cliente'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -12,20 +12,21 @@ object frmClientesPesq: TfrmClientesPesq
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
+  Position = poScreenCenter
   OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 280
-    Width = 631
+    Top = 270
+    Width = 640
     Height = 16
     Panels = <>
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 231
-    Width = 631
+    Top = 221
+    Width = 640
     Height = 49
     Align = alBottom
     TabOrder = 2
@@ -141,14 +142,14 @@ object frmClientesPesq: TfrmClientesPesq
   object pnlFiltro: TPanel
     Left = 0
     Top = 0
-    Width = 631
+    Width = 640
     Height = 60
     Align = alTop
     TabOrder = 0
     object grbFiltrar: TGroupBox
       Left = 1
       Top = 1
-      Width = 629
+      Width = 638
       Height = 58
       Align = alClient
       Caption = 'Filtrar'
@@ -215,23 +216,23 @@ object frmClientesPesq: TfrmClientesPesq
   object pnlResultado: TPanel
     Left = 0
     Top = 60
-    Width = 631
-    Height = 171
+    Width = 640
+    Height = 161
     Align = alClient
     TabOrder = 1
     object gbrGrid: TGroupBox
       Left = 1
       Top = 1
-      Width = 629
-      Height = 169
+      Width = 638
+      Height = 159
       Align = alClient
       Caption = 'Resultado da Busca'
       TabOrder = 0
       object dbgCliente: TDBGrid
         Left = 2
         Top = 15
-        Width = 625
-        Height = 152
+        Width = 634
+        Height = 142
         Align = alClient
         DataSource = dtsCliente
         TabOrder = 0
@@ -258,7 +259,7 @@ object frmClientesPesq: TfrmClientesPesq
             Expanded = False
             FieldName = 'DescricaoAtivo'
             Title.Caption = 'Ativo'
-            Width = 71
+            Width = 79
             Visible = True
           end>
       end

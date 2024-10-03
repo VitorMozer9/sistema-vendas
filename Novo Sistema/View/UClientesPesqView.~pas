@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, DB, DBClient, Grids,
-  DBGrids, UMessageUtil;
+  DBGrids, UMessageUtil, UPessoa, UPessoaController;
 
 type
   TfrmClientesPesq = class(TForm)
@@ -35,6 +35,9 @@ type
   private
     { Private declarations }
    vKey : Word;
+
+   procedure LimparTela;
+   procedure ProcessaPesquisa;
   public
     { Public declarations }
 
@@ -76,4 +79,47 @@ begin
    end;
 end;
 
+procedure TfrmClientesPesq.LimparTela;
+var
+   I : Integer;
+begin
+   for I := 0 to pred(ComponentCount) do
+   begin
+      if (Components[I] is TEdit) then
+         (Components[I] as TEdit).Text := EmptyStr;
+   end;
+
+   if (not cdsCliente.IsEmpty) then
+      cdsCliente.EmptyDataSet;
+
+   if (edtNome.CanFocus) then
+      edtNome.SetFocus;
+
+
+end;
+
+procedure TfrmClientesPesq.ProcessaPesquisa;
+var
+   xListaCliente : TColPessoa;
+begin
+   try
+      try
+         xListaCliente := TColPessoa.Create;
+
+         //XListaCliente :=
+            //TPessoaController.
+      finally
+
+      end;
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao pesquisar dados da Pessoa [View]: '#13 +
+            e.Message);
+      end;
+   end;
+end;
+
 end.
+

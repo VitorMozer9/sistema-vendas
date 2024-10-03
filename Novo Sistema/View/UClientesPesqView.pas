@@ -40,6 +40,8 @@ type
    procedure ProcessaPesquisa;
   public
     { Public declarations }
+    mClienteID   : Integer;
+    mClienteNome : String;
 
   end;
 
@@ -47,6 +49,8 @@ var
   frmClientesPesq: TfrmClientesPesq;
 
 implementation
+
+uses Math, StrUtils;
 
 {$R *.dfm}
 
@@ -83,7 +87,7 @@ procedure TfrmClientesPesq.LimparTela;
 var
    I : Integer;
 begin
-   for := 0 to pred(ComponentCount) do
+   for I := 0 to pred(ComponentCount) do
    begin
       if (Components[I] is TEdit) then
          (Components[I] as TEdit).Text := EmptyStr;
@@ -101,14 +105,52 @@ end;
 procedure TfrmClientesPesq.ProcessaPesquisa;
 var
    xListaCliente : TColPessoa;
+   xAux          : Integer;
 begin
    try
       try
          xListaCliente := TColPessoa.Create;
 
-         XListaCliente := 
-      finally
+         XListaCliente :=
+            TPessoaController.getInstancia.PesquisaPessoa(Trim(edtNome.Text));
 
+         cdsCliente.EmptyDataSet;
+
+         if xListaCliente <> nil then
+         begin
+            for xAux := 0 to pred(xListaCliente.Count) do
+            begin
+               cdsCliente.Append;
+               cdsClienteID.Value    := xListaCliente.Retorna(xAux).Id;
+               cdsClienteNome.Value  := xListaCliente.Retorna(xAux).Nome;
+
+               cdsClienteAtivo.Value :=
+                  IfThen(xListaCliente.Retorna(xAux).Ativo,1, 0);
+
+               cdsClienteDescricaoAtivo.Value :=
+                  IfThen(
+                     xListaCliente.Retorna(xAux).DescricaoAtivo, 'Sim', 'Não');
+               cdsCliente.Post;
+            end;
+         end;
+
+         if (cdsCliente.RecordCount = 0) then
+         begin
+            if edtNome.CanFocus then
+               edtNome.SetFocus;
+
+            TMessageUtil.Alerta('Nenhum cliente encontrado para este filtro');
+         end
+         else
+         begin
+            cdsCliente.First;
+
+            if dbgCliente.CanFocus then
+               dbgCliente.SetFocus;
+         end;
+      finally
+         if (xListaCliente <> nil) then
+            FreeAndNil(xListaCliente);
       end;
    except
       on E : Exception do

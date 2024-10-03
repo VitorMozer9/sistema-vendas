@@ -213,8 +213,35 @@ begin
 end;
 
 function TPessoaController.PesquisaPessoa(pNome: String): TColPessoa;
+var
+   xPessoaDAO : TPessoaDAO;
+   xCondicao  : String;
 begin
+   try
+      try
+         Result := nil;
 
+         xPessoaDAO:= TPessoaDAO.Create(TConexao.get.getConn);
+
+         xCondicao :=
+            IfThen(pNome <> EmptyStr,
+               'WHERE                            '#13 +
+               '    (NOME LIKE ''%' + pNome + '%'' )', EmptyStr);
+
+         Result := xPessoaDAO.RetornaLista(xCondicao);
+
+      finally
+         if (xPessoaDAO <> nil) then
+            FreeAndNil(xPessoaDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao pesquisar dados da pessoa [Controller]: '#13 +
+            e.Message);
+      end;
+   end;  
 end;
 
 function TPessoaController.RetornaCondicaoPessoa(

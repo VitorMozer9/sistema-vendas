@@ -15,6 +15,7 @@ type
        function ExcluiPessoa(pPessoa : TPessoa) : Boolean;
 
        function BuscaPessoa(pID : Integer) : TPessoa;
+       function PesquisaPessoa(pNome : String) : TColPessoa;
        function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
 
        function ValidaCPF(pCPF : String) : Boolean;
@@ -209,6 +210,31 @@ begin
       end;
 
    end;
+end;
+
+function TPessoaController.PesquisaPessoa(pNome: String): TColPessoa;
+var
+   xPessoaDAO : TPessoaDAO;
+begin
+   try
+     try
+
+        TConexao.get.iniciaTransacao;
+
+        xPessoaDAO:=
+           xPessoaDAO.Create(TConexao.get.getConn);
+
+     finally
+
+     end;   
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao pesquisar dados da pessoa [Controller]: '#13 +
+            e.Message);
+      end;
+   end;  
 end;
 
 function TPessoaController.RetornaCondicaoPessoa(
