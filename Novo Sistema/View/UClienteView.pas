@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons, Mask , UEnumerationUtil,
-  UCliente, UPessoaController, UEndereco, UClassFuncoes;
+  UCliente, UPessoaController, UEndereco, UClassFuncoes, frxClass, DB,
+  DBClient, frxDBSet;
 
 type
   TfrmClientes = class(TForm)
@@ -42,6 +43,18 @@ type
     btnConfirmar: TBitBtn;
     btnCancelar: TBitBtn;
     btnSair: TBitBtn;
+    frxListagemCliente: TfrxReport;
+    cdsCliente: TClientDataSet;
+    cdsClienteID: TStringField;
+    cdsClienteNome: TStringField;
+    cdsClienteCPFCNPJ: TStringField;
+    cdsClienteAtivo: TStringField;
+    cdsClienteEndereco: TStringField;
+    cdsClienteNumero: TStringField;
+    cdsClienteComplemento: TStringField;
+    cdsClienteBairro: TStringField;
+    cdsClienteCidadeUF: TStringField;
+    frxDBCliente: TfrxDBDataset;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -76,6 +89,8 @@ type
     procedure LimpaTela; //não precisa de parametro pois a unica função é limpar a tela
     procedure DefineEstadoTela;
 
+
+
     //Carrega Dados Padrão na Tela
     procedure CarregaDadosTela;
 
@@ -84,14 +99,16 @@ type
     function ProcessaAlteracao   : Boolean;
     function ProcessaExclusao    : Boolean;
     function ProcessaConsulta    : Boolean;
+    function ProcessaListagem    : Boolean;
     function ProcessaCliente     : Boolean;
 
     function ProcessaPessoa      : Boolean;
     function ProcessaEndereco    : Boolean;  //todos esses metodos tem como função
                                              //capturar a informação dos metodos(leitura cin)
                                              // e passar esses resultados para os objetos
-    function ValidaCliente       : Boolean;
-    function ValidaEndereco      : Boolean;
+    function ValidaCliente            : Boolean;
+    function ValidaEndereco           : Boolean;
+    function ConfirmaValidacaoCPFCNPJ : Boolean;
   public
     { Public declarations }
   end;
@@ -102,7 +119,7 @@ var
 implementation
 
 uses
-   uMessageUtil, Consts, UPessoa, UClientesPesqView;
+   uMessageUtil, Consts, UPessoa, UClientesPesqView, StrUtils;
 
 {$R *.dfm}
 
@@ -319,6 +336,22 @@ begin
             if (btnAlterar.CanFocus) then
                btnAlterar.SetFocus;
          end
+         else
+         begin
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
+
+            if edtCodigo.CanFocus then
+               edtCodigo.SetFocus;
+         end;
+      end;
+
+      etListar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Listagem';
+
+         if (edtCodigo.Text <> EmptyStr) then
+            ProcessaListagem;
          else
          begin
             lblCodigo.Enabled := True;
@@ -613,6 +646,10 @@ begin
       exit;
    end;
 
+   if not(TFuncoes.SoNumero(edtCPFCNPJ.Text) = EmptyStr) then
+     if not ConfirmaValidacaoCPFCNPJ then
+      Exit;
+
    Result := True;
 end;
 
@@ -753,6 +790,8 @@ begin
             Screen.Cursor := crHourGlass;
             TPessoaController.getInstancia.ExcluiPessoa(vObjCliente);
 
+            TMessageUtil.Informacao('Cliente excluído com sucesso');
+
          end
          else
          begin
@@ -769,7 +808,6 @@ begin
 
       Result := True;
 
-      TMessageUtil.Informacao('Cliente excluido com sucesso');
       LimpaTela;
       vEstadoTela := etPadrao;
       DefineEstadoTela;
@@ -855,31 +893,62 @@ end;
 
 procedure TfrmClientes.edtCPFCNPJKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
-var
-   xCPFCNPJreplace  : String;
 begin
-   xCPFCNPJreplace := EmptyStr;
-
    if vKey = VK_RETURN then
+      ConfirmaValidacaoCPFCNPJ;
+end;
+
+function TfrmClientes.ConfirmaValidacaoCPFCNPJ : Boolean;
+begin
+   Result := False;
+
+   if (rdgTipoPessoa.ItemIndex = 0) then
+   if (TPessoaController.getInstancia.ValidaCPF(TFuncoes.SoNumero(edtCPFCNPJ.Text)))then
    begin
-      xCPFCNPJreplace := TFuncoes.SoNumero(edtCPFCNPJ.Text);
+      Result := True;
+      exit
+   end
+   else
+      TMessageUtil.Alerta('CPF inválido, Favor informar um novo número');
 
-      if (rdgTipoPessoa.ItemIndex = 0) then
-      if (TPessoaController.getInstancia.ValidaCPF(xCPFCNPJreplace))then
-         exit
-      else
-         TMessageUtil.Alerta('CPF inválido, Favor informar um novo número');
+   if (rdgTipoPessoa.ItemIndex = 1) then
+   if (TPessoaController.getInstancia.ValidaCNPJ(TFuncoes.SoNumero(edtCPFCNPJ.Text))) then
+   begin
+      Result := True;
+      exit;
+   end
+   else
+     TMessageUtil.Alerta('CNPJ inválido, Favor informar um novo número');
 
-      if (rdgTipoPessoa.ItemIndex = 1) then
-      if (TPessoaController.getInstancia.ValidaCNPJ(xCPFCNPJreplace)) then
-         exit
-      else
-        TMessageUtil.Alerta('CNPJ inválido, Favor informar um novo número');
+   edtCPFCNPJ.Text := '';
 
-      edtCPFCNPJ.Text := '';
+   if edtCPFCNPJ.CanFocus then
+      edtCPFCNPJ.SetFocus;
+end;
 
-      if edtCPFCNPJ.CanFocus then
-         edtCPFCNPJ.SetFocus;
+function TfrmClientes.ProcessaListagem: Boolean;
+begin
+   try
+      if (not cdsCliente.Active) then
+         exit;
+
+      cdsCliente.Append;
+      cdsClienteID.Value          := edtCodigo.Text;
+      cdsClienteNome.Value        := edtNome.Text;
+      cdsClienteCPFCNPJ.Value     := edtCPFCNPJ.Text;
+      cdsClienteAtivo.Value       := IfThen (chkAtivo.Checked, 'Sim', 'Não');
+      cdsClienteEndereco.Value    := edtEndereco.Text;
+      cdsClienteComplemento.Value := edtComplemento.Text;
+      cdsClienteBairro.Value      := edtBairro.Text;
+      cdsClienteCidadeUF.Value    := edtCidade.Text + '/' + cmbUF.Text;
+      cdsCliente.Post;
+
+      frxListagemCliente.Variables['DATAHORA'];
+      frxListagemCliente.ShowReport();
+
+   finally
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
    end;
 end;
 

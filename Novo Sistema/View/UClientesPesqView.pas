@@ -198,20 +198,18 @@ end;
 
 procedure TfrmClientesPesq.btnConfirmarClick(Sender: TObject);
 begin
-   mClienteID := 0;
-   mClienteNome := EmptyStr;
    ProcessaConfirmacao;
 end;
 
 procedure TfrmClientesPesq.btnLimparClick(Sender: TObject);
 begin
+   mClienteID := 0;
+   mClienteNome := EmptyStr;
    LimparTela;
 end;
 
 procedure TfrmClientesPesq.btnSairClick(Sender: TObject);
 begin
-   mClienteID := 0;
-   mClienteNome := EmptyStr;
    LimparTela;
    Close;
 end;

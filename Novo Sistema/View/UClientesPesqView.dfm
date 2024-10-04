@@ -173,6 +173,7 @@ object frmClientesPesq: TfrmClientesPesq
         Top = 32
         Width = 473
         Height = 21
+        CharCase = ecUpperCase
         TabOrder = 0
       end
       object btnFiltrar: TBitBtn
