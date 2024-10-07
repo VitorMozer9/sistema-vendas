@@ -339,7 +339,6 @@ object frmClientes: TfrmClientes
       Width = 75
       Height = 25
       Caption = '&Sair'
-      Enabled = False
       TabOrder = 8
       OnClick = btnSairClick
       Glyph.Data = {
@@ -596,11 +595,11 @@ object frmClientes: TfrmClientes
     PrintOptions.Printer = 'Padr'#227'o'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 45569.455394548600000000
-    ReportOptions.LastChange = 45569.455394548600000000
+    ReportOptions.LastChange = 45572.412815451390000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'begin'
-      ''
+      '                        '
       'end.')
     Left = 258
     Top = 253
@@ -685,7 +684,7 @@ object frmClientes: TfrmClientes
           ParentFont = False
         end
         object DATAHORA: TfrxMemoView
-          Width = 94.488250000000000000
+          Width = 185.196970000000000000
           Height = 18.897650000000000000
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -700,7 +699,6 @@ object frmClientes: TfrmClientes
         object Memo2: TfrxMemoView
           Top = 60.472480000000000000
           Width = 680.315400000000000000
-          Height = 0.000000000000000000
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -954,7 +952,7 @@ object frmClientes: TfrmClientes
           ParentFont = False
         end
         object frxDBClienteBairro: TfrxMemoView
-          Left = 64.252010000000000000
+          Left = 56.692950000000000000
           Top = 37.795300000000000000
           Width = 234.330860000000000000
           Height = 18.897650000000000000
@@ -976,17 +974,6 @@ object frmClientes: TfrmClientes
           DataSetName = 'frxDBCliente'
           Memo.UTF8 = (
             '[frxDBCliente."Endereco"]')
-        end
-        object Memo8: TfrxMemoView
-          Left = 377.953000000000000000
-          Top = 3.779530000000000000
-          Width = 64.252010000000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxDBCliente
-          DataSetName = 'frxDBCliente'
-          Memo.UTF8 = (
-            '[frxDBCliente."Numero"]')
         end
         object Memo14: TfrxMemoView
           Left = 445.984540000000000000
@@ -1011,6 +998,18 @@ object frmClientes: TfrmClientes
           DataSetName = 'frxDBCliente'
           Memo.UTF8 = (
             '[frxDBCliente."CidadeUF"]')
+        end
+        object frxDBClienteNumero: TfrxMemoView
+          Left = 377.953000000000000000
+          Top = 3.779530000000000000
+          Width = 60.472480000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'Numero'
+          DataSet = frxDBCliente
+          DataSetName = 'frxDBCliente'
+          Memo.UTF8 = (
+            '[frxDBCliente."Numero"]')
         end
       end
     end
@@ -1083,5 +1082,25 @@ object frmClientes: TfrmClientes
     BCDToCurrency = False
     Left = 296
     Top = 255
+  end
+  object frxPDF: TfrxPDFExport
+    UseFileCache = True
+    ShowProgress = True
+    OverwritePrompt = False
+    PrintOptimized = False
+    Outline = False
+    Background = False
+    HTMLTags = True
+    Author = 'FastReport'
+    Subject = 'FastReport PDF export'
+    ProtectionFlags = [ePrint, eModify, eCopy, eAnnot]
+    HideToolbar = False
+    HideMenubar = False
+    HideWindowUI = False
+    FitWindow = False
+    CenterWindow = False
+    PrintScaling = False
+    Left = 259
+    Top = 284
   end
 end

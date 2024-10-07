@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons, Mask , UEnumerationUtil,
   UCliente, UPessoaController, UEndereco, UClassFuncoes, frxClass, DB,
-  DBClient, frxDBSet;
+  DBClient, frxDBSet, frxExportPDF;
 
 type
   TfrmClientes = class(TForm)
@@ -55,6 +55,7 @@ type
     cdsClienteBairro: TStringField;
     cdsClienteCidadeUF: TStringField;
     frxDBCliente: TfrxDBDataset;
+    frxPDF: TfrxPDFExport;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -351,7 +352,7 @@ begin
          stbBarraStatus.Panels[0].Text := 'Listagem';
 
          if (edtCodigo.Text <> EmptyStr) then
-            ProcessaListagem;
+            ProcessaListagem
          else
          begin
             lblCodigo.Enabled := True;
@@ -934,6 +935,7 @@ begin
 
       cdsCliente.Append;
       cdsClienteID.Value          := edtCodigo.Text;
+      cdsClienteNumero.Value      := edtNumero.Text;
       cdsClienteNome.Value        := edtNome.Text;
       cdsClienteCPFCNPJ.Value     := edtCPFCNPJ.Text;
       cdsClienteAtivo.Value       := IfThen (chkAtivo.Checked, 'Sim', 'Não');
@@ -943,12 +945,16 @@ begin
       cdsClienteCidadeUF.Value    := edtCidade.Text + '/' + cmbUF.Text;
       cdsCliente.Post;
 
-      frxListagemCliente.Variables['DATAHORA'];
+      frxListagemCliente.Variables['DATAHORA']    :=
+         QuotedStr(FormatDateTime('DD/MM/YYYY hh:mm', Date + Time));
+      frxListagemCliente.Variables['NOMEEMPRESA'] :=
+         QuotedStr('Nome da empresa');
       frxListagemCliente.ShowReport();
 
    finally
       vEstadoTela := etPadrao;
       DefineEstadoTela;
+      cdsCliente.EmptyDataSet;
    end;
 end;
 

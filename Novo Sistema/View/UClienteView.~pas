@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons, Mask , UEnumerationUtil,
-  UCliente, UPessoaController, UEndereco, UClassFuncoes, frxClass;
+  UCliente, UPessoaController, UEndereco, UClassFuncoes, frxClass, DB,
+  DBClient, frxDBSet;
 
 type
   TfrmClientes = class(TForm)
@@ -43,6 +44,17 @@ type
     btnCancelar: TBitBtn;
     btnSair: TBitBtn;
     frxListagemCliente: TfrxReport;
+    cdsCliente: TClientDataSet;
+    cdsClienteID: TStringField;
+    cdsClienteNome: TStringField;
+    cdsClienteCPFCNPJ: TStringField;
+    cdsClienteAtivo: TStringField;
+    cdsClienteEndereco: TStringField;
+    cdsClienteNumero: TStringField;
+    cdsClienteComplemento: TStringField;
+    cdsClienteBairro: TStringField;
+    cdsClienteCidadeUF: TStringField;
+    frxDBCliente: TfrxDBDataset;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -107,7 +119,7 @@ var
 implementation
 
 uses
-   uMessageUtil, Consts, UPessoa, UClientesPesqView;
+   uMessageUtil, Consts, UPessoa, UClientesPesqView, StrUtils;
 
 {$R *.dfm}
 
@@ -339,7 +351,7 @@ begin
          stbBarraStatus.Panels[0].Text := 'Listagem';
 
          if (edtCodigo.Text <> EmptyStr) then
-            ProcessaListagem;
+            ProcessaListagem
          else
          begin
             lblCodigo.Enabled := True;
@@ -917,7 +929,26 @@ end;
 function TfrmClientes.ProcessaListagem: Boolean;
 begin
    try
+      if (not cdsCliente.Active) then
+         exit;
 
+      cdsCliente.Append;
+      cdsClienteID.Value          := edtCodigo.Text;
+      cdsClienteNumero.Value      := edtNumero.Text;
+      cdsClienteNome.Value        := edtNome.Text;
+      cdsClienteCPFCNPJ.Value     := edtCPFCNPJ.Text;
+      cdsClienteAtivo.Value       := IfThen (chkAtivo.Checked, 'Sim', 'Não');
+      cdsClienteEndereco.Value    := edtEndereco.Text;
+      cdsClienteComplemento.Value := edtComplemento.Text;
+      cdsClienteBairro.Value      := edtBairro.Text;
+      cdsClienteCidadeUF.Value    := edtCidade.Text + '/' + cmbUF.Text;
+      cdsCliente.Post;
+
+      frxListagemCliente.Variables['DATAHORA']    :=
+         QuotedStr(FormatDateTime('DD/MM/YYYY hh:mm', Date + Time));
+      frxListagemCliente.Variables['NOMEEMPRESA'] :=
+         QuotedStr('Nome da empresa');
+      frxListagemCliente.ShowReport();
 
    finally
       vEstadoTela := etPadrao;
