@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons, Mask , UEnumerationUtil,
   UCliente, UPessoaController, UEndereco, UClassFuncoes, frxClass, DB,
-  DBClient, frxDBSet;
+  DBClient, frxDBSet, frxExportPDF;
 
 type
   TfrmClientes = class(TForm)
@@ -55,6 +55,7 @@ type
     cdsClienteBairro: TStringField;
     cdsClienteCidadeUF: TStringField;
     frxDBCliente: TfrxDBDataset;
+    frxPDF: TfrxPDFExport;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -953,6 +954,7 @@ begin
    finally
       vEstadoTela := etPadrao;
       DefineEstadoTela;
+      cdsCliente.EmptyDataSet;
    end;
 end;
 

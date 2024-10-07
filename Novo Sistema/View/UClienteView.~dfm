@@ -339,7 +339,6 @@ object frmClientes: TfrmClientes
       Width = 75
       Height = 25
       Caption = '&Sair'
-      Enabled = False
       TabOrder = 8
       OnClick = btnSairClick
       Glyph.Data = {
@@ -1083,5 +1082,25 @@ object frmClientes: TfrmClientes
     BCDToCurrency = False
     Left = 296
     Top = 255
+  end
+  object frxPDF: TfrxPDFExport
+    UseFileCache = True
+    ShowProgress = True
+    OverwritePrompt = False
+    PrintOptimized = False
+    Outline = False
+    Background = False
+    HTMLTags = True
+    Author = 'FastReport'
+    Subject = 'FastReport PDF export'
+    ProtectionFlags = [ePrint, eModify, eCopy, eAnnot]
+    HideToolbar = False
+    HideMenubar = False
+    HideWindowUI = False
+    FitWindow = False
+    CenterWindow = False
+    PrintScaling = False
+    Left = 259
+    Top = 284
   end
 end

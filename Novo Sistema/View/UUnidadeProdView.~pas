@@ -4,10 +4,28 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs;
+  Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons;
 
 type
-  TForm1 = class(TForm)
+  TfrmUnidadeProd = class(TForm)
+    stbBarraStatus: TStatusBar;
+    pnlBotoes: TPanel;
+    btnIncluir: TBitBtn;
+    btnAlterar: TBitBtn;
+    btnExcluir: TBitBtn;
+    btnConsultar: TBitBtn;
+    btnPesquisar: TBitBtn;
+    btnConfirmar: TBitBtn;
+    btnCancelar: TBitBtn;
+    btnSair: TBitBtn;
+    pnlArea: TPanel;
+    edtUnidade: TEdit;
+    lblCodigo: TLabel;
+    lblUnidade: TLabel;
+    chkAtivo: TCheckBox;
+    lblDescricao: TLabel;
+    edtDescricao: TEdit;
+    edtCodigo: TEdit;
   private
     { Private declarations }
   public
@@ -15,10 +33,11 @@ type
   end;
 
 var
-  Form1: TForm1;
+  frmUnidadeProd: TfrmUnidadeProd;
 
 implementation
 
 {$R *.dfm}
 
-end.
+
+

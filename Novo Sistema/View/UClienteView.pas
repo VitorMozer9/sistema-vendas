@@ -130,30 +130,29 @@ begin
    vKey := Key;  //nossa variavel privada recebe a variavel da procedure keydown
 
    case vKey of
-       VK_RETURN: //correspondente a tecla <Enter> toda vez q pressionar o enter
-       begin   //sistema vai pro proximo campo, pelo comando perform
-          Perform(WM_NextDlgCtl, 0, 0); //passa para o proximo campo do formulario
-       end;
+      VK_RETURN: //correspondente a tecla <Enter> toda vez q pressionar o enter
+      begin   //sistema vai pro proximo campo, pelo comando perform
+         Perform(WM_NextDlgCtl, 0, 0); //passa para o proximo campo do formulario
+      end;
 
-       VK_ESCAPE: //correspondente a tecla <ESC>
-       begin
-          if (vEstadoTela <> etPadrao) then
-          begin
-             if(TMessageUtil.Pergunta(
-                'Deseja realmente abortar esta operação?')) then
-             begin
-               vEstadoTela := etPadrao;
-               DefineEstadoTela;
-             end;
-          end
-
-          else
-          begin
-            if (TMessageUtil.Pergunta(
-               'Deseja sair da rotina?')) then
-               Close;   //fecha o formulario
-          end;
-       end;
+      VK_ESCAPE: //correspondente a tecla <ESC>
+      begin
+         if (vEstadoTela <> etPadrao) then
+         begin
+            if(TMessageUtil.Pergunta(
+               'Deseja realmente abortar esta operação?')) then
+            begin
+              vEstadoTela := etPadrao;
+              DefineEstadoTela;
+            end;
+         end
+         else
+         begin
+           if (TMessageUtil.Pergunta(
+              'Deseja sair da rotina?')) then
+              Close;   //fecha o formulario
+         end;
+      end;
     end;
 end;
 

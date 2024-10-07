@@ -873,6 +873,10 @@ object fmPrincipal: TfmPrincipal
       object menProdutos: TMenuItem
         Caption = 'Produtos'
       end
+      object MenUniProduto: TMenuItem
+        Caption = 'Unidade Produto'
+        OnClick = MenUniProdutoClick
+      end
     end
     object menRelatorios: TMenuItem
       Caption = 'Relatorios'

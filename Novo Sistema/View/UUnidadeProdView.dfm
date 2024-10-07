@@ -3,7 +3,7 @@ object frmUnidadeProd: TfrmUnidadeProd
   Top = 240
   Width = 513
   Height = 182
-  Caption = 'frmUnidadeProd'
+  Caption = 'Unidade de Produtos'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,6 +11,8 @@ object frmUnidadeProd: TfrmUnidadeProd
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
+  OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
   object stbBarraStatus: TStatusBar
@@ -331,18 +333,30 @@ object frmUnidadeProd: TfrmUnidadeProd
       Caption = 'C'#243'digo'
     end
     object lblUnidade: TLabel
-      Left = 13
+      Left = 4
       Top = 35
-      Width = 40
-      Height = 13
-      Caption = 'Unidade'
-    end
-    object lblDescricao: TLabel
-      Left = 125
-      Top = 32
       Width = 48
       Height = 13
+      Caption = 'Unidade'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblDescricao: TLabel
+      Left = 117
+      Top = 32
+      Width = 58
+      Height = 13
       Caption = 'Descri'#231#227'o'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
     end
     object edtCodigo: TEdit
       Left = 56
