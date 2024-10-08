@@ -159,7 +159,7 @@ end;
 procedure TfrmClientes.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
-   Action := caFree;
+   Action := caFree;  //limpar
    frmClientes := nil;
 end;
 
@@ -256,7 +256,7 @@ begin
           if (frmClientes <> nil) and
              (frmClientes.Active) and
              (btnIncluir.CanFocus) then
-             btnIncluir.SetFocus;
+               btnIncluir.SetFocus;
 
           Application.ProcessMessages;
       end;
@@ -486,7 +486,6 @@ begin
    except
       on E: Exception do
          TMessageUtil.Alerta(E.Message);
-
    end;
 
    Result := True;

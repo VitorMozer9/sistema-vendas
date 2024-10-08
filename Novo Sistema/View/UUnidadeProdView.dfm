@@ -1,8 +1,9 @@
 object frmUnidadeProd: TfrmUnidadeProd
-  Left = 468
-  Top = 240
+  Left = 790
+  Top = 213
   Width = 513
   Height = 182
+  BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Unidade de Produtos'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -10,9 +11,14 @@ object frmUnidadeProd: TfrmUnidadeProd
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
   OnKeyDown = FormKeyDown
+  OnKeyUp = FormKeyUp
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object stbBarraStatus: TStatusBar
@@ -42,6 +48,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       Height = 25
       Caption = '&Incluir'
       TabOrder = 0
+      OnClick = btnIncluirClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -77,6 +84,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       Height = 25
       Caption = '&Alterar'
       TabOrder = 1
+      OnClick = btnAlterarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E000000000000000000000A2B95062082
@@ -112,6 +120,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       Height = 25
       Caption = '&Excluir'
       TabOrder = 2
+      OnClick = btnExcluirClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -147,6 +156,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       Height = 25
       Caption = '&Consultar'
       TabOrder = 3
+      OnClick = btnConsultarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -182,6 +192,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       Height = 25
       Caption = 'Pesquisar'
       TabOrder = 4
+      OnClick = btnPesquisarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -218,6 +229,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       Caption = 'C&onfirmar'
       Enabled = False
       TabOrder = 5
+      OnClick = btnConfirmarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -254,6 +266,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       Caption = '&Cancelar'
       Enabled = False
       TabOrder = 6
+      OnClick = btnCancelarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFF5B57D9
@@ -289,6 +302,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       Height = 25
       Caption = '&Sair'
       TabOrder = 7
+      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
