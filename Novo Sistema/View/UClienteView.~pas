@@ -486,7 +486,6 @@ begin
    except
       on E: Exception do
          TMessageUtil.Alerta(E.Message);
-
    end;
 
    Result := True;

@@ -53,6 +53,10 @@ type
     procedure DefineEstadoTela;
 
     function ProcessaConfirmacao : Boolean;
+    function ProcessaInclusao    : Boolean;
+    function ProcessaUnidadeProd : Boolean;
+
+    function ValidaCampos        : Boolean;
 
   public
     { Public declarations }
@@ -259,10 +263,10 @@ begin
 
    try
       case vEstadoTela of
-         etIncluir:   Result := ProcessaInclusao;
-         etAlterar:   Result := ProcessaAlteracao;
-         etExcluir:   Result := ProcessaExclusao;
-         etConsultar: Result := ProcessaConsulta;
+         etIncluir:     Result := ProcessaInclusao;
+//         etAlterar:   Result := ProcessaAlteracao;
+//         etExcluir:   Result := ProcessaExclusao;
+//         etConsultar: Result := ProcessaConsulta;
       end;
 
       if not Result then
@@ -270,6 +274,79 @@ begin
    except
       on E : Exception do
          TMessageUtil.Alerta(e.Message);
+   end;
+
+   Result := True;
+end;
+
+function TfrmUnidadeProd.ProcessaInclusao: Boolean;
+begin
+   try
+      Result := False;
+
+      if ProcessaUnidadeProd then
+      begin
+         TMessageUtil.Informacao('Unidade cadastrada com sucesso');
+
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+
+         Result := True;
+      end;
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao incluir dados da Unidade de Produto [View]:'+ #13 +
+            e.Message);
+      end;
+
+   end;
+end;
+
+function TfrmUnidadeProd.ProcessaUnidadeProd: Boolean;
+begin
+   try
+      Result := False;
+
+      //Grava no banco
+
+      if not ValidaCampos then
+         exit;
+
+      Result := True;
+
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+         'Falha ao processar os dados da Unidade de produto[View]'#13 +
+         e.Message);
+      end;
+   end;
+end;
+
+function TfrmUnidadeProd.ValidaCampos: Boolean;
+begin
+   Result := False;
+
+    if (edtUnidade.Text = EmptyStr) then
+   begin
+      TMessageUtil.Alerta('Unidade do produto não pode ficar em branco.');
+
+      if edtUnidade.CanFocus then
+         edtUnidade.SetFocus;
+      exit;
+   end;
+
+   if (edtDescricao.Text = EmptyStr) then
+   begin
+      TMessageUtil.Alerta(
+         'Descroão da unidade de produto não pode ficar em branco.');
+
+      if edtDescricao.CanFocus then
+         edtDescricao.SetFocus;
+      exit;
    end;
 
    Result := True;

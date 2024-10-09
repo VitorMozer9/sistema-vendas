@@ -1,6 +1,6 @@
 object frmUnidadeProd: TfrmUnidadeProd
-  Left = 790
-  Top = 213
+  Left = 221
+  Top = 287
   Width = 513
   Height = 182
   BorderIcons = [biSystemMenu, biMinimize]

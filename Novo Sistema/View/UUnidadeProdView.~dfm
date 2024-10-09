@@ -1,6 +1,6 @@
 object frmUnidadeProd: TfrmUnidadeProd
-  Left = 790
-  Top = 213
+  Left = 221
+  Top = 287
   Width = 513
   Height = 182
   BorderIcons = [biSystemMenu, biMinimize]
@@ -17,6 +17,7 @@ object frmUnidadeProd: TfrmUnidadeProd
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13

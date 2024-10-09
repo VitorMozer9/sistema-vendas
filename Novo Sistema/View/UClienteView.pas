@@ -510,7 +510,7 @@ begin
         end;
 
       except
-         on E: Exception do
+         on E : Exception do
          begin
             Raise Exception.Create(
                'Falha ao incluir os dados do cliente[View]: '#13 +
