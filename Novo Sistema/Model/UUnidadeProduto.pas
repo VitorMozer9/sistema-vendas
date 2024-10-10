@@ -16,7 +16,7 @@ type
       public
          constructor create;
 
-         function Retorna(pIndex : Integer) : TUnidadeProduto;
+         //function Retorna(pIndex : Integer) : TUnidadeProduto;
          procedure Adiciona(pUnidadeProd : TUnidadeProduto);
 
       published
@@ -36,23 +36,22 @@ implementation
 
 procedure TUnidadeProduto.Adiciona(pUnidadeProd: TUnidadeProduto);
 begin
-   Self.Add(TUnidadeProduto(pUnidadeProd));
+   Self.Adiciona(TUnidadeProduto(pUnidadeProd));
 end;
 
 constructor TUnidadeProduto.create;
 begin
-
    Self.vId        := 0;
    Self.vAtivo     := False;
    Self.vUnidade   := EmptyStr;
    Self.vDescricao := EmptyStr;
-
 end;
 
-function TUnidadeProduto.Retorna(pIndex: Integer): TUnidadeProduto;
-begin
-   Result := TUnidadeProduto(Self[pIndex]);
-end;
-
+//function TUnidadeProduto.Retorna(pIndex: Integer): TUnidadeProduto;
+//begin
+//   Result := TUnidadeProduto(pIndex);
+//end;
+//
 end.
- 
+
+

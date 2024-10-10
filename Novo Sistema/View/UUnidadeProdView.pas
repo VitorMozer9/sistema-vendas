@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons,UEnumerationUtil;
+  Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons,UEnumerationUtil, UUnidadeProduto;
 
 type
   TfrmUnidadeProd = class(TForm)
@@ -47,6 +47,7 @@ type
 
     //variáveis de tela
     vEstadoTela : TEstadoTela;
+    vObjUnidadeProduto : TUnidadeProduto;
 
     procedure CamposEnable(pOpcao : Boolean);
     procedure LimpaTela;
@@ -67,7 +68,7 @@ var
 
 implementation
 
-uses uMessageUtil;
+uses uMessageUtil, UUnidadeProdController;
 
 {$R *.dfm}
 procedure TfrmUnidadeProd.FormKeyDown(Sender: TObject; var Key: Word;
@@ -310,9 +311,29 @@ begin
       Result := False;
 
       //Grava no banco
+      TUnidadeProdController.
 
       if not ValidaCampos then
          exit;
+
+      if vEstadoTela = etIncluir then
+      begin
+         if vObjUnidadeProduto = nil then
+            vObjUnidadeProduto := TUnidadeProduto.create;
+      end
+      else
+      if vEstadoTela = etAlterar then
+      begin
+         if vObjUnidadeProduto = nil then
+            exit;
+      end;
+
+      if (vObjUnidadeProduto = nil) then
+         Exit;
+
+      vObjUnidadeProduto.Ativo     := chkAtivo.Checked;
+      vObjUnidadeProduto.Unidade   := edtUnidade.Text;
+      vObjUnidadeProduto.Descricao := edtDescricao.Text;
 
       Result := True;
 

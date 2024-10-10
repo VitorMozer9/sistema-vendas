@@ -17,6 +17,7 @@ type
          constructor create;
 
          function Retorna(pIndex : Integer) : TUnidadeProduto;
+         procedure Adiciona(pUnidadeProd : TUnidadeProduto);
 
       published
        property Id        : Integer read vId write vId;
@@ -32,6 +33,11 @@ type
 implementation
 
 { TUnidadeProduto }
+
+procedure TUnidadeProduto.Adiciona(pUnidadeProd: TUnidadeProduto);
+begin
+   Self.Add(TUnidadeProduto(pUnidadeProd));
+end;
 
 constructor TUnidadeProduto.create;
 begin

@@ -2,7 +2,7 @@ unit UUnidadeProdDAO;
 
 interface
 
-uses SysUtils, UGenericDAO, UUnidadeProduto,SqlExpr;
+uses SysUtils, UGenericDAO, UUnidadeProduto;
 
 type
    TUnidadeProdutoDAO = class(TGenericDAO)

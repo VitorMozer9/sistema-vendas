@@ -1,0 +1,62 @@
+unit UUnidadeProdController;
+
+interface
+
+uses SysUtils, Math, StrUtils, UConexao, UUnidadeProduto;
+
+type
+   TUnidadeProdController = class
+      public
+         constructor create;
+         function GravaUnidadeProduto (
+                     pUnidadeProduto : TUnidadeProduto) : Boolean;
+
+   end;
+
+implementation
+
+uses UUnidadeProdDAO, UClassFuncoes;
+
+{ TUnidadeProdController }
+
+constructor TUnidadeProdController.create;
+begin
+   inherited create;
+end;
+
+function TUnidadeProdController.GravaUnidadeProduto(
+  pUnidadeProduto: TUnidadeProduto): Boolean;
+var
+   xUnidadeProdDAO : TUnidadeProdutoDAO;
+
+begin
+try
+   try
+      TConexao.get.iniciaTransacao;
+
+      Result := False;
+
+      xUnidadeProdDAO := nil;
+
+      xUnidadeProdDAO :=
+         TUnidadeProdutoDAO.Create(TConexao.get.getConn);
+
+      if pUnidadeProduto.Id = 0 then
+
+
+   finally
+      if xUnidadeProdDAO <> nil then
+         FreeAndNil(xUnidadeProdDAO);
+   end;
+except
+   on E : Exception do
+   begin
+      Raise Exception.Create(
+         'Falha ao gravar dados de unidade. [Controller]'#13 +
+         e.Message);
+   end;
+end;  
+end;
+
+end.
+ 
