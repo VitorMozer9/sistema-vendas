@@ -378,6 +378,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       Width = 54
       Height = 21
       TabOrder = 0
+      OnExit = edtCodigoExit
     end
     object edtUnidade: TEdit
       Left = 56

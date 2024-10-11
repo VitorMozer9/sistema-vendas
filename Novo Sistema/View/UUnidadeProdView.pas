@@ -41,6 +41,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure edtCodigoExit(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -481,6 +482,7 @@ begin
    edtUnidade.Text   := vObjUnidadeProduto.Unidade;
    edtDescricao.Text := vObjUnidadeProduto.Descricao;
    btnAlterar.Enabled := True;
+   btnExcluir.Enabled := True;
 end;
 
 function TfrmUnidadeProd.ProcessaAlteracao: Boolean;
@@ -505,6 +507,14 @@ begin
             e.Message);
       end;
    end;
+end;
+
+procedure TfrmUnidadeProd.edtCodigoExit(Sender: TObject);
+begin
+   if vKey = VK_RETURN then
+      ProcessaConsulta;
+
+   vKey := VK_CLEAR;
 end;
 
 end.
