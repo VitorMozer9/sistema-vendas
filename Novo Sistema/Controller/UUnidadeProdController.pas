@@ -11,6 +11,8 @@ type
          function GravaUnidadeProduto (
                      pUnidadeProduto : TUnidadeProduto) : Boolean;
 
+         function BuscaUnidade(pID : Integer) : TUnidadeProduto;
+
          function RetornaCondicaoUnidade(pID : Integer ) : String;
 
       published
@@ -22,7 +24,36 @@ implementation
 
 uses UUnidadeProdDAO, UClassFuncoes;
 
+var
+   _instance : TUnidadeProdController;
+
 { TUnidadeProdController }
+
+function TUnidadeProdController.BuscaUnidade(
+  pID: Integer): TUnidadeProduto;
+var
+   xUnidadeDAO : TUnidadeProdutoDAO;
+begin
+   try
+      try
+         Result := nil;
+
+         xUnidadeDAO := TUnidadeProdutoDAO.Create(TConexao.getInstance.getConn);
+         Result := xUnidadeDAO.Retorna(RetornaCondicaoUnidade(pID));
+
+      finally
+         if (xUnidadeDAO <> nil) then
+            FreeAndNil(xUnidadeDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+         'Falha ao retornar dados da Unidade de Produto. [Controller]'#13 +
+         e.Message);
+      end;
+   end;  
+end;
 
 constructor TUnidadeProdController.create;
 begin

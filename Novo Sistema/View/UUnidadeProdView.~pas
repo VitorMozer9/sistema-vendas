@@ -68,7 +68,7 @@ var
 
 implementation
 
-uses uMessageUtil;
+uses uMessageUtil, UUnidadeProdController;
 
 {$R *.dfm}
 procedure TfrmUnidadeProd.FormKeyDown(Sender: TObject; var Key: Word;
@@ -311,6 +311,7 @@ begin
       Result := False;
 
       //Grava no banco
+      TUnidadeProdController.
 
       if not ValidaCampos then
          exit;

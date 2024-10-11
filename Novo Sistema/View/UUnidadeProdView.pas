@@ -52,10 +52,13 @@ type
     procedure CamposEnable(pOpcao : Boolean);
     procedure LimpaTela;
     procedure DefineEstadoTela;
+    procedure CarregaDadosTela;
 
     function ProcessaConfirmacao : Boolean;
     function ProcessaInclusao    : Boolean;
+    function ProcessaConsulta    : Boolean;
     function ProcessaUnidadeProd : Boolean;
+
 
     function ValidaCampos        : Boolean;
 
@@ -183,6 +186,33 @@ begin
          if (edtUnidade.CanFocus) then
             edtUnidade.SetFocus;
       end;
+
+      etConsultar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Consulta';
+
+          CamposEnable(False);
+
+         if (edtCodigo.Text <> EmptyStr) then
+         begin
+            edtCodigo.Enabled    := False;
+            btnAlterar.Enabled   := True;
+            btnExcluir.Enabled   := True;
+            btnConfirmar.Enabled := False;
+
+            if (btnAlterar.CanFocus) then
+               btnAlterar.SetFocus;
+         end
+         else
+         begin
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
+
+            if edtCodigo.CanFocus then
+               edtCodigo.SetFocus;
+         end;
+
+      end;
    end;
 end;
 
@@ -264,10 +294,10 @@ begin
 
    try
       case vEstadoTela of
-         etIncluir:     Result := ProcessaInclusao;
-//         etAlterar:   Result := ProcessaAlteracao;
-//         etExcluir:   Result := ProcessaExclusao;
-//         etConsultar: Result := ProcessaConsulta;
+         etIncluir:   Result := ProcessaInclusao;
+//       etAlterar:   Result := ProcessaAlteracao;
+//       etExcluir:   Result := ProcessaExclusao;
+         etConsultar: Result := ProcessaConsulta;
       end;
 
       if not Result then
@@ -287,7 +317,8 @@ begin
 
       if ProcessaUnidadeProd then
       begin
-         TMessageUtil.Informacao('Unidade cadastrada com sucesso');
+         TMessageUtil.Informacao('Unidade cadastrada com sucesso'+ #13 +
+         'Código cadastrado: ' + IntToStr(vObjUnidadeProduto.Id));
 
          vEstadoTela := etPadrao;
          DefineEstadoTela;
@@ -309,9 +340,6 @@ function TfrmUnidadeProd.ProcessaUnidadeProd: Boolean;
 begin
    try
       Result := False;
-
-      //Grava no banco
-      TUnidadeProdController.
 
       if not ValidaCampos then
          exit;
@@ -335,6 +363,9 @@ begin
       vObjUnidadeProduto.Unidade   := edtUnidade.Text;
       vObjUnidadeProduto.Descricao := edtDescricao.Text;
 
+      TUnidadeProdController.getInstancia.GravaUnidadeProduto(
+         vObjUnidadeProduto);
+
       Result := True;
 
    except
@@ -351,7 +382,7 @@ function TfrmUnidadeProd.ValidaCampos: Boolean;
 begin
    Result := False;
 
-    if (edtUnidade.Text = EmptyStr) then
+    if (Trim(edtUnidade.Text) = EmptyStr) then
    begin
       TMessageUtil.Alerta('Unidade do produto não pode ficar em branco.');
 
@@ -360,10 +391,10 @@ begin
       exit;
    end;
 
-   if (edtDescricao.Text = EmptyStr) then
+   if (Trim(edtDescricao.Text) = EmptyStr) then
    begin
       TMessageUtil.Alerta(
-         'Descroão da unidade de produto não pode ficar em branco.');
+         'Descrição da unidade de produto não pode ficar em branco.');
 
       if edtDescricao.CanFocus then
          edtDescricao.SetFocus;
@@ -371,6 +402,57 @@ begin
    end;
 
    Result := True;
+end;
+
+function TfrmUnidadeProd.ProcessaConsulta: Boolean;
+begin
+   try
+      Result := False;
+
+      if (edtCodigo.Text = EmptyStr) then
+      begin
+         TMessageUtil.Alerta(
+            'O código de Unidade De Produto não pode ficar em branco');
+
+         if (edtCodigo.CanFocus) then
+            edtCodigo.SetFocus;
+
+         exit;
+      end;
+
+      vObjUnidadeProduto :=
+         TUnidadeProdController.getInstancia.BuscaUnidade(
+            StrToIntDef(edtCodigo.Text, 0));
+
+      if (vObjUnidadeProduto <> nil) then
+         CarregaDadosTela
+      else
+      begin
+         TMessageUtil.Alerta('Nenhum dado de unidade encontrado')
+      end;
+
+      Result := True;
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+         'Falha ao consultar dados de unidade de produto [View]: '+#13 +
+         e.Message);
+      end;
+   end;  
+end;
+
+procedure TfrmUnidadeProd.CarregaDadosTela;
+begin
+
+   if (vObjUnidadeProduto = nil) then
+   exit;
+
+   edtCodigo.Text    := IntToStr(vObjUnidadeProduto.Id);
+   chkAtivo.Checked  := vObjUnidadeProduto.Ativo;
+   edtUnidade.Text   := vObjUnidadeProduto.Unidade;
+   edtDescricao.Text := vObjUnidadeProduto.Descricao;
+
 end;
 
 end.
