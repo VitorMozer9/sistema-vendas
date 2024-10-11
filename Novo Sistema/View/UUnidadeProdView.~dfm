@@ -1,6 +1,6 @@
 object frmUnidadeProd: TfrmUnidadeProd
-  Left = 221
-  Top = 287
+  Left = 653
+  Top = 235
   Width = 513
   Height = 182
   BorderIcons = [biSystemMenu, biMinimize]
@@ -384,6 +384,14 @@ object frmUnidadeProd: TfrmUnidadeProd
       Top = 29
       Width = 54
       Height = 21
+      CharCase = ecUpperCase
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      MaxLength = 2
+      ParentFont = False
       TabOrder = 1
     end
     object chkAtivo: TCheckBox

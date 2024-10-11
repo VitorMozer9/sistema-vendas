@@ -58,6 +58,7 @@ type
     function ProcessaInclusao    : Boolean;
     function ProcessaConsulta    : Boolean;
     function ProcessaUnidadeProd : Boolean;
+    function ProcessaAlteracao   : Boolean;
 
 
     function ValidaCampos        : Boolean;
@@ -187,6 +188,32 @@ begin
             edtUnidade.SetFocus;
       end;
 
+      etAlterar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Alteração';
+
+         if (edtCodigo.Text <> EmptyStr) then
+         begin
+            CamposEnable(True);
+
+            edtCodigo.Enabled := False;
+            btnAlterar.Enabled := False;
+            btnConfirmar.Enabled := True;
+
+            if (chkAtivo.CanFocus) then
+               chkAtivo.SetFocus;
+
+         end
+         else
+         begin
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
+
+            if (edtCodigo.CanFocus) then
+               edtCodigo.SetFocus;
+         end;
+      end;
+
       etConsultar:
       begin
          stbBarraStatus.Panels[0].Text := 'Consulta';
@@ -211,8 +238,9 @@ begin
             if edtCodigo.CanFocus then
                edtCodigo.SetFocus;
          end;
-
       end;
+
+
    end;
 end;
 
@@ -295,7 +323,7 @@ begin
    try
       case vEstadoTela of
          etIncluir:   Result := ProcessaInclusao;
-//       etAlterar:   Result := ProcessaAlteracao;
+         etAlterar:   Result := ProcessaAlteracao;
 //       etExcluir:   Result := ProcessaExclusao;
          etConsultar: Result := ProcessaConsulta;
       end;
@@ -428,7 +456,8 @@ begin
          CarregaDadosTela
       else
       begin
-         TMessageUtil.Alerta('Nenhum dado de unidade encontrado')
+         TMessageUtil.Alerta('Nenhum dado de unidade encontrado');
+         exit;
       end;
 
       Result := True;
@@ -444,15 +473,38 @@ end;
 
 procedure TfrmUnidadeProd.CarregaDadosTela;
 begin
-
    if (vObjUnidadeProduto = nil) then
-   exit;
+      exit;
 
    edtCodigo.Text    := IntToStr(vObjUnidadeProduto.Id);
    chkAtivo.Checked  := vObjUnidadeProduto.Ativo;
    edtUnidade.Text   := vObjUnidadeProduto.Unidade;
    edtDescricao.Text := vObjUnidadeProduto.Descricao;
+   btnAlterar.Enabled := True;
+end;
 
+function TfrmUnidadeProd.ProcessaAlteracao: Boolean;
+begin
+   try
+      Result := False;
+
+      if ProcessaUnidadeProd then
+      begin
+         TMessageUtil.Informacao('Dados alterados com sucesso.');
+
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+
+         Result := True;
+      end;
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao alterar os dados de Unidade [View]: '#13+
+            e.Message);
+      end;
+   end;
 end;
 
 end.
