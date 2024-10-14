@@ -60,6 +60,7 @@ type
     function ProcessaConsulta    : Boolean;
     function ProcessaUnidadeProd : Boolean;
     function ProcessaAlteracao   : Boolean;
+    function ProcessaExclusao    : Boolean;
 
 
     function ValidaCampos        : Boolean;
@@ -215,6 +216,22 @@ begin
          end;
       end;
 
+      etExcluir:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Exclusão';
+
+         if (edtCodigo.Text <> EmptyStr) then
+            ProcessaExclusao
+         else
+         begin
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
+
+            if (edtCodigo.CanFocus) then
+               edtCodigo.SetFocus;
+         end;
+      end;
+
       etConsultar:
       begin
          stbBarraStatus.Panels[0].Text := 'Consulta';
@@ -325,7 +342,7 @@ begin
       case vEstadoTela of
          etIncluir:   Result := ProcessaInclusao;
          etAlterar:   Result := ProcessaAlteracao;
-//       etExcluir:   Result := ProcessaExclusao;
+         etExcluir:   Result := ProcessaExclusao;
          etConsultar: Result := ProcessaConsulta;
       end;
 
@@ -341,28 +358,33 @@ end;
 
 function TfrmUnidadeProd.ProcessaInclusao: Boolean;
 begin
-   try
-      Result := False;
+  try
+     try
+        Result := False;
 
-      if ProcessaUnidadeProd then
-      begin
-         TMessageUtil.Informacao('Unidade cadastrada com sucesso'+ #13 +
-         'Código cadastrado: ' + IntToStr(vObjUnidadeProduto.Id));
+        if ProcessaUnidadeProd then
+        begin
+           TMessageUtil.Informacao('Unidade cadastrada com sucesso'+ #13 +
+           'Código cadastrado: ' + IntToStr(vObjUnidadeProduto.Id));
 
-         vEstadoTela := etPadrao;
-         DefineEstadoTela;
+           vEstadoTela := etPadrao;
+           DefineEstadoTela;
 
-         Result := True;
-      end;
-   except
-      on E : Exception do
-      begin
-         Raise Exception.Create(
-            'Falha ao incluir dados da Unidade de Produto [View]:'+ #13 +
-            e.Message);
-      end;
+           Result := True;
+        end;
+     except
+        on E : Exception do
+        begin
+           Raise Exception.Create(
+              'Falha ao incluir dados da Unidade de Produto [View]:'+ #13 +
+              e.Message);
+        end;
+     end;
 
-   end;
+  finally
+     if (vObjUnidadeProduto <> nil) then
+        FreeAndNil(vObjUnidadeProduto);
+  end;
 end;
 
 function TfrmUnidadeProd.ProcessaUnidadeProd: Boolean;
@@ -483,12 +505,26 @@ begin
    edtDescricao.Text := vObjUnidadeProduto.Descricao;
    btnAlterar.Enabled := True;
    btnExcluir.Enabled := True;
+   edtCodigo.Enabled := False;
+
+
+   if  vEstadoTela = etAlterar then
+   begin
+      edtUnidade.Enabled := true;
+      edtDescricao.Enabled := true;
+   end;
 end;
 
 function TfrmUnidadeProd.ProcessaAlteracao: Boolean;
 begin
    try
       Result := False;
+
+      if edtCodigo.Enabled then
+      begin
+         ProcessaConsulta;
+         exit;
+      end;
 
       if ProcessaUnidadeProd then
       begin
@@ -514,7 +550,63 @@ begin
    if vKey = VK_RETURN then
       ProcessaConsulta;
 
-   vKey := VK_CLEAR:
+   vKey := VK_CLEAR;
+end;
+
+function TfrmUnidadeProd.ProcessaExclusao: Boolean;
+begin
+   try
+      Result := False;
+
+      if (vObjUnidadeProduto = nil) then
+      begin
+         TMessageUtil.Alerta(
+            'Não foi possível carregar os dados de unidade ');
+
+         LimpaTela;
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         exit;
+      end;
+
+      try
+         if TMessageUtil.Pergunta(
+            'Confirma a exclusão dos dados de Unidade do Produto?') then
+         begin
+            Screen.Cursor := crHourGlass;
+
+            TUnidadeProdController.getInstancia.ExcluiUnidade(
+               vObjUnidadeProduto);
+
+            TMessageUtil.Informacao('Unidade excluída com sucesso. ');
+         end
+         else
+         begin
+            LimpaTela;
+            vEstadoTela := etPadrao;
+            DefineEstadoTela;
+            exit;
+         end;
+
+      finally
+         Screen.Cursor := crDefault;
+         Application.ProcessMessages;
+      end;
+
+      Result := True;
+
+      LimpaTela;
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
+
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+         'Falha ao excluir dados de unidade. [View]: '+ #13 +
+         e.Message);
+      end;
+   end;
 end;
 
 end.

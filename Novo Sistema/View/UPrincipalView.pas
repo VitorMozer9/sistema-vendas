@@ -58,7 +58,7 @@ procedure TfmPrincipal.menClientesClick(Sender: TObject);
 begin
   try       // try e finally são usados para executar um bloco
            //de codigos com segurança
-     Screen.Cursor := crHourGlass;  //chama a tela de clientes
+     Screen.Cursor := crHourGlass; 
 
       if frmClientes  = nil then
          frmClientes := TfrmClientes.Create(Application);

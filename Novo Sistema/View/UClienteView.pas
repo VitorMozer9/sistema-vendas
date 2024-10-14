@@ -779,7 +779,7 @@ begin
          LimpaTela;
          vEstadoTela := etPadrao;
          DefineEstadoTela;
-         Exit;
+         exit;
       end;
 
       try
@@ -802,7 +802,6 @@ begin
       finally
          Screen.Cursor := crDefault;
          Application.ProcessMessages;
-
       end;
 
       Result := True;
@@ -816,7 +815,7 @@ begin
       on E: Exception do
       begin
          Raise Exception.Create(
-            'Falha ao excluir os dados do cliente [View] .'#13 +
+            'Falha ao excluir os dados do cliente [View].'#13 +
             e.Message);
       end;
 

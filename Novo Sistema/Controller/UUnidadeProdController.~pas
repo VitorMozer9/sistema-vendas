@@ -11,6 +11,10 @@ type
          function GravaUnidadeProduto (
                      pUnidadeProduto : TUnidadeProduto) : Boolean;
 
+         function ExcluiUnidade (pUnidadeProd : TUnidadeProduto) : Boolean;
+
+         function BuscaUnidade(pID : Integer) : TUnidadeProduto;
+
          function RetornaCondicaoUnidade(pID : Integer ) : String;
 
       published
@@ -22,11 +26,78 @@ implementation
 
 uses UUnidadeProdDAO, UClassFuncoes;
 
+var
+   _instance : TUnidadeProdController;
+
 { TUnidadeProdController }
+
+function TUnidadeProdController.BuscaUnidade(
+  pID: Integer): TUnidadeProduto;
+var
+   xUnidadeDAO : TUnidadeProdutoDAO;
+begin
+   try
+      try
+         Result := nil;
+
+         xUnidadeDAO := TUnidadeProdutoDAO.Create(TConexao.getInstance.getConn);
+         Result := xUnidadeDAO.Retorna(RetornaCondicaoUnidade(pID));
+
+      finally
+         if (xUnidadeDAO <> nil) then
+            FreeAndNil(xUnidadeDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+         'Falha ao retornar dados da Unidade de Produto. [Controller]'#13 +
+         e.Message);
+      end;
+   end;  
+end;
 
 constructor TUnidadeProdController.create;
 begin
    inherited create;
+end;
+
+function TUnidadeProdController.ExcluiUnidade(
+  pUnidadeProd: TUnidadeProduto): Boolean;
+var
+   xUnidadeDAO : TUnidadeProdutoDAO;
+begin
+   try
+      try
+         Result := False;
+
+         TConexao.get.iniciaTransacao;
+
+         xUnidadeDAO := TUnidadeProdutoDAO.Create(TConexao.getInstance.getConn);
+
+         if (pUnidadeProd.Id = 0) then
+            exit
+         else
+         begin
+            xUnidadeDAO.Deleta(RetornaCondicaoUnidade(pUnidadeProd.Id));
+         end;
+
+         TConexao.get.confirmaTransacao;
+
+         Result := True;
+      finally
+         if (xUnidadeDAO <> nil) then
+            FreeAndNil(xUnidadeDAO);
+      end;
+   except
+      TConexao.get.cancelaTransacao;
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao excluir dados de unidade de produto. [Controller]'#13 +
+            e.Message);
+      end;
+   end;
 end;
 
 class function TUnidadeProdController.getInstancia: TUnidadeProdController;
@@ -77,7 +148,7 @@ except
          'Falha ao gravar dados de unidade de produto. [Controller]'#13 +
          e.Message);
    end;
-end;  
+end;
 end;
 
 function TUnidadeProdController.RetornaCondicaoUnidade(
