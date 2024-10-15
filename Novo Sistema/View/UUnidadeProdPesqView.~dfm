@@ -1,9 +1,9 @@
-object frmClientesPesq: TfrmClientesPesq
-  Left = 523
-  Top = 212
-  Width = 656
-  Height = 325
-  Caption = 'Pesquisa de Cliente'
+object frmUnidadePesq: TfrmUnidadePesq
+  Left = 372
+  Top = 193
+  Width = 709
+  Height = 346
+  Caption = 'Pesquisa de Unidade de Produto'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,32 +12,29 @@ object frmClientesPesq: TfrmClientesPesq
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
-  Position = poScreenCenter
-  OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 270
-    Width = 640
-    Height = 16
+    Top = 288
+    Width = 693
+    Height = 19
     Panels = <>
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 221
-    Width = 640
-    Height = 49
+    Top = 248
+    Width = 693
+    Height = 40
     Align = alBottom
-    TabOrder = 2
+    TabOrder = 1
     object btnConfirmar: TBitBtn
-      Left = 392
-      Top = 16
+      Left = 432
+      Top = 8
       Width = 75
       Height = 25
       Caption = 'C&onfirmar'
       TabOrder = 0
-      OnClick = btnConfirmarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -67,13 +64,12 @@ object frmClientesPesq: TfrmClientesPesq
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnLimpar: TBitBtn
-      Left = 472
-      Top = 16
+      Left = 512
+      Top = 8
       Width = 75
       Height = 25
       Caption = '&Limpar'
       TabOrder = 1
-      OnClick = btnLimparClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -103,13 +99,12 @@ object frmClientesPesq: TfrmClientesPesq
         AF8DC2AA84AA9161A98B5DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnSair: TBitBtn
-      Left = 552
-      Top = 16
+      Left = 592
+      Top = 8
       Width = 75
       Height = 25
       Caption = '&Sair'
       TabOrder = 2
-      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -142,167 +137,17 @@ object frmClientesPesq: TfrmClientesPesq
   object pnlFiltro: TPanel
     Left = 0
     Top = 0
-    Width = 640
-    Height = 60
+    Width = 693
+    Height = 65
     Align = alTop
-    TabOrder = 0
-    object grbFiltrar: TGroupBox
-      Left = 1
-      Top = 1
-      Width = 638
-      Height = 58
-      Align = alClient
-      Caption = 'Filtrar'
-      TabOrder = 0
-      object lblNome: TLabel
-        Left = 32
-        Top = 38
-        Width = 28
-        Height = 13
-        Caption = 'Nome'
-      end
-      object lblInfo: TLabel
-        Left = 64
-        Top = 16
-        Width = 233
-        Height = 13
-        Caption = 'Digite parte ou todo o conte'#250'do a ser pesquisado'
-      end
-      object edtNome: TEdit
-        Left = 64
-        Top = 32
-        Width = 473
-        Height = 21
-        CharCase = ecUpperCase
-        TabOrder = 0
-      end
-      object btnFiltrar: TBitBtn
-        Left = 544
-        Top = 26
-        Width = 75
-        Height = 25
-        Caption = '&Filtrar'
-        TabOrder = 1
-        OnClick = btnFiltrarClick
-        Glyph.Data = {
-          36030000424D3603000000000000360000002800000010000000100000000100
-          18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFB46822CF9D73F0E2D8FFFFFFFFFFFFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD0933CE8
-          A527AD570FBB7A4CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFCD903FEAAF30BD660EB56217FFFFFFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD09446E9
-          B23EC06B14BA671DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFD2994AECB849C6711BBE6B1FFFFFFFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD59C4EEE
-          BF53CB7820C26F22FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFD8A253F1C45FCE7E24C77A27FFFFFFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDAA558F2
-          C866D1842ACB7F2CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFE1B78AEAC681EFC261DA983ACB7824E3BC8EFFFFFFFFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEED6B9E9C588F3CF76EF
-          C264E7B358D17D26D58C33F0DABFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-          FFFFFFF5E5D2E5BB7CF8DB8FEEC463EFC76CF2C96CDC9337D5852CD9983CF6E7
-          D5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCF7EFE0AC5AF8DE91F1C55DF2C666F1
-          C363F4CB6AE8AF44D9851DDF9331E09F40FDFAF6FFFFFFFFFFFFFFFFFFFFFFFF
-          E4B46CFBEEC3FAE8B9F7E8C6F5EEE0F3F0EAF1EDE9EEE9DBDAA964D6A259E0AB
-          5DE3AF60FFFFFFFFFFFFFBF3E7ECC990FEFEFAFFFFFFF6F4F3F2F3F4EEE9DFE7
-          D5AAE2CFA1E6E2D7D9C9A8CFB278CAB796D3C4ADEAC68DFBF3E7E5AE54E7B75B
-          E5B24EDB931ADC981EDD971EDD971EDC961ADD951BDF9920E09D29E19F2AE2A0
-          29E0AA43E2AF52E4AF54F9ECD3F4DAACEFCB88F0CA7DEFC56DEFC56CF0C56BF4
-          CC7AF4CD7BF0C56DEFC56CEFC66DF0CA7EF2CD8AF4DBADF9ECD3}
-      end
-    end
+    TabOrder = 2
   end
   object pnlResultado: TPanel
     Left = 0
-    Top = 60
-    Width = 640
-    Height = 161
+    Top = 65
+    Width = 693
+    Height = 183
     Align = alClient
-    TabOrder = 1
-    object gbrGrid: TGroupBox
-      Left = 1
-      Top = 1
-      Width = 638
-      Height = 159
-      Align = alClient
-      Caption = 'Resultado da Busca'
-      TabOrder = 0
-      object dbgCliente: TDBGrid
-        Left = 2
-        Top = 15
-        Width = 634
-        Height = 142
-        Align = alClient
-        DataSource = dtsCliente
-        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgCancelOnExit]
-        TabOrder = 0
-        TitleFont.Charset = DEFAULT_CHARSET
-        TitleFont.Color = clWindowText
-        TitleFont.Height = -11
-        TitleFont.Name = 'MS Sans Serif'
-        TitleFont.Style = []
-        OnDblClick = dbgClienteDblClick
-        OnKeyDown = dbgClienteKeyDown
-        Columns = <
-          item
-            Expanded = False
-            FieldName = 'ID'
-            Title.Caption = 'C'#243'digo'
-            Width = 57
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'Nome'
-            Width = 474
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'DescricaoAtivo'
-            Title.Caption = 'Ativo'
-            Width = 79
-            Visible = True
-          end>
-      end
-    end
-  end
-  object dtsCliente: TDataSource
-    DataSet = cdsCliente
-    Left = 5
-    Top = 114
-  end
-  object cdsCliente: TClientDataSet
-    Active = True
-    Aggregates = <>
-    Params = <>
-    BeforeDelete = cdsClienteBeforeDelete
-    Left = 33
-    Top = 114
-    Data = {
-      6F0000009619E0BD0100000018000000040000000000030000006F0002494404
-      00010000000000044E6F6D650100490000000100055749445448020002006400
-      05417469766F04000100000000000E44657363726963616F417469766F010049
-      00000001000557494454480200020003000000}
-    object cdsClienteID: TIntegerField
-      DisplayWidth = 12
-      FieldName = 'ID'
-    end
-    object cdsClienteNome: TStringField
-      DisplayWidth = 73
-      FieldName = 'Nome'
-      Size = 100
-    end
-    object cdsClienteAtivo: TIntegerField
-      DisplayWidth = 17
-      FieldName = 'Ativo'
-    end
-    object cdsClienteDescricaoAtivo: TStringField
-      DisplayWidth = 27
-      FieldName = 'DescricaoAtivo'
-      Size = 3
-    end
+    TabOrder = 3
   end
 end

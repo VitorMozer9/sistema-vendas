@@ -393,7 +393,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       Font.Style = []
       MaxLength = 2
       ParentFont = False
-      TabOrder = 1
+      TabOrder = 2
       OnChange = edtUnidadeChange
     end
     object chkAtivo: TCheckBox
@@ -402,7 +402,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       Width = 48
       Height = 17
       Caption = 'Ativo'
-      TabOrder = 2
+      TabOrder = 1
     end
     object edtDescricao: TEdit
       Left = 179
