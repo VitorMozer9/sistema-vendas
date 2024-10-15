@@ -482,6 +482,11 @@ begin
       else
       begin
          TMessageUtil.Alerta('Nenhum dado de unidade encontrado');
+
+         edtCodigo.Clear;
+
+         if edtCodigo.CanFocus then
+            edtCodigo.SetFocus;
          exit;
       end;
 
@@ -505,15 +510,14 @@ begin
    chkAtivo.Checked  := vObjUnidadeProduto.Ativo;
    edtUnidade.Text   := vObjUnidadeProduto.Unidade;
    edtDescricao.Text := vObjUnidadeProduto.Descricao;
-   btnAlterar.Enabled := True;
-   btnExcluir.Enabled := True;
    edtCodigo.Enabled := False;
 
 
    if  vEstadoTela = etAlterar then
    begin
-      edtUnidade.Enabled := true;
+      edtUnidade.Enabled   := true;
       edtDescricao.Enabled := true;
+      chkAtivo.Enabled     := true;
    end;
 end;
 
@@ -559,6 +563,12 @@ function TfrmUnidadeProd.ProcessaExclusao: Boolean;
 begin
    try
       Result := False;
+
+      if edtCodigo.Enabled then
+      begin
+         ProcessaConsulta;
+         Exit;
+      end;
 
       if (vObjUnidadeProduto = nil) then
       begin

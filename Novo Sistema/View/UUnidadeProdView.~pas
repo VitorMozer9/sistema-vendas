@@ -42,6 +42,8 @@ type
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure edtCodigoExit(Sender: TObject);
+    procedure edtUnidadeChange(Sender: TObject);
+    procedure edtDescricaoChange(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -74,7 +76,7 @@ var
 
 implementation
 
-uses uMessageUtil, UUnidadeProdController;
+uses uMessageUtil, UUnidadeProdController, UClassFuncoes;
 
 {$R *.dfm}
 procedure TfrmUnidadeProd.FormKeyDown(Sender: TObject; var Key: Word;
@@ -607,6 +609,16 @@ begin
          e.Message);
       end;
    end;
+end;
+
+procedure TfrmUnidadeProd.edtUnidadeChange(Sender: TObject);
+begin
+   edtUnidade.Text := TFuncoes.removeCaracterEspecial(edtUnidade.Text, True);
+end;
+
+procedure TfrmUnidadeProd.edtDescricaoChange(Sender: TObject);
+begin
+   edtDescricao.Text := TFuncoes.removeCaracterEspecial(edtDescricao.Text, True);
 end;
 
 end.

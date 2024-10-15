@@ -394,6 +394,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       MaxLength = 2
       ParentFont = False
       TabOrder = 1
+      OnChange = edtUnidadeChange
     end
     object chkAtivo: TCheckBox
       Left = 120
@@ -409,6 +410,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       Width = 302
       Height = 21
       TabOrder = 3
+      OnChange = edtDescricaoChange
     end
   end
 end
