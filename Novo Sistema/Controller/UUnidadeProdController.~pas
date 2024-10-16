@@ -14,7 +14,7 @@ type
          function ExcluiUnidade (pUnidadeProd : TUnidadeProduto) : Boolean;
 
          function BuscaUnidade(pID : Integer) : TUnidadeProduto;
-
+         function PesquisaUnidade(pUnidade : String) : TColUnidadeProd;
          function RetornaCondicaoUnidade(pID : Integer ) : String;
 
       published
@@ -90,11 +90,11 @@ begin
             FreeAndNil(xUnidadeDAO);
       end;
    except
-      TConexao.get.cancelaTransacao;
       on E : Exception do
       begin
+         TConexao.get.cancelaTransacao;
          raise Exception.Create(
-            'Falha ao excluir dados de unidade de produto. [Controller]'#13 +
+            'Falha ao excluir dados de unidade de produto. [Controller]'+ #13 +
             e.Message);
       end;
    end;
@@ -112,7 +112,6 @@ function TUnidadeProdController.GravaUnidadeProduto(
   pUnidadeProduto: TUnidadeProduto): Boolean;
 var
    xUnidadeProdDAO : TUnidadeProdutoDAO;
-
 begin
 try
    try
@@ -149,6 +148,33 @@ except
          e.Message);
    end;
 end;
+end;
+
+function TUnidadeProdController.PesquisaUnidade(
+  pUnidade: String): TColUnidadeProd;
+var
+   xUnidadeDAO : TUnidadeProdutoDAO;
+begin
+   try
+      try
+         Result := nil;
+
+         xUnidadeDAO :=
+            TUnidadeProdutoDAO.Create(TConexao.getInstance.getConn);
+
+         Result := xUnidadeDAO.Retorna
+      finally
+       if (xUnidadeDAO <> nil) then
+         FreeAndNil(xUnidadeDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao buscar os dados da Unidade de Produto [Controller]'#13 +
+            e.Message);
+      end;
+   end;        
 end;
 
 function TUnidadeProdController.RetornaCondicaoUnidade(

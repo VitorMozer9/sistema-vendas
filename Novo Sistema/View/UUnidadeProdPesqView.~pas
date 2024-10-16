@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls;
+  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, DB, DBClient, Grids,
+  DBGrids,UMessageUtil, UUnidadeProduto, UUnidadeProdController, Math, StrUtils;
 
 type
   TfrmUnidadePesq = class(TForm)
@@ -15,10 +16,33 @@ type
     btnSair: TBitBtn;
     pnlFiltro: TPanel;
     pnlResultado: TPanel;
+    grbFiltrar: TGroupBox;
+    lblUnidade: TLabel;
+    lblInfo: TLabel;
+    edtUnidade: TEdit;
+    btnFiltrar: TBitBtn;
+    grbGrid: TGroupBox;
+    dbgResultadoBusca: TDBGrid;
+    dtsUnidade: TDataSource;
+    cdsUnidade: TClientDataSet;
+    cdsUnidadeID: TIntegerField;
+    cdsUnidadeUnidade: TStringField;
+    cdsUnidadeDescricao: TStringField;
+    cdsUnidadeAtivo: TIntegerField;
+    cdsUnidadeAtivoDesc: TStringField;
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
+
+    vKey : Word;
+
+    procedure LimpaTela;
+    procedure ProcessaPesquisa;
   public
     { Public declarations }
+    mUnidadeID   : Integer;
+    mUnidade      : String;
   end;
 
 var
@@ -27,5 +51,117 @@ var
 implementation
 
 {$R *.dfm}
+
+
+
+
+procedure TfrmUnidadePesq.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   vKey := Key;
+
+   case vKey of
+      VK_RETURN:
+      begin
+         Perform(WM_NEXTDLGCTL, 0, 0 );
+      end;
+
+      VK_ESCAPE:
+      begin
+         if TMessageUtil.Pergunta('Deseja sair da rotina?') then
+            Close;
+      end;
+
+      VK_UP:
+      begin
+         vKey := VK_CLEAR;
+
+         if (ActiveControl = dbgResultadoBusca) then
+            exit;
+
+          Perform(WM_NextDlgCtl, 1, 0);
+      end;
+   end;
+end;
+
+procedure TfrmUnidadePesq.LimpaTela;
+var
+   I : Integer;
+begin
+   for I := 0 to pred(ComponentCount) do
+   begin
+      if (Components[I] is TEdit) then
+         (Components[I] as TEdit).Text := EmptyStr;
+   end;
+
+   if (not cdsUnidade.IsEmpty) then
+      cdsUnidade.EmptyDataSet;
+
+   if (edtUnidade.CanFocus) then
+      (edtUnidade.SetFocus);
+
+end;
+
+procedure TfrmUnidadePesq.ProcessaPesquisa;
+var
+   xListaUnidade : TColUnidadeProd;
+   xAux          : Integer;
+begin
+   try
+      try
+         xListaUnidade := TColUnidadeProd.Create;
+
+         xListaUnidade :=
+            TUnidadeProdController.getInstancia.PesquisaUnidade(Trim(edtUnidade.Text));
+
+         cdsUnidade.EmptyDataSet;
+
+         if xListaUnidade <> nil then
+         begin
+            for xAux := 0 to pred(xListaUnidade.Count) do
+            begin
+               cdsUnidade.Append;
+               cdsUnidadeID.Value        := xListaUnidade.Retorna(xAux).Id;
+               cdsUnidadeUnidade.Value   := xListaUnidade.Retorna(xAux).Unidade;
+               cdsUnidadeDescricao.Value := xListaUnidade.Retorna(xAux).Descricao;
+               cdsUnidadeAtivo.Value     :=
+                  IfThen(xListaUnidade.Retorna(xAux).Ativo, 1, 0);
+
+               cdsUnidadeAtivoDesc.Value :=
+                  IfThen(xListaUnidade.Retorna(xAux).Ativo, 'Sim', 'Não');
+
+               cdsUnidade.Post;
+            end;
+         end;
+
+         if (cdsUnidade.RecordCount = 0) then
+         begin
+            if edtUnidade.CanFocus then
+               edtUnidade.SetFocus;
+
+            TMessageUtil.Alerta(
+               'Nenhuma unidade de produto encontrada para este filtro.');
+         end
+         else
+         begin
+            cdsUnidade.First;
+
+            if dbgResultadoBusca.CanFocus then
+               dbgResultadoBusca.SetFocus;
+         end;
+
+      finally
+         if (xListaUnidade <> nil) then
+            FreeAndNil(xListaUnidade);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+         'Falha ao pesquisar dados de Unidade de Produto. [View]:' + #13 +
+         e.Message);
+      end;
+   end;
+end;
 
 end.

@@ -1,6 +1,6 @@
 object frmUnidadePesq: TfrmUnidadePesq
-  Left = 423
-  Top = 208
+  Left = 358
+  Top = 204
   Width = 626
   Height = 319
   Caption = 'Pesquisa de Unidade de Produto'
@@ -10,8 +10,10 @@ object frmUnidadePesq: TfrmUnidadePesq
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
+  FormStyle = fsMDIForm
   KeyPreview = True
   OldCreateOrder = False
+  Position = poScreenCenter
   OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
@@ -36,6 +38,7 @@ object frmUnidadePesq: TfrmUnidadePesq
       Height = 25
       Caption = 'C&onfirmar'
       TabOrder = 0
+      OnClick = btnConfirmarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -71,6 +74,7 @@ object frmUnidadePesq: TfrmUnidadePesq
       Height = 25
       Caption = '&Limpar'
       TabOrder = 1
+      OnClick = btnLimparClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -106,6 +110,7 @@ object frmUnidadePesq: TfrmUnidadePesq
       Height = 25
       Caption = '&Sair'
       TabOrder = 2
+      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -179,6 +184,7 @@ object frmUnidadePesq: TfrmUnidadePesq
         Height = 25
         Caption = '&Filtrar'
         TabOrder = 1
+        OnClick = btnFiltrarClick
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -237,6 +243,8 @@ object frmUnidadePesq: TfrmUnidadePesq
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
+        OnDblClick = dbgResultadoBuscaDblClick
+        OnKeyDown = dbgResultadoBuscaKeyDown
         Columns = <
           item
             Expanded = False
@@ -276,6 +284,7 @@ object frmUnidadePesq: TfrmUnidadePesq
     Active = True
     Aggregates = <>
     Params = <>
+    BeforeDelete = cdsUnidadeBeforeDelete
     Left = 33
     Top = 119
     Data = {

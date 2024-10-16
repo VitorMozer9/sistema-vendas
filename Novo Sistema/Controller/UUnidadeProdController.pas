@@ -14,7 +14,7 @@ type
          function ExcluiUnidade (pUnidadeProd : TUnidadeProduto) : Boolean;
 
          function BuscaUnidade(pID : Integer) : TUnidadeProduto;
-
+         function PesquisaUnidade(pUnidade : String) : TColUnidadeProd;
          function RetornaCondicaoUnidade(pID : Integer ) : String;
 
       published
@@ -148,6 +148,41 @@ except
          e.Message);
    end;
 end;
+end;
+
+function TUnidadeProdController.PesquisaUnidade(
+  pUnidade: String): TColUnidadeProd;
+var
+   xUnidadeDAO : TUnidadeProdutoDAO;
+   xCondicao : string;
+begin
+   try
+      try
+         Result := nil;
+
+         xUnidadeDAO :=
+            TUnidadeProdutoDAO.Create(TConexao.getInstance.getConn);
+
+         xCondicao :=
+            IfThen(pUnidade <> EmptyStr,
+            'WHERE                                            '#13 +
+            '    (UNIDADE LIKE UPPER(''%' + pUnidade + '%'' ))'#13 +
+               'ORDER BY UNIDADE, ID ', EmptyStr);
+
+         Result := xUnidadeDAO.RetornaLista(xCondicao);
+
+      finally
+       if (xUnidadeDAO <> nil) then
+         FreeAndNil(xUnidadeDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao buscar os dados da Unidade de Produto [Controller]'#13 +
+            e.Message);
+      end;
+   end;        
 end;
 
 function TUnidadeProdController.RetornaCondicaoUnidade(

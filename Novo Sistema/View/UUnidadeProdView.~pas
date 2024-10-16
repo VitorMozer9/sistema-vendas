@@ -44,6 +44,9 @@ type
     procedure edtCodigoExit(Sender: TObject);
     procedure edtUnidadeChange(Sender: TObject);
     procedure edtDescricaoChange(Sender: TObject);
+//    procedure edtCodigoKeyDown(Sender: TObject; var Key: Word;
+ //     Shift: TShiftState);
+    procedure edtCodigoKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     vKey : Word;
@@ -76,7 +79,7 @@ var
 
 implementation
 
-uses uMessageUtil, UUnidadeProdController, UClassFuncoes;
+uses uMessageUtil, UUnidadeProdController, UClassFuncoes, UUnidadeProdPesqView;
 
 {$R *.dfm}
 procedure TfrmUnidadeProd.FormKeyDown(Sender: TObject; var Key: Word;
@@ -260,6 +263,33 @@ begin
          end;
       end;
 
+      etPesquisar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Pesquisa';
+
+         if (frmUnidadePesq = nil) then
+            frmUnidadePesq := TfrmUnidadePesq.Create(Application);
+
+         frmUnidadePesq.ShowModal;
+
+         if (frmUnidadePesq.mUnidadeID <> 0) then
+         begin
+            edtCodigo.Text := IntToStr(frmUnidadePesq.mUnidadeID);
+            vEstadoTela := etConsultar;
+            ProcessaConsulta;
+         end
+         else
+         begin
+            vEstadoTela := etPadrao;
+            DefineEstadoTela;
+         end;
+
+         frmUnidadePesq.mUnidadeID   := 0;
+         frmUnidadePesq.mUnidade := EmptyStr;
+
+         if (edtUnidade.CanFocus) then
+            edtUnidade.SetFocus;
+      end;
 
    end;
 end;
@@ -462,10 +492,10 @@ begin
    try
       Result := False;
 
-      if (edtCodigo.Text = EmptyStr) then
+      if (edtCodigo.Text = EmptyStr) and not(vEstadoTela = etConsultar) then
       begin
          TMessageUtil.Alerta(
-            'O código de Unidade De Produto não pode ficar em branco');
+            'O código de Unidade de Produto não pode ficar em branco');
 
          if (edtCodigo.CanFocus) then
             edtCodigo.SetFocus;
@@ -477,7 +507,7 @@ begin
          TUnidadeProdController.getInstancia.BuscaUnidade(
             StrToIntDef(edtCodigo.Text, 0));
 
-      if (vObjUnidadeProduto <> nil) then
+      if (vObjUnidadeProduto <> nil) or (edtCodigo.Text = '') then
          CarregaDadosTela
       else
       begin
@@ -512,6 +542,7 @@ begin
    edtDescricao.Text := vObjUnidadeProduto.Descricao;
    edtCodigo.Enabled := False;
 
+   btnCancelar.Enabled := True;
 
    if  vEstadoTela = etAlterar then
    begin
@@ -519,6 +550,7 @@ begin
       edtDescricao.Enabled := true;
       chkAtivo.Enabled     := true;
    end;
+
 end;
 
 function TfrmUnidadeProd.ProcessaAlteracao: Boolean;
@@ -629,6 +661,40 @@ end;
 procedure TfrmUnidadeProd.edtDescricaoChange(Sender: TObject);
 begin
    edtDescricao.Text := TFuncoes.removeCaracterEspecial(edtDescricao.Text, True);
+end;
+
+//procedure TfrmUnidadeProd.edtCodigoKeyDown(Sender: TObject; var Key: Word;
+//  Shift: TShiftState);
+//begin
+//   if vKey = VK_RETURN then
+//   begin
+//      if ((vEstadoTela = etConsultar) and (edtCodigo.Text = EmptyStr)) then
+//         begin
+//            if frmUnidadePesq = nil then
+//               frmUnidadePesq := TfrmUnidadePesq.Create(Application);
+//
+//               frmUnidadePesq.ShowModal;
+//
+//         end;
+//
+//   end;
+//end;
+
+procedure TfrmUnidadeProd.edtCodigoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if vKey = VK_RETURN then
+   begin
+      if ((vEstadoTela = etConsultar) and (edtCodigo.Text = EmptyStr)) then
+         begin
+            if frmUnidadePesq = nil then
+               frmUnidadePesq := TfrmUnidadePesq.Create(Application);
+
+               frmUnidadePesq.ShowModal;
+
+         end;
+
+   end;
 end;
 
 end.
