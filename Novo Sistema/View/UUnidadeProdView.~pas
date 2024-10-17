@@ -586,7 +586,10 @@ end;
 procedure TfrmUnidadeProd.edtCodigoExit(Sender: TObject);
 begin
    if vKey = VK_RETURN then
-      ProcessaConsulta;
+   if not (edtCodigo.Text = EmptyStr) then
+      ProcessaConsulta
+   else
+      // tela de pesquisa
 
    vKey := VK_CLEAR;
 end;
