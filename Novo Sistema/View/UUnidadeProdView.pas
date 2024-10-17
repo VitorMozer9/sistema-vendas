@@ -316,7 +316,7 @@ begin
    if (vEstadoTela <> etPadrao) then
    begin
       if (TMessageUtil.Pergunta(
-         'Deseja realmente abortar esta operação?')) then;
+         'Deseja realmente abortar esta operação?')) then
       begin
          vEstadoTela := etPadrao;
          DefineEstadoTela;

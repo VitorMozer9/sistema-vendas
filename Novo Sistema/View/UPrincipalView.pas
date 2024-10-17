@@ -28,6 +28,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure menClientesClick(Sender: TObject);
     procedure MenUniProdutoClick(Sender: TObject);
+    procedure menProdutosClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -39,7 +40,8 @@ var
 
 implementation    //codigo fonte
   uses
-    UConexao, UClienteView, UUnidadeProdView; //exemplo de herança, chamou a "classe" Uconexoes
+     //exemplo de herança, chamou a "classe" Uconexoes
+    UConexao, UClienteView, UUnidadeProdView, UProdutoView;
 
 {$R *.dfm}
 
@@ -82,7 +84,22 @@ begin
 
    finally
       Screen.Cursor := crDefault;
-   end;   
+   end;
+end;
+
+procedure TfmPrincipal.menProdutosClick(Sender: TObject);
+begin
+   try
+      Screen.Cursor := crHourGlass;
+
+      if frmProdutoView  = nil then
+         frmProdutoView := TfrmProdutoView.Create(Application);
+
+      frmProdutoView.Show;
+
+   finally
+      Screen.Cursor := crDefault;
+   end;
 end;
 
 end.

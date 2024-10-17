@@ -1,10 +1,11 @@
 object frmUnidadeProd: TfrmUnidadeProd
   Left = 653
   Top = 235
-  Width = 513
-  Height = 182
   BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
   Caption = 'Unidade de Produtos'
+  ClientHeight = 143
+  ClientWidth = 497
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

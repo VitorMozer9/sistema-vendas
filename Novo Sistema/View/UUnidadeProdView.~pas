@@ -44,9 +44,6 @@ type
     procedure edtCodigoExit(Sender: TObject);
     procedure edtUnidadeChange(Sender: TObject);
     procedure edtDescricaoChange(Sender: TObject);
-//    procedure edtCodigoKeyDown(Sender: TObject; var Key: Word;
- //     Shift: TShiftState);
-    procedure edtCodigoKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     vKey : Word;
@@ -59,6 +56,7 @@ type
     procedure LimpaTela;
     procedure DefineEstadoTela;
     procedure CarregaDadosTela;
+    procedure ConsultaPesquisa;
 
     function ProcessaConfirmacao : Boolean;
     function ProcessaInclusao    : Boolean;
@@ -266,29 +264,7 @@ begin
       etPesquisar:
       begin
          stbBarraStatus.Panels[0].Text := 'Pesquisa';
-
-         if (frmUnidadePesq = nil) then
-            frmUnidadePesq := TfrmUnidadePesq.Create(Application);
-
-         frmUnidadePesq.ShowModal;
-
-         if (frmUnidadePesq.mUnidadeID <> 0) then
-         begin
-            edtCodigo.Text := IntToStr(frmUnidadePesq.mUnidadeID);
-            vEstadoTela := etConsultar;
-            ProcessaConsulta;
-         end
-         else
-         begin
-            vEstadoTela := etPadrao;
-            DefineEstadoTela;
-         end;
-
-         frmUnidadePesq.mUnidadeID   := 0;
-         frmUnidadePesq.mUnidade := EmptyStr;
-
-         if (edtUnidade.CanFocus) then
-            edtUnidade.SetFocus;
+         ConsultaPesquisa;
       end;
 
    end;
@@ -543,6 +519,8 @@ begin
    edtCodigo.Enabled := False;
 
    btnCancelar.Enabled := True;
+   btnAlterar.Enabled := True;
+   btnExcluir.Enabled := True;
 
    if  vEstadoTela = etAlterar then
    begin
@@ -589,7 +567,12 @@ begin
    if not (edtCodigo.Text = EmptyStr) then
       ProcessaConsulta
    else
-      // tela de pesquisa
+   begin
+      if vEstadoTela = etConsultar then
+      begin
+         ConsultaPesquisa;
+      end;
+   end;
 
    vKey := VK_CLEAR;
 end;
@@ -666,38 +649,31 @@ begin
    edtDescricao.Text := TFuncoes.removeCaracterEspecial(edtDescricao.Text, True);
 end;
 
-//procedure TfrmUnidadeProd.edtCodigoKeyDown(Sender: TObject; var Key: Word;
-//  Shift: TShiftState);
-//begin
-//   if vKey = VK_RETURN then
-//   begin
-//      if ((vEstadoTela = etConsultar) and (edtCodigo.Text = EmptyStr)) then
-//         begin
-//            if frmUnidadePesq = nil then
-//               frmUnidadePesq := TfrmUnidadePesq.Create(Application);
-//
-//               frmUnidadePesq.ShowModal;
-//
-//         end;
-//
-//   end;
-//end;
 
-procedure TfrmUnidadeProd.edtCodigoKeyPress(Sender: TObject;
-  var Key: Char);
+procedure TfrmUnidadeProd.ConsultaPesquisa;
 begin
-   if vKey = VK_RETURN then
+   if (frmUnidadePesq = nil) then
+      frmUnidadePesq := TfrmUnidadePesq.Create(Application);
+
+      frmUnidadePesq.ShowModal;
+
+   if (frmUnidadePesq.mUnidadeID <> 0) then
    begin
-      if ((vEstadoTela = etConsultar) and (edtCodigo.Text = EmptyStr)) then
-         begin
-            if frmUnidadePesq = nil then
-               frmUnidadePesq := TfrmUnidadePesq.Create(Application);
-
-               frmUnidadePesq.ShowModal;
-
-         end;
-
+      edtCodigo.Text := IntToStr(frmUnidadePesq.mUnidadeID);
+      vEstadoTela := etConsultar;
+      ProcessaConsulta;
+   end
+   else
+   begin
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
    end;
+
+   frmUnidadePesq.mUnidadeID   := 0;
+   frmUnidadePesq.mUnidade := EmptyStr;
+
+   if (edtUnidade.CanFocus) then
+      edtUnidade.SetFocus;
 end;
 
 end.
