@@ -1,6 +1,6 @@
 object frmProdutoView: TfrmProdutoView
-  Left = 366
-  Top = 301
+  Left = 363
+  Top = 268
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Produtos'
@@ -475,18 +475,24 @@ object frmProdutoView: TfrmProdutoView
       Height = 21
       TabOrder = 3
     end
-    object edtQuantidadeEstoque: TEdit
-      Left = 68
+    object edtQuantidadeEstoque: TNumEdit
+      Left = 69
       Top = 64
-      Width = 49
+      Width = 35
       Height = 21
+      Alignment = taRightJustify
+      Decimals = 2
+      ShowSeparator = True
       TabOrder = 4
     end
-    object edtPreco: TEdit
-      Left = 171
-      Top = 63
-      Width = 48
+    object edtPreco: TNumEdit
+      Left = 168
+      Top = 64
+      Width = 33
       Height = 21
+      Alignment = taRightJustify
+      Decimals = 2
+      ShowSeparator = True
       TabOrder = 5
     end
   end

@@ -13,6 +13,7 @@ type
                      pCondicao : String) : Boolean;
 
        function Retorna(pCondicao : String) : TUnidadeProduto;
+       function RetornaLista(pCondicao : String = '') : TColUnidadeProd;
 
 end;
 
@@ -44,6 +45,12 @@ end;
 function TUnidadeProdutoDAO.Retorna(pCondicao: String): TUnidadeProduto;
 begin
    Result := TUnidadeProduto(inherited Retorna(pCondicao));
+end;
+
+function TUnidadeProdutoDAO.RetornaLista(
+  pCondicao: String): TColUnidadeProd;
+begin
+   Result := TColUnidadeProd(inherited RetornaLista(pCondicao));
 end;
 
 end.

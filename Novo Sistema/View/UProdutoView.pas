@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons,UEnumerationUtil, uMessageUtil;
+  Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons,UEnumerationUtil, uMessageUtil,
+  UProduto, UProdutoController, NumEdit, Types;
 
 type
   TfrmProdutoView = class(TForm)
@@ -30,9 +31,9 @@ type
     Label1: TLabel;
     edtUnidadeDesc: TEdit;
     Label2: TLabel;
-    edtQuantidadeEstoque: TEdit;
     lblPreco: TLabel;
-    edtPreco: TEdit;
+    edtQuantidadeEstoque: TNumEdit;
+    edtPreco: TNumEdit;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnIncluirClick(Sender: TObject);
@@ -52,15 +53,16 @@ type
     { Private declarations }
     vKey : Word;
     vEstadoTela : TEstadoTela;
+    vObjProduto : TProduto;
 
     procedure CamposEnable(pOpcao : Boolean);
     procedure LimpaTela;
     procedure DefineEstadoTela;
 
+    function ValidaCampos        : Boolean;
     function ProcessaConfirmacao : Boolean;
     function ProcessaInclusao    : Boolean;
     function ProcessaProduto     : Boolean;
-
 
   public
     { Public declarations }
@@ -70,6 +72,8 @@ var
   frmProdutoView: TfrmProdutoView;
 
 implementation
+
+uses Math;
 
 {$R *.dfm}
 
@@ -232,6 +236,7 @@ end;
 procedure TfrmProdutoView.btnCancelarClick(Sender: TObject);
 begin
    vEstadoTela := etPadrao;
+//   LimpaTela;
    DefineEstadoTela;
 end;
 
@@ -268,15 +273,14 @@ end;
 
 function TfrmProdutoView.ProcessaInclusao: Boolean;
 begin
+   Result := False;
    try
       try
-        Result := False;
 
         if ProcessaProduto then
         begin
-           TMessageUtil.Informacao(
-           'Produto cadastrado com sucesso');
-//             'Código cadastrado: ' + IntToStr(vObjProduto.Id));
+           TMessageUtil.Informacao('Produto cadastrado com sucesso'#13 +
+             'Código cadastrado: ' + IntToStr(vObjProduto.ID));
 
            vEstadoTela := etPadrao;
            DefineEstadoTela;
@@ -293,8 +297,8 @@ begin
          end;
       end;
    finally
-//      if vObjProduto <> nil then
-//         FreeAndNil(vObjProduto);
+      if vObjProduto <> nil then
+         FreeAndNil(vObjProduto);
    end;
 end;
 
@@ -309,7 +313,7 @@ begin
       if vEstadoTela = etIncluir then
       begin
          if vObjProduto = nil then
-            vObjProduto := T.create;
+            vObjProduto := TProduto.Create;
       end
       else
       if vEstadoTela = etAlterar then
@@ -321,12 +325,17 @@ begin
       if (vObjProduto = nil) then
          Exit;
 
+      vObjProduto.Descricao           := edtDescricao.Text;
 
-//      vObjProduto.Unidade   := edtUnidade.Text;
-//      vObjProduto.Descricao := edtDescricao.Text;
+      //edtQuantidadeEstoque.Text := StringReplace(edtQuantidadeEstoque.Text, '.', ',' ,[rfReplaceAll]);
+      //vObjProduto.QuantidadeDeEstoque := StrToFloat(edtQuantidadeEstoque.Text);
+
+      //edtPreco.Text := StringReplace(edtPreco.Text, '.', ',' ,[rfReplaceAll]);
+      //vObjProduto.PrecoVenda := StrToFloat(edtPreco.Text);
 
 
       //Gravação no banco
+      TProdutoController.getInstancia.GravaProduto(vObjProduto);
 
       Result := True;
 
@@ -339,5 +348,44 @@ begin
       end;
    end;
 end;
+
+function TfrmProdutoView.ValidaCampos: Boolean;
+begin
+   Result := False;
+
+   if (edtDescricao.Text = EmptyStr) then
+   begin
+      TMessageUtil.Alerta(
+         'A identificação do nome do produto não pode ficar em branco.  ');
+
+      if (edtDescricao.CanFocus) then
+         edtDescricao.SetFocus;
+         exit;
+   end;
+
+   if (edtQuantidadeEstoque.Value > 0) then
+   begin
+      TMessageUtil.Alerta(
+         'A Quantidade de estoque do produto não pode ficae em branco. ');
+
+      if (edtQuantidadeEstoque.CanFocus) then
+         edtQuantidadeEstoque.SetFocus;
+         exit;
+   end;
+
+   if CompareValue(edtQuantidadeEstoque.Value,0,0.001) = EqualsValue then
+   begin
+      TMessageUtil.Alerta(
+         'O preço do produto não pode ficar em branco. ');
+
+      if (edtPreco.CanFocus) then
+         edtPreco.SetFocus;
+         exit;
+   end;
+
+   Result := True;
+end;
+
+
 
 end.

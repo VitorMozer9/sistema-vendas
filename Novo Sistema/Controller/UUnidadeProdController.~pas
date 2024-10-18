@@ -154,6 +154,7 @@ function TUnidadeProdController.PesquisaUnidade(
   pUnidade: String): TColUnidadeProd;
 var
    xUnidadeDAO : TUnidadeProdutoDAO;
+   xCondicao : string;
 begin
    try
       try
@@ -162,7 +163,14 @@ begin
          xUnidadeDAO :=
             TUnidadeProdutoDAO.Create(TConexao.getInstance.getConn);
 
-         Result := xUnidadeDAO.Retorna
+         xCondicao :=
+            IfThen(pUnidade <> EmptyStr,
+            'WHERE                                            '#13 +
+            '    (UNIDADE LIKE UPPER(''%' + pUnidade + '%'' ))'#13 +
+               'ORDER BY UNIDADE, ID ', EmptyStr);
+
+         Result := xUnidadeDAO.RetornaLista(xCondicao);
+
       finally
        if (xUnidadeDAO <> nil) then
          FreeAndNil(xUnidadeDAO);

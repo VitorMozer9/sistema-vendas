@@ -73,7 +73,7 @@ begin
 
          TConexao.get.iniciaTransacao;
 
-         xUnidadeDAO := TUnidadeProdutoDAO.Create(TConexao.getInstance.getConn);
+         xUnidadeDAO := TUnidadeProdutoDAO.Create(TConexao.get.getConn);
 
          if (pUnidadeProd.Id = 0) then
             exit
@@ -113,41 +113,41 @@ function TUnidadeProdController.GravaUnidadeProduto(
 var
    xUnidadeProdDAO : TUnidadeProdutoDAO;
 begin
-try
    try
-      TConexao.get.iniciaTransacao;
+      try
+         TConexao.get.iniciaTransacao;
 
-      Result := False;
+         Result := False;
 
-      xUnidadeProdDAO := nil;
+         xUnidadeProdDAO := nil;
 
-      xUnidadeProdDAO :=
-         TUnidadeProdutoDAO.Create(TConexao.get.getConn);
+         xUnidadeProdDAO :=
+            TUnidadeProdutoDAO.Create(TConexao.get.getConn);
 
-      if pUnidadeProduto.Id = 0 then
-      begin
-         xUnidadeProdDAO.Insere(pUnidadeProduto);
-      end
-      else
-      begin
-         xUnidadeProdDAO.Atualiza(
-            pUnidadeProduto,RetornaCondicaoUnidade(pUnidadeProduto.Id));
+         if pUnidadeProduto.Id = 0 then
+         begin
+            xUnidadeProdDAO.Insere(pUnidadeProduto);
+         end
+         else
+         begin
+            xUnidadeProdDAO.Atualiza(
+               pUnidadeProduto,RetornaCondicaoUnidade(pUnidadeProduto.Id));
+         end;
+
+         TConexao.get.confirmaTransacao;
+      finally
+         if xUnidadeProdDAO <> nil then
+            FreeAndNil(xUnidadeProdDAO);
       end;
-
-      TConexao.get.confirmaTransacao;
-   finally
-      if xUnidadeProdDAO <> nil then
-         FreeAndNil(xUnidadeProdDAO);
+   except
+      on E : Exception do
+      begin
+         TConexao.get.cancelaTransacao;
+         Raise Exception.Create(
+            'Falha ao gravar dados de unidade de produto. [Controller]'#13 +
+            e.Message);
+      end;
    end;
-except
-   on E : Exception do
-   begin
-      TConexao.get.cancelaTransacao;
-      Raise Exception.Create(
-         'Falha ao gravar dados de unidade de produto. [Controller]'#13 +
-         e.Message);
-   end;
-end;
 end;
 
 function TUnidadeProdController.PesquisaUnidade(

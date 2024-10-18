@@ -1,0 +1,32 @@
+unit UProdutoController;
+
+interface
+
+uses SysUtils, Math, StrUtils, UConexao, UProduto;
+
+type
+   TProdutoController = class
+      public
+         constructor Create;
+         function GravaProduto (pProduto : TProduto) : Boolean;
+   end;
+
+implementation
+
+{ TProdutoController }
+
+constructor TProdutoController.Create;
+begin
+   inherited Create;
+end;
+
+function TProdutoController.GravaProduto(pProduto: TProduto): Boolean;
+begin
+   try
+
+   except
+
+   end;  
+end;
+
+end.
