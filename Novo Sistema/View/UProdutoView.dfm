@@ -435,7 +435,7 @@ object frmProdutoView: TfrmProdutoView
       ParentFont = False
     end
     object lblPreco: TLabel
-      Left = 121
+      Left = 129
       Top = 68
       Width = 34
       Height = 13
@@ -478,7 +478,7 @@ object frmProdutoView: TfrmProdutoView
     object edtQuantidadeEstoque: TNumEdit
       Left = 69
       Top = 64
-      Width = 35
+      Width = 53
       Height = 21
       Alignment = taRightJustify
       Decimals = 2
@@ -488,7 +488,7 @@ object frmProdutoView: TfrmProdutoView
     object edtPreco: TNumEdit
       Left = 168
       Top = 64
-      Width = 33
+      Width = 63
       Height = 21
       Alignment = taRightJustify
       Decimals = 2

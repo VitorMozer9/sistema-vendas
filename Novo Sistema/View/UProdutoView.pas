@@ -85,6 +85,9 @@ begin
    begin
       if (Components[xAux] is TEdit) then
          (Components[xAux] as TEdit).Enabled := pOpcao;
+
+      if (Components[xAux] is TNumEdit) then
+         (Components[xAux] as TNumEdit).Enabled := pOpcao;
    end;
 end;
 
@@ -106,13 +109,18 @@ begin
    case vEstadoTela of
       etPadrao:
       begin
+         CamposEnable(False);
+         LimpaTela;
+
          stbBarraStatus.Panels[0].Text := EmptyStr;
          stbBarraStatus.Panels[1].Text := EmptyStr;
 
          if (frmProdutoView <> nil) and
-         (frmProdutoView.Active) and
-         (btnConfirmar.CanFocus)then
+            (frmProdutoView.Active) and
+            (btnConfirmar.CanFocus)then
             btnConfirmar.SetFocus;
+
+         Application.ProcessMessages;
       end;
 
       etIncluir:
@@ -120,7 +128,9 @@ begin
          stbBarraStatus.Panels[0].Text := 'Inclusão';
          CamposEnable(True);
 
-         edtCodigo.Enabled := False;
+         edtUnidade.Enabled     := False;
+         edtUnidadeDesc.Enabled := False;
+         edtCodigo.Enabled      := False;
 
          if (edtDescricao.CanFocus) then
             edtDescricao.SetFocus;
@@ -162,12 +172,21 @@ end;
 
 procedure TfrmProdutoView.LimpaTela;
 var
-   i : Integer;
+   xI : Integer;
 begin
-   for i := 0 to (ComponentCount) do
+   edtPreco.Value := 0;
+   edtQuantidadeEstoque.Value := 0;
+
+   for xI := 0 to (ComponentCount) do
    begin
-      if (Components[i] is TEdit) then
-         (Components[i] as TEdit).Text := EmptyStr;
+      if (Components[xI] is TNumEdit) then
+      begin
+         (Components[xI] as TNumEdit).Value := 0;
+         exit;
+      end;
+
+      if (Components[xI] is TEdit) then
+         (Components[xI] as TEdit).Text := EmptyStr;
    end;
 end;
 
@@ -236,7 +255,6 @@ end;
 procedure TfrmProdutoView.btnCancelarClick(Sender: TObject);
 begin
    vEstadoTela := etPadrao;
-//   LimpaTela;
    DefineEstadoTela;
 end;
 
@@ -325,13 +343,16 @@ begin
       if (vObjProduto = nil) then
          Exit;
 
-      vObjProduto.Descricao           := edtDescricao.Text;
-
       //edtQuantidadeEstoque.Text := StringReplace(edtQuantidadeEstoque.Text, '.', ',' ,[rfReplaceAll]);
       //vObjProduto.QuantidadeDeEstoque := StrToFloat(edtQuantidadeEstoque.Text);
 
       //edtPreco.Text := StringReplace(edtPreco.Text, '.', ',' ,[rfReplaceAll]);
       //vObjProduto.PrecoVenda := StrToFloat(edtPreco.Text);
+
+      vObjProduto.Descricao         := edtDescricao.Text;
+      vObjProduto.QuantidadeEstoque := edtQuantidadeEstoque.Value;
+      vObjProduto.PrecoVenda        := edtPreco.Value;
+     //vObjProduto.Unidade_Id        :=
 
 
       //Gravação no banco
@@ -363,7 +384,7 @@ begin
          exit;
    end;
 
-   if (edtQuantidadeEstoque.Value > 0) then
+   if CompareValue(edtQuantidadeEstoque.Value,0,0.001) = EqualsValue then
    begin
       TMessageUtil.Alerta(
          'A Quantidade de estoque do produto não pode ficae em branco. ');
@@ -373,7 +394,7 @@ begin
          exit;
    end;
 
-   if CompareValue(edtQuantidadeEstoque.Value,0,0.001) = EqualsValue then
+   if CompareValue(edtPreco.Value,0,0.001) = EqualsValue then
    begin
       TMessageUtil.Alerta(
          'O preço do produto não pode ficar em branco. ');

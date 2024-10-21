@@ -19,8 +19,8 @@ type
       published
          property ID                   : Integer read vID write vID;
          property Descricao            : String  read vDescricao write vDescricao;
-         property vQuantidadeDeEstoque : Double read vQuantidadeDeEstoque write vQuantidadeDeEstoque;
-         property vPrecoVenda          : Double read vPrecoVenda write vPrecoVenda;
+         property QuantidadeDeEstoque : Double read vQuantidadeDeEstoque write vQuantidadeDeEstoque;
+         property PrecoVenda          : Double read vPrecoVenda write vPrecoVenda;
    end;
 
    TColProduto = class(TList) //forma de manipular uma coleção de objetos da classe TPessoa

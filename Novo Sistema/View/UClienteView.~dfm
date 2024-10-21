@@ -1,17 +1,17 @@
 object frmClientes: TfrmClientes
-  Left = 433
-  Top = 191
-  Width = 663
-  Height = 375
+  Left = 238
+  Top = 169
   BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
   Caption = 'Clientes'
+  ClientHeight = 335
+  ClientWidth = 637
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
-  FormStyle = fsMDIChild
   KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
@@ -25,8 +25,8 @@ object frmClientes: TfrmClientes
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 317
-    Width = 647
+    Top = 316
+    Width = 637
     Height = 19
     Panels = <
       item
@@ -38,8 +38,8 @@ object frmClientes: TfrmClientes
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 247
-    Width = 647
+    Top = 246
+    Width = 637
     Height = 70
     Align = alBottom
     TabOrder = 1
@@ -260,7 +260,7 @@ object frmClientes: TfrmClientes
         A780BBA077A890608D652DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnConfirmar: TBitBtn
-      Left = 488
+      Left = 469
       Top = 8
       Width = 75
       Height = 25
@@ -297,7 +297,7 @@ object frmClientes: TfrmClientes
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnCancelar: TBitBtn
-      Left = 568
+      Left = 549
       Top = 8
       Width = 75
       Height = 25
@@ -334,7 +334,7 @@ object frmClientes: TfrmClientes
         79F47179F47279F47178F4727AF4727AF47279F49499F6FFFFFF}
     end
     object btnSair: TBitBtn
-      Left = 568
+      Left = 549
       Top = 40
       Width = 75
       Height = 25
@@ -373,8 +373,8 @@ object frmClientes: TfrmClientes
   object pnlArea: TPanel
     Left = 0
     Top = 0
-    Width = 647
-    Height = 247
+    Width = 637
+    Height = 246
     Align = alClient
     TabOrder = 0
     object lblCodigo: TLabel
