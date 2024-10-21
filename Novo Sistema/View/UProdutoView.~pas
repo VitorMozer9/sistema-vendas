@@ -62,6 +62,7 @@ type
     function ValidaCampos        : Boolean;
     function ProcessaConfirmacao : Boolean;
     function ProcessaInclusao    : Boolean;
+    function ProcessaConsulta    : Boolean;
     function ProcessaProduto     : Boolean;
 
   public
@@ -85,6 +86,9 @@ begin
    begin
       if (Components[xAux] is TEdit) then
          (Components[xAux] as TEdit).Enabled := pOpcao;
+
+      if (Components[xAux] is TNumEdit) then
+         (Components[xAux] as TNumEdit).Enabled := pOpcao;
    end;
 end;
 
@@ -131,6 +135,33 @@ begin
 
          if (edtDescricao.CanFocus) then
             edtDescricao.SetFocus;
+      end;
+
+      etConsultar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Consulta';
+
+         CamposEnable(False);
+
+         if (edtCodigo.Text <> EmptyStr) then
+         begin
+            edtCodigo.Enabled    := False;
+            btnAlterar.Enabled   := True;
+            btnExcluir.Enabled   := True;
+            btnListar.Enabled    := True;
+            btnConfirmar.Enabled := False;
+
+            if (btnAlterar.CanFocus) then
+               btnAlterar.SetFocus;
+         end
+         else
+         begin
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
+
+            if edtCodigo.CanFocus then
+               edtCodigo.SetFocus;
+         end;
       end;
    end;
 end;
@@ -196,7 +227,7 @@ begin
            etIncluir:   Result := ProcessaInclusao;
 //         etAlterar:   Result := ProcessaAlteracao;
 //         etExcluir:   Result := ProcessaExclusao;
-//         etConsultar: Result := ProcessaConsulta;
+           etConsultar: Result := ProcessaConsulta;
       end;
 
       if not Result then
@@ -340,15 +371,12 @@ begin
       if (vObjProduto = nil) then
          Exit;
 
-      //edtQuantidadeEstoque.Text := StringReplace(edtQuantidadeEstoque.Text, '.', ',' ,[rfReplaceAll]);
-      //vObjProduto.QuantidadeDeEstoque := StrToFloat(edtQuantidadeEstoque.Text);
+      vObjProduto.Descricao         := edtDescricao.Text;
+      vObjProduto.QuantidadeEstoque := edtQuantidadeEstoque.Value;
+      vObjProduto.PrecoVenda        := edtPreco.Value;
+//      vObjProduto.Unidade_Id := 0;
+//      vObjProduto.ID       := 30;
 
-      //edtPreco.Text := StringReplace(edtPreco.Text, '.', ',' ,[rfReplaceAll]);
-      //vObjProduto.PrecoVenda := StrToFloat(edtPreco.Text);
-
-      vObjProduto.Descricao           := edtDescricao.Text;
-      vObjProduto.QuantidadeDeEstoque := edtQuantidadeEstoque.Value;
-      vObjProduto.PrecoVenda          := edtPreco.Value;
 
 
       //Gravação no banco
@@ -404,5 +432,33 @@ begin
 end;
 
 
+
+function TfrmProdutoView.ProcessaConsulta: Boolean;
+begin
+   try
+      Result := False;
+
+      if (edtCodigo.Text = EmptyStr) then
+      begin
+         TMessageUtil.Alerta('Código do produto não pode ficar em branco.');
+
+         if (edtCodigo.CanFocus) then
+            edtCodigo.SetFocus;
+
+         exit;
+      end;
+
+      vObjProduto :=
+         TProdutoController.getInstancia.BuscaProduto(
+            StrToIntDef(edtCodigo.Text, 0));
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao processar dados de consulta de produto [View]: '#13 +
+            e.Message);
+      end;
+   end;
+end;
 
 end.

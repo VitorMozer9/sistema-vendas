@@ -9,6 +9,7 @@ type
       public
          constructor Create;
          function GravaProduto (pProduto : TProduto) : Boolean;
+         function BuscaProduto(pID : Integer) : TProduto;
          function RetornaCondicaoProduto(pID : Integer) : string;
 
       published
@@ -22,6 +23,32 @@ uses UProdutoDAO;
 var _instance : TProdutoController;
 
 { TProdutoController }
+
+function TProdutoController.BuscaProduto(pID: Integer): TProduto;
+var
+   xProdutoDAO : TProdutoDAO;
+begin
+   try
+      try
+         Result := nil;
+
+         xProdutoDAO := TProdutoDAO.Create(TConexao.getInstance.getConn);
+
+         Result := xProdutoDAO.Retorna(RetornaCondicaoUnidade(pID));
+
+      finally
+         if (xProdutoDAO <> nil) then
+            FreeAndNil(xProdutoDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao buscar dados do produto[Controller]: '#13 +
+            e.Message);
+      end;
+   end;
+end;
 
 constructor TProdutoController.Create;
 begin
@@ -39,7 +66,6 @@ end;
 function TProdutoController.GravaProduto(pProduto: TProduto): Boolean;
 var
    xProdutoDAO : TProdutoDAO;
-   i           : Integer;
 begin
    try
       try
@@ -48,6 +74,7 @@ begin
          TConexao.get.iniciaTransacao;
 
          xProdutoDAO := TProdutoDAO.Create(TConexao.get.getConn);
+//         pProduto.ID := 2;
 
          if pProduto.ID = 0 then
          begin
@@ -58,6 +85,7 @@ begin
             xProdutoDAO.Atualiza(pProduto, RetornaCondicaoProduto(pProduto.ID));
          end;
 
+         TConexao.get.confirmaTransacao;
 
       finally
          if (xProdutoDAO <> nil) then
@@ -69,7 +97,7 @@ begin
          TConexao.get.cancelaTransacao;
 
          raise Exception.Create(
-            'Falha ao gravar dados de produto. [Controller]: '#13 +
+            'Falha ao gravar dados de produto [Controller]: '#13 +
             e.Message);
       end;
    end;  

@@ -41,6 +41,7 @@ begin
          Result := nil;
 
          xUnidadeDAO := TUnidadeProdutoDAO.Create(TConexao.getInstance.getConn);
+
          Result := xUnidadeDAO.Retorna(RetornaCondicaoUnidade(pID));
 
       finally
@@ -121,8 +122,7 @@ begin
 
          xUnidadeProdDAO := nil;
 
-         xUnidadeProdDAO :=
-            TUnidadeProdutoDAO.Create(TConexao.get.getConn);
+         xUnidadeProdDAO := TUnidadeProdutoDAO.Create(TConexao.get.getConn);
 
          if pUnidadeProduto.Id = 0 then
          begin
