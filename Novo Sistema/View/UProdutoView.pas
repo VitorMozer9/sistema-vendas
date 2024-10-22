@@ -58,6 +58,7 @@ type
     procedure CamposEnable(pOpcao : Boolean);
     procedure LimpaTela;
     procedure DefineEstadoTela;
+    procedure CarregaDadosTela;
 
     function ValidaCampos        : Boolean;
     function ProcessaConfirmacao : Boolean;
@@ -451,6 +452,19 @@ begin
       vObjProduto :=
          TProdutoController.getInstancia.BuscaProduto(
             StrToIntDef(edtCodigo.Text, 0));
+
+      if (vObjProduto <> nil) then
+         CarregaDadosTela
+      else
+      begin
+         TMessageUtil.Alerta('Nenhum dado de produto encontrado');
+
+         edtCodigo.Clear;
+
+         if (edtCodigo.CanFocus) then
+            edtCodigo.SetFocus;
+      end;
+
    except
       on E : Exception do
       begin
@@ -459,6 +473,24 @@ begin
             e.Message);
       end;
    end;
+end;
+
+procedure TfrmProdutoView.CarregaDadosTela;
+begin
+   if (vObjProduto = nil) then
+      exit;
+
+   edtCodigo.Text             := IntToStr(vObjProduto.ID);
+   edtDescricao.Text          := vObjProduto.Descricao;
+   edtQuantidadeEstoque.Value := vObjProduto.QuantidadeEstoque;
+   edtPreco.Value             := vObjProduto.PrecoVenda;
+
+   btnCancelar.Enabled := True;
+   btnAlterar.Enabled := True;
+   btnExcluir.Enabled := True;
+
+   //Chamada da unidade de produto
+
 end;
 
 end.

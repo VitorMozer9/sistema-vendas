@@ -34,7 +34,7 @@ begin
 
          xProdutoDAO := TProdutoDAO.Create(TConexao.getInstance.getConn);
 
-         Result := xProdutoDAO.Retorna(RetornaCondicaoUnidade(pID));
+         Result := xProdutoDAO.Retorna(RetornaCondicaoProduto(pID));
 
       finally
          if (xProdutoDAO <> nil) then
