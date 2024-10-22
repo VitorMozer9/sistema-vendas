@@ -1,6 +1,6 @@
 object frmUnidadePesq: TfrmUnidadePesq
-  Left = 358
-  Top = 204
+  Left = 593
+  Top = 216
   Width = 626
   Height = 319
   Caption = 'Pesquisa de Unidade de Produto'

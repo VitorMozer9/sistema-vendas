@@ -49,6 +49,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure edtCodigoExit(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -65,6 +66,8 @@ type
     function ProcessaInclusao    : Boolean;
     function ProcessaConsulta    : Boolean;
     function ProcessaProduto     : Boolean;
+    function ProcessaAlteracao   : Boolean;
+    function ProcessaExclusao    : Boolean;
 
   public
     { Public declarations }
@@ -138,6 +141,50 @@ begin
             edtDescricao.SetFocus;
       end;
 
+      etAlterar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Alteração';
+
+         if (edtCodigo.Text <> EmptyStr) then
+         begin
+            CamposEnable(True);
+
+            edtUnidade.Enabled := False;
+            edtUnidadeDesc.Enabled := False;
+            edtCodigo.Enabled := False;
+            btnAlterar.Enabled := False;
+            btnConfirmar.Enabled := True;
+
+            if (edtDescricao.CanFocus) then
+               edtDescricao.SetFocus;
+
+         end
+         else
+         begin
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
+
+            if (edtCodigo.CanFocus) then
+               edtCodigo.SetFocus;
+         end;
+      end;
+
+      etExcluir:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Exclusão';
+
+         if (edtCodigo.Text <> EmptyStr) then
+            ProcessaExclusao
+         else
+         begin
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
+
+            if (edtCodigo.CanFocus) then
+               edtCodigo.SetFocus;
+         end;
+      end;
+
       etConsultar:
       begin
          stbBarraStatus.Panels[0].Text := 'Consulta';
@@ -164,6 +211,12 @@ begin
                edtCodigo.SetFocus;
          end;
       end;
+
+      etPesquisar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Pesquisa';
+       // ConsultaPesquisa;
+      end;
    end;
 end;
 
@@ -186,7 +239,7 @@ begin
                'Deseja abortar esta operação?')) then
             begin
                vEstadoTela := etPadrao;
-               //DefineEstadoTela;
+               DefineEstadoTela;
             end;
          end
          else
@@ -226,9 +279,10 @@ begin
    try
       case vEstadoTela of
            etIncluir:   Result := ProcessaInclusao;
-//         etAlterar:   Result := ProcessaAlteracao;
-//         etExcluir:   Result := ProcessaExclusao;
+           etAlterar:   Result := ProcessaAlteracao;
+           etExcluir:   Result := ProcessaExclusao;
            etConsultar: Result := ProcessaConsulta;
+           //etPesquisar: Result := ProcessaPesquisa;
       end;
 
       if not Result then
@@ -256,6 +310,7 @@ end;
 procedure TfrmProdutoView.btnExcluirClick(Sender: TObject);
 begin
    vEstadoTela := etExcluir;
+   DefineEstadoTela;
 end;
 
 procedure TfrmProdutoView.btnConsultarClick(Sender: TObject);
@@ -375,10 +430,6 @@ begin
       vObjProduto.Descricao         := edtDescricao.Text;
       vObjProduto.QuantidadeEstoque := edtQuantidadeEstoque.Value;
       vObjProduto.PrecoVenda        := edtPreco.Value;
-//      vObjProduto.Unidade_Id := 0;
-//      vObjProduto.ID       := 30;
-
-
 
       //Gravação no banco
       TProdutoController.getInstancia.GravaProduto(vObjProduto);
@@ -457,14 +508,16 @@ begin
          CarregaDadosTela
       else
       begin
-         TMessageUtil.Alerta('Nenhum dado de produto encontrado');
+         TMessageUtil.Alerta('Nenhum dado de produto encontrado.');
 
          edtCodigo.Clear;
 
          if (edtCodigo.CanFocus) then
             edtCodigo.SetFocus;
+         exit;
       end;
 
+      Result := True;
    except
       on E : Exception do
       begin
@@ -486,11 +539,118 @@ begin
    edtPreco.Value             := vObjProduto.PrecoVenda;
 
    btnCancelar.Enabled := True;
-   btnAlterar.Enabled := True;
-   btnExcluir.Enabled := True;
+   btnAlterar.Enabled  := True;
+   btnExcluir.Enabled  := True;
 
-   //Chamada da unidade de produto
+   if  vEstadoTela = etAlterar then
+   begin
+      edtDescricao.Enabled         := true;
+      edtQuantidadeEstoque.Enabled := true;
+      edtPreco.Enabled             := true;
+   end;
 
+end;
+
+procedure TfrmProdutoView.edtCodigoExit(Sender: TObject);
+begin
+   if vKey = VK_RETURN then
+   begin
+      ProcessaConsulta;
+   end;
+   //else
+      vKey := VK_CLEAR;
+end;
+
+function TfrmProdutoView.ProcessaAlteracao: Boolean;
+begin
+   try
+      Result := False;
+
+      if edtCodigo.Enabled then
+      begin
+         ProcessaConsulta;
+         exit;
+      end;
+
+      if ProcessaProduto then
+      begin
+         TMessageUtil.Informacao('Dados alterados com sucesso.');
+
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+
+         Result := True;
+      end;
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao alterar os dados de Produto [View]: '#13+
+            e.Message);
+      end;
+   end;
+end;
+
+function TfrmProdutoView.ProcessaExclusao: Boolean;
+begin
+   Result := False;
+   try
+      if (edtCodigo.Text <> EmptyStr) and
+         (Trim(edtDescricao.Text) = EmptyStr) and
+         (CompareValue(edtPreco.Value,0,0.001) = EqualsValue) then
+      begin
+         ProcessaConsulta;
+         exit;
+      end;
+
+      if (vObjProduto = nil) then
+      begin
+         TMessageUtil.Alerta(
+            'Não foi possível carregar os dados de Produto. ');
+
+         LimpaTela;
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         exit;
+      end;
+
+      try
+         if TMessageUtil.Pergunta(
+               'Confirma a exclusão dos dados do Produto?') then
+         begin
+            Screen.Cursor := crHourGlass;
+
+            TProdutoController.getInstancia.ExcluiProduto(vObjProduto);
+
+            TMessageUtil.Informacao('Produto excluído com sucesso. ');
+         end
+         else
+         begin
+            LimpaTela;
+            vEstadoTela := etPadrao;
+            DefineEstadoTela;
+            exit;
+         end;
+
+      finally
+         Screen.Cursor := crDefault;
+         Application.ProcessMessages;
+      end;
+
+      Result := True;
+
+      LimpaTela;
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
+
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+         'Falha ao excluir dados do Produto. [View]: '+ #13 +
+         e.Message);
+      end;
+   end;
 end;
 
 end.

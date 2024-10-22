@@ -460,6 +460,7 @@ object frmProdutoView: TfrmProdutoView
       Width = 37
       Height = 21
       TabOrder = 0
+      OnExit = edtCodigoExit
     end
     object edtUnidade: TEdit
       Left = 68

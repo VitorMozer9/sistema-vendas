@@ -26,7 +26,8 @@ uses
   UProdutoView in 'View\UProdutoView.pas' {frmProdutoView},
   UProduto in 'Model\UProduto.pas',
   UProdutoDAO in 'Model\UProdutoDAO.pas',
-  UProdutoController in 'Controller\UProdutoController.pas';
+  UProdutoController in 'Controller\UProdutoController.pas',
+  UProdutoPesqView in 'View\UProdutoPesqView.pas' {frmProdutoPesq};
 
 {$R *.res}
 
