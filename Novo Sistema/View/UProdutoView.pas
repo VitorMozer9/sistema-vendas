@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons,UEnumerationUtil, uMessageUtil,
-  UProduto, UProdutoController, NumEdit, Types;
+  UProduto, UProdutoController, NumEdit, Types, UProdutoPesqView;
 
 type
   TfrmProdutoView = class(TForm)
@@ -60,6 +60,7 @@ type
     procedure LimpaTela;
     procedure DefineEstadoTela;
     procedure CarregaDadosTela;
+    procedure ConsultaPesquisa;
 
     function ValidaCampos        : Boolean;
     function ProcessaConfirmacao : Boolean;
@@ -215,7 +216,7 @@ begin
       etPesquisar:
       begin
          stbBarraStatus.Panels[0].Text := 'Pesquisa';
-       // ConsultaPesquisa;
+         ConsultaPesquisa;
       end;
    end;
 end;
@@ -650,6 +651,26 @@ begin
          'Falha ao excluir dados do Produto. [View]: '+ #13 +
          e.Message);
       end;
+   end;
+end;
+
+procedure TfrmProdutoView.ConsultaPesquisa;
+begin
+   if (frmProdutoPesq = nil) then
+      frmProdutoPesq := TfrmProdutoPesq.Create(Application);
+
+      frmProdutoPesq.ShowModal;
+
+   if (frmProdutoPesq.mProdutoID <> 0) then
+   begin
+      edtCodigo.Text := IntToStr(frmProdutoPesq.mProdutoID);
+      vEstadoTela := etConsultar;
+      ProcessaConsulta;
+   end
+   else
+   begin
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
    end;
 end;
 

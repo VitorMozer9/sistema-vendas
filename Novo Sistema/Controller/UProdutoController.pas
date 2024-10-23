@@ -12,6 +12,7 @@ type
          function BuscaProduto(pID : Integer) : TProduto;
          function RetornaCondicaoProduto(pID : Integer) : string;
          function ExcluiProduto (pProduto : TProduto) : Boolean;
+         function PesquisaProduto(pProduto : String) : TColProduto;
 
       published
          class function getInstancia : TProdutoController;
@@ -139,6 +140,40 @@ begin
             e.Message);
       end;
    end;  
+end;
+
+function TProdutoController.PesquisaProduto(pProduto: String): TColProduto;
+var
+   xProdutoDAO : TProdutoDAO;
+   xCondicao   : string;
+begin
+   try
+      try
+         Result := nil;
+
+         xProdutoDAO :=
+            TProdutoDAO.Create(TConexao.getInstance.getConn);
+
+         xCondicao :=
+            IfThen(pProduto <> EmptyStr,
+            'WHERE                                            '#13 +
+            '    (DESCRICAO LIKE UPPER(''%' + pProduto + '%'' ))'#13 +
+               'ORDER BY DESCRICAO, ID ', EmptyStr);
+
+         Result := xProdutoDAO.RetornaLista(xCondicao);
+
+      finally
+         if (xProdutoDAO <> nil) then
+            FreeAndNil(xProdutoDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao pesquisar dados do produto. [Controller]'#13 +
+            e.Message);
+      end;
+   end;
 end;
 
 function TProdutoController.RetornaCondicaoProduto(pID: Integer): string;
