@@ -1,8 +1,8 @@
 object frmProdutoPesq: TfrmProdutoPesq
   Left = 360
   Top = 279
-  Width = 627
-  Height = 296
+  Width = 654
+  Height = 327
   Caption = 'Pesquisa de Produto'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -17,20 +17,20 @@ object frmProdutoPesq: TfrmProdutoPesq
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 238
-    Width = 611
+    Top = 269
+    Width = 638
     Height = 19
     Panels = <>
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 198
-    Width = 611
+    Top = 229
+    Width = 638
     Height = 40
     Align = alBottom
     TabOrder = 2
     object btnConfirmar: TBitBtn
-      Left = 367
+      Left = 399
       Top = 8
       Width = 75
       Height = 25
@@ -66,7 +66,7 @@ object frmProdutoPesq: TfrmProdutoPesq
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnLimpar: TBitBtn
-      Left = 447
+      Left = 479
       Top = 8
       Width = 75
       Height = 25
@@ -102,7 +102,7 @@ object frmProdutoPesq: TfrmProdutoPesq
         AF8DC2AA84AA9161A98B5DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnSair: TBitBtn
-      Left = 527
+      Left = 559
       Top = 8
       Width = 75
       Height = 25
@@ -141,14 +141,14 @@ object frmProdutoPesq: TfrmProdutoPesq
   object pnlFiltro: TPanel
     Left = 0
     Top = 0
-    Width = 611
+    Width = 638
     Height = 65
     Align = alTop
     TabOrder = 3
     object grbFiltrar: TGroupBox
       Left = 1
       Top = 1
-      Width = 609
+      Width = 636
       Height = 63
       Align = alClient
       Caption = 'Filtrar'
@@ -176,7 +176,7 @@ object frmProdutoPesq: TfrmProdutoPesq
         TabOrder = 0
       end
       object btnFiltrar: TBitBtn
-        Left = 521
+        Left = 551
         Top = 29
         Width = 75
         Height = 25
@@ -216,23 +216,23 @@ object frmProdutoPesq: TfrmProdutoPesq
   object pnlArea: TPanel
     Left = 0
     Top = 65
-    Width = 611
-    Height = 133
+    Width = 638
+    Height = 164
     Align = alClient
     TabOrder = 1
     object gbrResultadoBusca: TGroupBox
       Left = 1
       Top = 1
-      Width = 609
-      Height = 131
+      Width = 636
+      Height = 162
       Align = alClient
       Caption = 'Resultado Busca'
       TabOrder = 0
       object dbgResultadoBusca: TDBGrid
         Left = 2
         Top = 15
-        Width = 605
-        Height = 114
+        Width = 632
+        Height = 145
         Align = alClient
         DataSource = dtsProduto
         TabOrder = 0
@@ -241,6 +241,8 @@ object frmProdutoPesq: TfrmProdutoPesq
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
+        OnDblClick = dbgResultadoBuscaDblClick
+        OnKeyDown = dbgResultadoBuscaKeyDown
         Columns = <
           item
             Expanded = False
@@ -259,14 +261,14 @@ object frmProdutoPesq: TfrmProdutoPesq
             Expanded = False
             FieldName = 'QuantidadeEstoque'
             Title.Caption = 'Estoque'
-            Width = 68
+            Width = 75
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'PrecoVenda'
             Title.Caption = 'Pre'#231'o'
-            Width = 68
+            Width = 60
             Visible = True
           end>
       end
@@ -281,6 +283,7 @@ object frmProdutoPesq: TfrmProdutoPesq
     Active = True
     Aggregates = <>
     Params = <>
+    BeforeDelete = cdsProdutoBeforeDelete
     Left = 33
     Top = 119
     Data = {

@@ -16,7 +16,6 @@ type
       public
          constructor create;
 
-         //function Retorna(pIndex : Integer) : TUnidadeProduto;
          procedure Adiciona(pUnidadeProd : TUnidadeProduto);
 
       published
@@ -29,6 +28,11 @@ type
 
    end;
 
+   TColUnidadeProd = class(TList)
+      public
+         function Retorna(pIndex : Integer) : TUnidadeProduto;
+
+   end;
 
 implementation
 
@@ -47,11 +51,14 @@ begin
    Self.vDescricao := EmptyStr;
 end;
 
-//function TUnidadeProduto.Retorna(pIndex: Integer): TUnidadeProduto;
-//begin
-//   Result := TUnidadeProduto(pIndex);
-//end;
-//
+
+{ TColUnidadeProd }
+
+function TColUnidadeProd.Retorna(pIndex: Integer): TUnidadeProduto;
+begin
+   Result := TUnidadeProduto(Self[pIndex]);
+end;
+
 end.
 
 

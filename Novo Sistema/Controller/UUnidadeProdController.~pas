@@ -16,6 +16,7 @@ type
          function BuscaUnidade(pID : Integer) : TUnidadeProduto;
          function PesquisaUnidade(pUnidade : String) : TColUnidadeProd;
          function RetornaCondicaoUnidade(pID : Integer ) : String;
+         function RetornaProdutoUnidade(pCodProduto : Integer) : TUnidadeProduto;
 
       published
          class function getInstancia : TUnidadeProdController;  
@@ -41,6 +42,7 @@ begin
          Result := nil;
 
          xUnidadeDAO := TUnidadeProdutoDAO.Create(TConexao.getInstance.getConn);
+
          Result := xUnidadeDAO.Retorna(RetornaCondicaoUnidade(pID));
 
       finally
@@ -194,6 +196,41 @@ begin
    Result :=
    'WHERE                                             '#13+
    '    '+xChave+ ' = ' + QuotedStr(IntToStr(pID))+ ' '#13;
+end;
+
+function TUnidadeProdController.RetornaProdutoUnidade(
+  pCodProduto: Integer): TUnidadeProduto;
+var
+   xUnidadeDAO : TUnidadeProdutoDAO;
+   xCondicao : string;
+begin
+   try
+      try
+         Result := nil;
+
+         xUnidadeDAO :=
+            TUnidadeProdutoDAO.Create(TConexao.getInstance.getConn);
+
+         xCondicao :=
+            IfThen(IntToStr(pCodProduto) <> '0',
+             'SELECT unidadeproduto.unidade, unidadeproduto.descricao'        + #13 +
+               'FROM unidadeproduto'                                          + #13 +
+               'INNER JOIN produto on unidadeproduto.id = PRODUTO.unidade_id' + #13 +
+               'WHERE PRODUTO.id = ' + IntToStr(pCodProduto), EmptyStr);
+
+          Result := xUnidadeDAO.Retorna(xCondicao);
+      finally
+         if (xUnidadeDAO <> nil) then
+            FreeAndNil(xUnidadeDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao retornar dados de unidade para produto. [Controller]: '#13 +
+            e.Message);
+      end;
+   end;  
 end;
 
 end.

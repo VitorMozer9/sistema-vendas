@@ -3,6 +3,7 @@ object frmProdutoPesq: TfrmProdutoPesq
   Top = 279
   Width = 654
   Height = 327
+  BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Pesquisa de Produto'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET

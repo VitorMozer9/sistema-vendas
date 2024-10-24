@@ -20,7 +20,6 @@ type
     btnConsultar: TBitBtn;
     btnPesquisar: TBitBtn;
     btnSair: TBitBtn;
-    btnListar: TBitBtn;
     edtDescricao: TEdit;
     lblDescricao: TLabel;
     lblCodigo: TLabel;
@@ -40,7 +39,6 @@ type
     procedure btnAlterarClick(Sender: TObject);
     procedure btnExcluirClick(Sender: TObject);
     procedure btnConsultarClick(Sender: TObject);
-    procedure btnListarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
@@ -62,13 +60,13 @@ type
     procedure CarregaDadosTela;
     procedure ConsultaPesquisa;
 
-    function ValidaCampos        : Boolean;
-    function ProcessaConfirmacao : Boolean;
-    function ProcessaInclusao    : Boolean;
-    function ProcessaConsulta    : Boolean;
-    function ProcessaProduto     : Boolean;
-    function ProcessaAlteracao   : Boolean;
-    function ProcessaExclusao    : Boolean;
+    function ValidaCampos           : Boolean;
+    function ProcessaConfirmacao    : Boolean;
+    function ProcessaInclusao       : Boolean;
+    function ProcessaConsulta       : Boolean;
+    function ProcessaProduto        : Boolean;
+    function ProcessaAlteracao      : Boolean;
+    function ProcessaExclusao       : Boolean;
 
   public
     { Public declarations }
@@ -79,7 +77,7 @@ var
 
 implementation
 
-uses Math;
+uses Math, UUnidadeProdDAO, UUnidadeProdController, UUnidadeProduto;
 
 {$R *.dfm}
 
@@ -103,7 +101,6 @@ begin
    btnAlterar.Enabled   := (vEstadoTela in [etPadrao]);
    btnExcluir.Enabled   := (vEstadoTela in [etPadrao]);
    btnConsultar.Enabled := (vEstadoTela in [etPadrao]);
-   btnListar.Enabled    := (vEstadoTela in [etPadrao]);
    btnPesquisar.Enabled := (vEstadoTela in [etPadrao]);
 
    btnConfirmar.Enabled :=
@@ -134,7 +131,7 @@ begin
          stbBarraStatus.Panels[0].Text := 'Inclusão';
          CamposEnable(True);
 
-         edtUnidade.Enabled     := False;
+         edtUnidade.Enabled := False;
          edtUnidadeDesc.Enabled := False;
          edtCodigo.Enabled      := False;
 
@@ -150,7 +147,7 @@ begin
          begin
             CamposEnable(True);
 
-            edtUnidade.Enabled := False;
+//            edtUnidade.Enabled := False;
             edtUnidadeDesc.Enabled := False;
             edtCodigo.Enabled := False;
             btnAlterar.Enabled := False;
@@ -197,7 +194,6 @@ begin
             edtCodigo.Enabled    := False;
             btnAlterar.Enabled   := True;
             btnExcluir.Enabled   := True;
-            btnListar.Enabled    := True;
             btnConfirmar.Enabled := False;
 
             if (btnAlterar.CanFocus) then
@@ -320,12 +316,6 @@ begin
    DefineEstadoTela;
 end;
 
-procedure TfrmProdutoView.btnListarClick(Sender: TObject);
-begin
-   vEstadoTela := etListar;
-   DefineEstadoTela;
-end;
-
 procedure TfrmProdutoView.btnPesquisarClick(Sender: TObject);
 begin
    vEstadoTela := etPesquisar;
@@ -429,6 +419,7 @@ begin
          Exit;
 
       vObjProduto.Descricao         := edtDescricao.Text;
+      //vObjProduto.Unidade_Id        := StrToInt(edtUnidade.Text);
       vObjProduto.QuantidadeEstoque := edtQuantidadeEstoque.Value;
       vObjProduto.PrecoVenda        := edtPreco.Value;
 
@@ -530,6 +521,8 @@ begin
 end;
 
 procedure TfrmProdutoView.CarregaDadosTela;
+var
+   xObjUnidadeProduto : TUnidadeProduto;
 begin
    if (vObjProduto = nil) then
       exit;
@@ -538,6 +531,23 @@ begin
    edtDescricao.Text          := vObjProduto.Descricao;
    edtQuantidadeEstoque.Value := vObjProduto.QuantidadeEstoque;
    edtPreco.Value             := vObjProduto.PrecoVenda;
+
+   try
+      if vObjProduto.Unidade_ID <> 0 then
+      begin
+         xObjUnidadeProduto := nil;
+         xObjUnidadeProduto := TUnidadeProduto.create;
+         xObjUnidadeProduto := TUnidadeProdController.getInstancia.RetornaProdutoUnidade(vObjProduto.ID);
+         edtUnidade.Text := xObjUnidadeProduto.Unidade;
+         edtUnidadeDesc.Text := xObjUnidadeProduto.Descricao;
+
+         if  xObjUnidadeProduto <> nil then
+             edtUnidadeDesc.Text :=  xObjUnidadeProduto.Descricao;
+      end;
+   finally
+      if xObjUnidadeProduto <> nil then
+         FreeAndNil(xObjUnidadeProduto);
+   end;
 
    btnCancelar.Enabled := True;
    btnAlterar.Enabled  := True;
@@ -549,7 +559,6 @@ begin
       edtQuantidadeEstoque.Enabled := true;
       edtPreco.Enabled             := true;
    end;
-
 end;
 
 procedure TfrmProdutoView.edtCodigoExit(Sender: TObject);
@@ -673,5 +682,6 @@ begin
       DefineEstadoTela;
    end;
 end;
+
 
 end.

@@ -10,17 +10,19 @@ type
       private
          vID                  : Integer;
          vDescricao           : String;
-         vQuantidadeDeEstoque : Double;
+         vQuantidadeEstoque   : Double;
          vPrecoVenda          : Double;
+         vUnidade_ID             : String;
 
       public
          constructor Create;
 
       published
-         property ID                   : Integer read vID write vID;
-         property Descricao            : String  read vDescricao write vDescricao;
-         property QuantidadeDeEstoque : Double read vQuantidadeDeEstoque write vQuantidadeDeEstoque;
-         property PrecoVenda          : Double read vPrecoVenda write vPrecoVenda;
+         property ID                : Integer read vID write vID;
+         property Descricao         : String  read vDescricao write vDescricao;
+         property QuantidadeEstoque : Double read vQuantidadeEstoque write vQuantidadeEstoque;
+         property PrecoVenda        : Double read vPrecoVenda write vPrecoVenda;
+         property Unidade_ID        : Integer read vUnidade_ID write vUnidade_ID;
    end;
 
    TColProduto = class(TList) //forma de manipular uma coleção de objetos da classe TPessoa
@@ -35,10 +37,11 @@ implementation
 
 constructor TProduto.Create;
 begin
-   Self.vID                  := 0;
-   Self.vDescricao           := EmptyStr;
-   Self.vQuantidadeDeEstoque := 0;
-   Self.vPrecoVenda          := 0;
+   Self.vID                := 0;
+   Self.vUnidade_ID           := 0;
+   Self.vDescricao         := EmptyStr;
+   Self.vQuantidadeEstoque := 0;
+   Self.vPrecoVenda        := 0;
 end;
 
 { TColPessoa }

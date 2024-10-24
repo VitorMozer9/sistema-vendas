@@ -2,7 +2,7 @@ unit UUnidadeProdController;
 
 interface
 
-uses SysUtils, Math, StrUtils, UConexao, UUnidadeProduto;
+uses SysUtils, Math, StrUtils, UConexao, UUnidadeProduto, SqlExpr;
 
 type
    TUnidadeProdController = class
@@ -16,6 +16,7 @@ type
          function BuscaUnidade(pID : Integer) : TUnidadeProduto;
          function PesquisaUnidade(pUnidade : String) : TColUnidadeProd;
          function RetornaCondicaoUnidade(pID : Integer ) : String;
+         //function RetornaProdutoUnidade(pCodProduto : Integer) : TUnidadeProduto;
 
       published
          class function getInstancia : TUnidadeProdController;  
@@ -197,5 +198,45 @@ begin
    '    '+xChave+ ' = ' + QuotedStr(IntToStr(pID))+ ' '#13;
 end;
 
+//function TUnidadeProdController.RetornaProdutoUnidade(
+//  pCodProduto: Integer): TUnidadeProduto;
+//var
+//   xQuery : TSQLQuery;
+//   xConexao : TSQLConnection;
+//   xObjUnidadeProduto : TUnidadeProduto;
+//begin
+//   try
+//      try
+//         Result := nil;
+//         xObjUnidadeProduto := TUnidadeProduto.create;
+//         xQuery := TSQLQuery.Create(nil);
+//
+//         xQuery.SQLConnection := xConexao;
+//         xQuery.Close;
+//
+//         xQuery.SQL.Text :=
+//             'SELECT unidadeproduto.unidade, unidadeproduto.descricao'        + #13 +
+//               'FROM unidadeproduto'                                          + #13 +
+//               'INNER JOIN produto on unidadeproduto.id = PRODUTO.unidade_id' + #13 +
+//               'WHERE PRODUTO.id = ' + IntToStr(pCodProduto);
+//
+//         xQuery.Open;
+//
+//         xObjUnidadeProduto.Unidade := xQuery.FieldByName('');
+//
+//          Result :=
+//      finally
+//         if (xQuery <> nil) then
+//            FreeAndNil(xQuery);
+//      end;
+//   except
+//      on E : Exception do
+//      begin
+//         raise Exception.Create(
+//            'Falha ao retornar dados de unidade para produto. [Controller]: '#13 +
+//            e.Message);
+//      end;
+//   end;
+//end;
+
 end.
- 

@@ -35,6 +35,10 @@ type
     procedure btnConfirmarClick(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);
     procedure btnSairClick(Sender: TObject);
+    procedure cdsProdutoBeforeDelete(DataSet: TDataSet);
+    procedure dbgResultadoBuscaDblClick(Sender: TObject);
+    procedure dbgResultadoBuscaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     vKey : Word;
@@ -169,7 +173,7 @@ end;
 
 procedure TfrmProdutoPesq.ProcessaConfirmacao;
 begin
-   if not cdsUnidade.IsEmpty then
+   if not cdsProduto.IsEmpty then
    begin
       mProdutoID       := cdsProdutoID.Value;
       mProduto     := cdsProdutoDescricao.Value;
@@ -202,6 +206,24 @@ procedure TfrmProdutoPesq.btnSairClick(Sender: TObject);
 begin
    LimpaTela;
    Close;
+end;
+
+procedure TfrmProdutoPesq.cdsProdutoBeforeDelete(DataSet: TDataSet);
+begin
+   Abort;
+end;
+
+procedure TfrmProdutoPesq.dbgResultadoBuscaDblClick(Sender: TObject);
+begin
+   ProcessaConfirmacao;
+end;
+
+procedure TfrmProdutoPesq.dbgResultadoBuscaKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+   if (Key = VK_RETURN) and
+      (btnConfirmar.CanFocus) then
+      btnConfirmar.SetFocus;
 end;
 
 end.
