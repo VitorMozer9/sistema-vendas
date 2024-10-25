@@ -8,9 +8,8 @@ type
    TUnidadeProduto = Class(TPersistent)
 
       private
-         vId        : Integer;
-         vAtivo     : Boolean;
          vUnidade   : String;
+         vAtivo     : Boolean;
          vDescricao : String;
 
       public
@@ -19,9 +18,8 @@ type
          procedure Adiciona(pUnidadeProd : TUnidadeProduto);
 
       published
-       property Id        : Integer read vId write vId;
-       property Ativo     : Boolean read vAtivo write vAtivo;
        property Unidade   : String  read vUnidade write vUnidade;
+       property Ativo     : Boolean read vAtivo write vAtivo;
        property Descricao : String  read vDescricao write vDescricao;
 
 
@@ -45,7 +43,6 @@ end;
 
 constructor TUnidadeProduto.create;
 begin
-   Self.vId        := 0;
    Self.vAtivo     := False;
    Self.vUnidade   := EmptyStr;
    Self.vDescricao := EmptyStr;

@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons,UEnumerationUtil, uMessageUtil,
-  UProduto, UProdutoController, NumEdit, Types, UProdutoPesqView;
+  UProduto, UProdutoController, NumEdit, Types, UProdutoPesqView, UUnidadeProdPesqView,
+  DBCtrls;
 
 type
   TfrmProdutoView = class(TForm)
@@ -25,7 +26,6 @@ type
     lblCodigo: TLabel;
     edtCodigo: TEdit;
     lblUnidade: TLabel;
-    edtUnidade: TEdit;
     SpeedButton1: TSpeedButton;
     Label1: TLabel;
     edtUnidadeDesc: TEdit;
@@ -33,6 +33,7 @@ type
     lblPreco: TLabel;
     edtQuantidadeEstoque: TNumEdit;
     edtPreco: TNumEdit;
+    cmbUnidade: TComboBox;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnIncluirClick(Sender: TObject);
@@ -131,7 +132,7 @@ begin
          stbBarraStatus.Panels[0].Text := 'Inclusão';
          CamposEnable(True);
 
-         edtUnidade.Enabled := False;
+         cmbUnidade.Enabled := True;
          edtUnidadeDesc.Enabled := False;
          edtCodigo.Enabled      := False;
 
@@ -533,12 +534,12 @@ begin
    edtPreco.Value             := vObjProduto.PrecoVenda;
 
    try
-      if vObjProduto.Unidade_ID <> 0 then
+      if vObjProduto.ID <> 0 then
       begin
          xObjUnidadeProduto := nil;
          xObjUnidadeProduto := TUnidadeProduto.create;
-         xObjUnidadeProduto := TUnidadeProdController.getInstancia.RetornaProdutoUnidade(vObjProduto.ID);
-         edtUnidade.Text := xObjUnidadeProduto.Unidade;
+         //xObjUnidadeProduto := TUnidadeProdController.BuscaUnidade(vObjProduto.Unidade_ID);
+         cmbUnidade.Text := xObjUnidadeProduto.Unidade;
          edtUnidadeDesc.Text := xObjUnidadeProduto.Descricao;
 
          if  xObjUnidadeProduto <> nil then

@@ -360,8 +360,8 @@ object frmProdutoView: TfrmProdutoView
       Caption = 'C'#243'digo'
     end
     object lblUnidade: TLabel
-      Left = 21
-      Top = 44
+      Left = 20
+      Top = 43
       Width = 40
       Height = 13
       Caption = 'Unidade'
@@ -373,9 +373,9 @@ object frmProdutoView: TfrmProdutoView
       ParentFont = False
     end
     object SpeedButton1: TSpeedButton
-      Left = 117
-      Top = 36
-      Width = 23
+      Left = 128
+      Top = 40
+      Width = 25
       Height = 21
       Glyph.Data = {
         36060000424D3606000000000000360000002800000020000000100000000100
@@ -431,7 +431,7 @@ object frmProdutoView: TfrmProdutoView
       NumGlyphs = 2
     end
     object Label1: TLabel
-      Left = 146
+      Left = 159
       Top = 42
       Width = 91
       Height = 13
@@ -479,20 +479,12 @@ object frmProdutoView: TfrmProdutoView
       TabOrder = 0
       OnExit = edtCodigoExit
     end
-    object edtUnidade: TEdit
-      Left = 68
-      Top = 37
-      Width = 37
-      Height = 21
-      MaxLength = 2
-      TabOrder = 2
-    end
     object edtUnidadeDesc: TEdit
-      Left = 243
+      Left = 256
       Top = 37
-      Width = 374
+      Width = 361
       Height = 21
-      TabOrder = 3
+      TabOrder = 2
     end
     object edtQuantidadeEstoque: TNumEdit
       Left = 69
@@ -502,7 +494,7 @@ object frmProdutoView: TfrmProdutoView
       Alignment = taRightJustify
       Decimals = 2
       ShowSeparator = True
-      TabOrder = 4
+      TabOrder = 3
     end
     object edtPreco: TNumEdit
       Left = 168
@@ -512,6 +504,15 @@ object frmProdutoView: TfrmProdutoView
       Alignment = taRightJustify
       Decimals = 2
       ShowSeparator = True
+      TabOrder = 4
+    end
+    object cmbUnidade: TComboBox
+      Left = 71
+      Top = 36
+      Width = 51
+      Height = 21
+      CharCase = ecUpperCase
+      ItemHeight = 13
       TabOrder = 5
     end
   end

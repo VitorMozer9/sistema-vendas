@@ -574,7 +574,8 @@ object frmClientes: TfrmClientes
         TabOrder = 4
         Items.Strings = (
           'SP'
-          'MG')
+          'MG'
+          'RJ')
       end
       object edtCidade: TEdit
         Left = 176

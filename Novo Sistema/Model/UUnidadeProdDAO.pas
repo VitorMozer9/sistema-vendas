@@ -39,7 +39,7 @@ end;
 function TUnidadeProdutoDAO.Insere(
   pUnidadeProduto: TUnidadeProduto): Boolean;
 begin
-   Result := inherited Insere(pUnidadeProduto, 'ID');
+   Result := inherited Insere(pUnidadeProduto, 'UNIDADE');
 end;
 
 function TUnidadeProdutoDAO.Retorna(pCondicao: String): TUnidadeProduto;

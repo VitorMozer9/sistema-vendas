@@ -9,13 +9,13 @@ type
       public
          constructor create;
          function GravaUnidadeProduto (
-                     pUnidadeProduto : TUnidadeProduto) : Boolean;
+                     pUnidadeProduto : TUnidadeProduto; pInclusao : Boolean) : Boolean;
 
          function ExcluiUnidade (pUnidadeProd : TUnidadeProduto) : Boolean;
 
-         function BuscaUnidade(pID : Integer) : TUnidadeProduto;
+         function BuscaUnidade(pUnidade : string) : TUnidadeProduto;
          function PesquisaUnidade(pUnidade : String) : TColUnidadeProd;
-         function RetornaCondicaoUnidade(pID : Integer ) : String;
+         function RetornaCondicaoUnidade(pUnidade : String ) : String;
          //function RetornaProdutoUnidade(pCodProduto : Integer) : TUnidadeProduto;
 
       published
@@ -33,7 +33,7 @@ var
 { TUnidadeProdController }
 
 function TUnidadeProdController.BuscaUnidade(
-  pID: Integer): TUnidadeProduto;
+  pUnidade: String): TUnidadeProduto;
 var
    xUnidadeDAO : TUnidadeProdutoDAO;
 begin
@@ -43,7 +43,7 @@ begin
 
          xUnidadeDAO := TUnidadeProdutoDAO.Create(TConexao.getInstance.getConn);
 
-         Result := xUnidadeDAO.Retorna(RetornaCondicaoUnidade(pID));
+         Result := xUnidadeDAO.Retorna(RetornaCondicaoUnidade(pUnidade));
 
       finally
          if (xUnidadeDAO <> nil) then
@@ -77,11 +77,11 @@ begin
 
          xUnidadeDAO := TUnidadeProdutoDAO.Create(TConexao.get.getConn);
 
-         if (pUnidadeProd.Id = 0) then
+         if (pUnidadeProd.Unidade = EmptyStr) then
             exit
          else
          begin
-            xUnidadeDAO.Deleta(RetornaCondicaoUnidade(pUnidadeProd.Id));
+            xUnidadeDAO.Deleta(RetornaCondicaoUnidade(pUnidadeProd.Unidade));
          end;
 
          TConexao.get.confirmaTransacao;
@@ -111,7 +111,7 @@ begin
 end;
 
 function TUnidadeProdController.GravaUnidadeProduto(
-  pUnidadeProduto: TUnidadeProduto): Boolean;
+  pUnidadeProduto: TUnidadeProduto; pInclusao : Boolean): Boolean;
 var
    xUnidadeProdDAO : TUnidadeProdutoDAO;
 begin
@@ -125,15 +125,11 @@ begin
 
          xUnidadeProdDAO := TUnidadeProdutoDAO.Create(TConexao.get.getConn);
 
-         if pUnidadeProduto.Id = 0 then
-         begin
-            xUnidadeProdDAO.Insere(pUnidadeProduto);
-         end
+         if pInclusao then
+            xUnidadeProdDAO.Insere(pUnidadeProduto)
          else
-         begin
             xUnidadeProdDAO.Atualiza(
-               pUnidadeProduto,RetornaCondicaoUnidade(pUnidadeProduto.Id));
-         end;
+               pUnidadeProduto,RetornaCondicaoUnidade(pUnidadeProduto.Unidade));
 
          TConexao.get.confirmaTransacao;
       finally
@@ -187,15 +183,12 @@ begin
 end;
 
 function TUnidadeProdController.RetornaCondicaoUnidade(
-  pID: Integer): String;
-var
-   xChave : String;
+  pUnidade : String): String;
 begin
-   xChave := 'ID';
 
    Result :=
-   'WHERE                                             '#13+
-   '    '+xChave+ ' = ' + QuotedStr(IntToStr(pID))+ ' '#13;
+      'WHERE                                            '#13 +
+      '    (UNIDADE LIKE UPPER(''%' + pUnidade + '%'' ))';
 end;
 
 //function TUnidadeProdController.RetornaProdutoUnidade(

@@ -20,12 +20,10 @@ type
     btnSair: TBitBtn;
     pnlArea: TPanel;
     edtUnidade: TEdit;
-    lblCodigo: TLabel;
     lblUnidade: TLabel;
     chkAtivo: TCheckBox;
     lblDescricao: TLabel;
     edtDescricao: TEdit;
-    edtCodigo: TEdit;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -41,7 +39,6 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure edtCodigoExit(Sender: TObject);
     procedure edtUnidadeChange(Sender: TObject);
     procedure edtDescricaoChange(Sender: TObject);
   private
@@ -185,8 +182,6 @@ begin
 
          CamposEnable(True);
 
-         edtCodigo.Enabled := False;
-
          chkAtivo.Checked := True;
 
          if (edtUnidade.CanFocus) then
@@ -197,11 +192,10 @@ begin
       begin
          stbBarraStatus.Panels[0].Text := 'Alteração';
 
-         if (edtCodigo.Text <> EmptyStr) then
+         if (edtUnidade.Text <> EmptyStr) then
          begin
             CamposEnable(True);
 
-            edtCodigo.Enabled := False;
             btnAlterar.Enabled := False;
             btnConfirmar.Enabled := True;
 
@@ -211,11 +205,11 @@ begin
          end
          else
          begin
-            lblCodigo.Enabled := True;
-            edtCodigo.Enabled := True;
+            lblUnidade.Enabled := True;
+            edtUnidade.Enabled := True;
 
-            if (edtCodigo.CanFocus) then
-               edtCodigo.SetFocus;
+            if (edtUnidade.CanFocus) then
+               edtUnidade.SetFocus;
          end;
       end;
 
@@ -223,15 +217,15 @@ begin
       begin
          stbBarraStatus.Panels[0].Text := 'Exclusão';
 
-         if (edtCodigo.Text <> EmptyStr) then
+         if (edtUnidade.Text <> EmptyStr) then
             ProcessaExclusao
          else
          begin
-            lblCodigo.Enabled := True;
-            edtCodigo.Enabled := True;
+            lblUnidade.Enabled := True;
+            edtUnidade.Enabled := True;
 
-            if (edtCodigo.CanFocus) then
-               edtCodigo.SetFocus;
+            if (edtUnidade.CanFocus) then
+               edtUnidade.SetFocus;
          end;
       end;
 
@@ -241,9 +235,9 @@ begin
 
           CamposEnable(False);
 
-         if (edtCodigo.Text <> EmptyStr) then
+         if (edtUnidade.Text <> EmptyStr) then
          begin
-            edtCodigo.Enabled    := False;
+
             btnAlterar.Enabled   := True;
             btnExcluir.Enabled   := True;
             btnConfirmar.Enabled := False;
@@ -253,11 +247,11 @@ begin
          end
          else
          begin
-            lblCodigo.Enabled := True;
-            edtCodigo.Enabled := True;
+            lblUnidade.Enabled := True;
+            edtUnidade.Enabled := True;
 
-            if edtCodigo.CanFocus then
-               edtCodigo.SetFocus;
+            if edtUnidade.CanFocus then
+               edtUnidade.SetFocus;
          end;
       end;
 
@@ -316,7 +310,7 @@ begin
    if (vEstadoTela <> etPadrao) then
    begin
       if (TMessageUtil.Pergunta(
-         'Deseja realmente abortar esta operação?')) then;
+         'Deseja realmente abortar esta operação?')) then
       begin
          vEstadoTela := etPadrao;
          DefineEstadoTela;
@@ -372,8 +366,7 @@ begin
 
         if ProcessaUnidadeProd then
         begin
-           TMessageUtil.Informacao('Unidade cadastrada com sucesso'+ #13 +
-           'Código cadastrado: ' + IntToStr(vObjUnidadeProduto.Id));
+           TMessageUtil.Informacao('Unidade cadastrada com sucesso');
 
            vEstadoTela := etPadrao;
            DefineEstadoTela;
@@ -396,9 +389,12 @@ begin
 end;
 
 function TfrmUnidadeProd.ProcessaUnidadeProd: Boolean;
+var
+   xInclusao : boolean;
 begin
    try
       Result := False;
+      xInclusao := False;
 
       if not ValidaCampos then
          exit;
@@ -407,6 +403,8 @@ begin
       begin
          if vObjUnidadeProduto = nil then
             vObjUnidadeProduto := TUnidadeProduto.create;
+
+          xInclusao := True;
       end
       else
       if vEstadoTela = etAlterar then
@@ -423,7 +421,7 @@ begin
       vObjUnidadeProduto.Descricao := edtDescricao.Text;
 
       TUnidadeProdController.getInstancia.GravaUnidadeProduto(
-         vObjUnidadeProduto);
+         vObjUnidadeProduto, xInclusao);
 
       Result := True;
 
@@ -468,31 +466,30 @@ begin
    try
       Result := False;
 
-      if (edtCodigo.Text = EmptyStr) and not(vEstadoTela = etConsultar) then
+      if (edtUnidade.Text = EmptyStr) and not(vEstadoTela = etConsultar) then
       begin
          TMessageUtil.Alerta(
-            'O código de Unidade de Produto não pode ficar em branco');
+            'A Unidade de Produto não pode ficar em branco');
 
-         if (edtCodigo.CanFocus) then
-            edtCodigo.SetFocus;
+         if (edtUnidade.CanFocus) then
+            edtUnidade.SetFocus;
 
          exit;
       end;
 
       vObjUnidadeProduto :=
-         TUnidadeProdController.getInstancia.BuscaUnidade(
-            StrToIntDef(edtCodigo.Text, 0));
+         TUnidadeProdController.getInstancia.BuscaUnidade(edtUnidade.Text);
 
-      if (vObjUnidadeProduto <> nil) or (edtCodigo.Text = '') then
+      if (vObjUnidadeProduto <> nil) or (edtUnidade.Text = EmptyStr) then
          CarregaDadosTela
       else
       begin
          TMessageUtil.Alerta('Nenhum dado de unidade encontrado');
 
-         edtCodigo.Clear;
+         edtUnidade.Clear;
 
-         if edtCodigo.CanFocus then
-            edtCodigo.SetFocus;
+         if edtUnidade.CanFocus then
+            edtUnidade.SetFocus;
          exit;
       end;
 
@@ -512,11 +509,9 @@ begin
    if (vObjUnidadeProduto = nil) then
       exit;
 
-   edtCodigo.Text    := IntToStr(vObjUnidadeProduto.Id);
    chkAtivo.Checked  := vObjUnidadeProduto.Ativo;
    edtUnidade.Text   := vObjUnidadeProduto.Unidade;
    edtDescricao.Text := vObjUnidadeProduto.Descricao;
-   edtCodigo.Enabled := False;
 
    btnCancelar.Enabled := True;
    btnAlterar.Enabled := True;
@@ -536,7 +531,7 @@ begin
    try
       Result := False;
 
-      if edtCodigo.Enabled then
+      if edtUnidade.Enabled then
       begin
          ProcessaConsulta;
          exit;
@@ -561,28 +556,12 @@ begin
    end;
 end;
 
-procedure TfrmUnidadeProd.edtCodigoExit(Sender: TObject);
-begin
-   if vKey = VK_RETURN then
-   if not (edtCodigo.Text = EmptyStr) then
-      ProcessaConsulta
-   else
-   begin
-      if vEstadoTela = etConsultar then
-      begin
-         ConsultaPesquisa;
-      end;
-   end;
-
-   vKey := VK_CLEAR;
-end;
-
 function TfrmUnidadeProd.ProcessaExclusao: Boolean;
 begin
    try
       Result := False;
 
-      if edtCodigo.Enabled then
+      if edtUnidade.Enabled then
       begin
          ProcessaConsulta;
          Exit;
@@ -642,6 +621,19 @@ end;
 procedure TfrmUnidadeProd.edtUnidadeChange(Sender: TObject);
 begin
    edtUnidade.Text := TFuncoes.removeCaracterEspecial(edtUnidade.Text, True);
+
+   if vKey = VK_RETURN then
+   if not (edtUnidade.Text = EmptyStr) then
+      ProcessaConsulta
+   else
+   begin
+      if vEstadoTela = etConsultar then
+      begin
+         ConsultaPesquisa;
+      end;
+   end;
+
+   vKey := VK_CLEAR;
 end;
 
 procedure TfrmUnidadeProd.edtDescricaoChange(Sender: TObject);
@@ -657,9 +649,9 @@ begin
 
       frmUnidadePesq.ShowModal;
 
-   if (frmUnidadePesq.mUnidadeID <> 0) then
+   if (frmUnidadePesq.mUnidade <> EmptyStr) then
    begin
-      edtCodigo.Text := IntToStr(frmUnidadePesq.mUnidadeID);
+      edtUnidade.Text := frmUnidadePesq.mUnidade;
       vEstadoTela := etConsultar;
       ProcessaConsulta;
    end
@@ -669,7 +661,6 @@ begin
       DefineEstadoTela;
    end;
 
-   frmUnidadePesq.mUnidadeID   := 0;
    frmUnidadePesq.mUnidade := EmptyStr;
 
    if (edtUnidade.CanFocus) then

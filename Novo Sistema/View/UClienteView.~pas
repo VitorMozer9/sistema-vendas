@@ -344,7 +344,7 @@ begin
             if edtCodigo.CanFocus then
                edtCodigo.SetFocus;
          end;
-      end;
+      end; 
 
       etListar:
       begin

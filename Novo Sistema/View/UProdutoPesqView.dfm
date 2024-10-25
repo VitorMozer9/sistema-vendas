@@ -236,6 +236,7 @@ object frmProdutoPesq: TfrmProdutoPesq
         Height = 145
         Align = alClient
         DataSource = dtsProduto
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgCancelOnExit]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText

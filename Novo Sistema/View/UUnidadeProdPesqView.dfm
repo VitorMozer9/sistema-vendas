@@ -237,6 +237,7 @@ object frmUnidadePesq: TfrmUnidadePesq
         Height = 137
         Align = alClient
         DataSource = dtsUnidade
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgCancelOnExit]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
@@ -246,12 +247,6 @@ object frmUnidadePesq: TfrmUnidadePesq
         OnDblClick = dbgResultadoBuscaDblClick
         OnKeyDown = dbgResultadoBuscaKeyDown
         Columns = <
-          item
-            Expanded = False
-            FieldName = 'ID'
-            Title.Caption = 'C'#243'digo'
-            Visible = True
-          end
           item
             Expanded = False
             FieldName = 'Unidade'

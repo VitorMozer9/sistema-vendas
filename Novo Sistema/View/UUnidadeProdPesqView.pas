@@ -131,7 +131,6 @@ begin
             for xAux := 0 to pred(xListaUnidade.Count) do
             begin
                cdsUnidade.Append;
-               cdsUnidadeID.Value        := xListaUnidade.Retorna(xAux).Id;
                cdsUnidadeUnidade.Value   := xListaUnidade.Retorna(xAux).Unidade;
                cdsUnidadeDescricao.Value := xListaUnidade.Retorna(xAux).Descricao;
                cdsUnidadeAtivo.Value     :=

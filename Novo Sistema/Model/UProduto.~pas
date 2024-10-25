@@ -12,7 +12,7 @@ type
          vDescricao           : String;
          vQuantidadeEstoque   : Double;
          vPrecoVenda          : Double;
-         vUnidade_ID             : String;
+         vUnidade_ID          : Integer;
 
       public
          constructor Create;
