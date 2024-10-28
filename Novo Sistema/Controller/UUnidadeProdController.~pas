@@ -126,14 +126,10 @@ begin
          xUnidadeProdDAO := TUnidadeProdutoDAO.Create(TConexao.get.getConn);
 
          if pInclusao then
-         begin
-            xUnidadeProdDAO.Insere(pUnidadeProduto);
-         end
+            xUnidadeProdDAO.Insere(pUnidadeProduto)
          else
-         begin
             xUnidadeProdDAO.Atualiza(
                pUnidadeProduto,RetornaCondicaoUnidade(pUnidadeProduto.Unidade));
-         end;
 
          TConexao.get.confirmaTransacao;
       finally

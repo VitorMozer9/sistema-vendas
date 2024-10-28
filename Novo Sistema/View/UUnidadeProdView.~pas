@@ -531,7 +531,7 @@ begin
    try
       Result := False;
 
-      if edtUnidade.Enabled then
+      if (edtUnidade.Text <> EmptyStr) then
       begin
          ProcessaConsulta;
          exit;

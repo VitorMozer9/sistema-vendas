@@ -372,7 +372,7 @@ object frmProdutoView: TfrmProdutoView
       Font.Style = []
       ParentFont = False
     end
-    object SpeedButton1: TSpeedButton
+    object btnUnidadeProduto: TSpeedButton
       Left = 128
       Top = 40
       Width = 25
@@ -429,6 +429,7 @@ object frmProdutoView: TfrmProdutoView
         FFFF00FFFF00FFFF00FFFF00FF90909090909090909090909090909090909090
         9090898989FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
       NumGlyphs = 2
+      OnClick = btnUnidadeProdutoClick
     end
     object Label1: TLabel
       Left = 159
@@ -514,6 +515,7 @@ object frmProdutoView: TfrmProdutoView
       CharCase = ecUpperCase
       ItemHeight = 13
       TabOrder = 5
+      OnChange = cmbUnidadeChange
     end
   end
 end
