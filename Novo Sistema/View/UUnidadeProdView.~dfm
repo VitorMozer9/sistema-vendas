@@ -356,7 +356,7 @@ object frmUnidadeProd: TfrmUnidadeProd
     object lblDescricao: TLabel
       Left = 115
       Top = 11
-      Width = 57
+      Width = 58
       Height = 13
       Caption = 'Descri'#231#227'o'
       Font.Charset = DEFAULT_CHARSET
@@ -395,6 +395,7 @@ object frmUnidadeProd: TfrmUnidadeProd
       Top = 6
       Width = 256
       Height = 21
+      CharCase = ecUpperCase
       TabOrder = 2
       OnChange = edtDescricaoChange
     end

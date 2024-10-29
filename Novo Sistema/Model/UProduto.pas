@@ -12,15 +12,17 @@ type
          vDescricao           : String;
          vQuantidadeEstoque   : Double;
          vPrecoVenda          : Double;
+         vUnidade             : String;
 
       public
          constructor Create;
 
       published
          property ID                : Integer read vID write vID;
-         property Descricao         : String  read vDescricao write vDescricao;
+         property Descricao         : string  read vDescricao write vDescricao;
          property QuantidadeEstoque : Double read vQuantidadeEstoque write vQuantidadeEstoque;
          property PrecoVenda        : Double read vPrecoVenda write vPrecoVenda;
+         property Unidade           : string read vUnidade write vUnidade;
    end;
 
    TColProduto = class(TList) //forma de manipular uma coleção de objetos da classe TPessoa
@@ -39,6 +41,7 @@ begin
    Self.vDescricao         := EmptyStr;
    Self.vQuantidadeEstoque := 0;
    Self.vPrecoVenda        := 0;
+   Self.vUnidade           := EmptyStr;
 end;
 
 { TColPessoa }

@@ -1,6 +1,6 @@
 object frmClientes: TfrmClientes
-  Left = 238
-  Top = 169
+  Left = 1707
+  Top = 207
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Clientes'

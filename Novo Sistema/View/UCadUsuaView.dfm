@@ -1,31 +1,22 @@
-object frmUnidadeProd: TfrmUnidadeProd
-  Left = 653
-  Top = 257
-  BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
-  Caption = 'Unidade de Produtos'
-  ClientHeight = 123
-  ClientWidth = 497
+object frmCadUsua: TfrmCadUsua
+  Left = 399
+  Top = 228
+  Width = 400
+  Height = 239
+  Caption = 'Cadastro de Usu'#225'rio'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
-  KeyPreview = True
   OldCreateOrder = False
-  Position = poScreenCenter
-  OnClose = FormClose
-  OnCreate = FormCreate
-  OnKeyDown = FormKeyDown
-  OnKeyUp = FormKeyUp
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 104
-    Width = 497
+    Top = 181
+    Width = 384
     Height = 19
     Panels = <
       item
@@ -37,19 +28,18 @@ object frmUnidadeProd: TfrmUnidadeProd
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 36
-    Width = 497
-    Height = 68
+    Top = 112
+    Width = 384
+    Height = 69
     Align = alBottom
     TabOrder = 1
     object btnIncluir: TBitBtn
-      Left = 13
+      Left = 37
       Top = 8
       Width = 75
       Height = 25
       Caption = '&Incluir'
       TabOrder = 0
-      OnClick = btnIncluirClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -79,13 +69,12 @@ object frmUnidadeProd: TfrmUnidadeProd
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnAlterar: TBitBtn
-      Left = 96
+      Left = 120
       Top = 8
       Width = 75
       Height = 25
       Caption = '&Alterar'
       TabOrder = 1
-      OnClick = btnAlterarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E000000000000000000000A2B95062082
@@ -115,13 +104,12 @@ object frmUnidadeProd: TfrmUnidadeProd
         FFFFFFFFFFFFFFFFFFFFFF427BDB44AFF7378AEEE2E7FCFFFFFF}
     end
     object btnExcluir: TBitBtn
-      Left = 176
-      Top = 8
+      Left = 200
+      Top = 40
       Width = 75
       Height = 25
       Caption = '&Excluir'
       TabOrder = 2
-      OnClick = btnExcluirClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -151,13 +139,12 @@ object frmUnidadeProd: TfrmUnidadeProd
         74170A74170A74170A74171B7E2742944C76B17DFFFFFFFFFFFF}
     end
     object btnConsultar: TBitBtn
-      Left = 13
+      Left = 37
       Top = 40
       Width = 75
       Height = 25
       Caption = '&Consultar'
-      TabOrder = 3
-      OnClick = btnConsultarClick
+      TabOrder = 5
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -187,13 +174,12 @@ object frmUnidadeProd: TfrmUnidadeProd
         CFCFDFDFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnPesquisar: TBitBtn
-      Left = 96
+      Left = 120
       Top = 40
       Width = 75
       Height = 25
       Caption = 'Pesquisar'
-      TabOrder = 4
-      OnClick = btnPesquisarClick
+      TabOrder = 6
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -223,14 +209,13 @@ object frmUnidadeProd: TfrmUnidadeProd
         A780BBA077A890608D652DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnConfirmar: TBitBtn
-      Left = 334
+      Left = 199
       Top = 8
       Width = 75
       Height = 25
       Caption = 'C&onfirmar'
       Enabled = False
-      TabOrder = 5
-      OnClick = btnConfirmarClick
+      TabOrder = 3
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -260,14 +245,13 @@ object frmUnidadeProd: TfrmUnidadeProd
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnCancelar: TBitBtn
-      Left = 414
+      Left = 279
       Top = 8
       Width = 75
       Height = 25
       Caption = '&Cancelar'
       Enabled = False
-      TabOrder = 6
-      OnClick = btnCancelarClick
+      TabOrder = 4
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFF5B57D9
@@ -297,13 +281,12 @@ object frmUnidadeProd: TfrmUnidadeProd
         79F47179F47279F47178F4727AF4727AF47279F49499F6FFFFFF}
     end
     object btnSair: TBitBtn
-      Left = 414
+      Left = 279
       Top = 40
       Width = 75
       Height = 25
       Caption = '&Sair'
       TabOrder = 7
-      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -336,16 +319,16 @@ object frmUnidadeProd: TfrmUnidadeProd
   object pnlArea: TPanel
     Left = 0
     Top = 0
-    Width = 497
-    Height = 36
+    Width = 384
+    Height = 112
     Align = alClient
     TabOrder = 2
-    object lblUnidade: TLabel
-      Left = 4
-      Top = 10
-      Width = 48
+    object lblUsuario: TLabel
+      Left = 9
+      Top = 24
+      Width = 44
       Height = 13
-      Caption = 'Unidade'
+      Caption = 'Usu'#225'rio'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -353,12 +336,12 @@ object frmUnidadeProd: TfrmUnidadeProd
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object lblDescricao: TLabel
-      Left = 115
-      Top = 11
-      Width = 58
+    object lblNome: TLabel
+      Left = 16
+      Top = 84
+      Width = 33
       Height = 13
-      Caption = 'Descri'#231#227'o'
+      Caption = 'Nome'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -366,38 +349,61 @@ object frmUnidadeProd: TfrmUnidadeProd
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object edtUnidade: TEdit
+    object lblSenha: TLabel
+      Left = 12
+      Top = 56
+      Width = 41
+      Height = 13
+      Caption = 'Senha '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object edtCodigo: TEdit
       Left = 56
-      Top = 6
-      Width = 54
+      Top = 20
+      Width = 90
       Height = 21
-      CharCase = ecUpperCase
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = []
-      MaxLength = 2
-      ParentFont = False
-      TabOrder = 1
-      OnChange = edtUnidadeChange
-    end
-    object chkAtivo: TCheckBox
-      Left = 440
-      Top = 10
-      Width = 48
-      Height = 17
-      Caption = 'Ativo'
       TabOrder = 0
     end
-    object edtDescricao: TEdit
-      Left = 176
-      Top = 6
-      Width = 256
+    object chkAtivo: TCheckBox
+      Left = 329
+      Top = 19
+      Width = 46
+      Height = 20
+      Caption = 'Ativo'
+      TabOrder = 1
+    end
+    object rdgCargo: TRadioGroup
+      Left = 159
+      Top = 9
+      Width = 145
+      Height = 32
+      Caption = 'Cargo'
+      Columns = 2
+      ItemIndex = 0
+      Items.Strings = (
+        'Gerente'
+        'Vendedor')
+      TabOrder = 2
+    end
+    object edtNome: TEdit
+      Left = 56
+      Top = 80
+      Width = 321
       Height = 21
       CharCase = ecUpperCase
-      TabOrder = 2
-      OnChange = edtDescricaoChange
+      TabOrder = 3
+    end
+    object Edit1: TEdit
+      Left = 56
+      Top = 50
+      Width = 90
+      Height = 21
+      TabOrder = 4
     end
   end
 end

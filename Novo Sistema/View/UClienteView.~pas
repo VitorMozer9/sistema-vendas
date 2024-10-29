@@ -209,7 +209,7 @@ begin
      if (Components[i] is TRadioGroup) then
         (Components[i] as TRadioGroup).ItemIndex := 0;
 
-     if (Components[i] is TComboBox) then  //padrao -1
+     if (Components[i] is TComboBox) then
       begin
         (Components[i] as TComboBox).Clear;
         (Components[i] as TComboBox).ItemIndex := -1;

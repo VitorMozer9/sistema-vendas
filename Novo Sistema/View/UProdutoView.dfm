@@ -1,6 +1,6 @@
 object frmProdutoView: TfrmProdutoView
-  Left = 410
-  Top = 298
+  Left = 435
+  Top = 271
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Produtos'
@@ -373,8 +373,8 @@ object frmProdutoView: TfrmProdutoView
       ParentFont = False
     end
     object btnUnidadeProduto: TSpeedButton
-      Left = 128
-      Top = 40
+      Left = 129
+      Top = 35
       Width = 25
       Height = 21
       Glyph.Data = {
@@ -481,8 +481,8 @@ object frmProdutoView: TfrmProdutoView
       OnExit = edtCodigoExit
     end
     object edtUnidadeDesc: TEdit
-      Left = 256
-      Top = 37
+      Left = 255
+      Top = 35
       Width = 361
       Height = 21
       TabOrder = 2

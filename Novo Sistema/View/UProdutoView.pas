@@ -65,6 +65,7 @@ type
     procedure CarregaDadosTela;
     procedure ConsultaPesquisa;
     procedure carregaCMB;
+    procedure carregaDescUnidade;
 
     function ValidaCampos           : Boolean;
     function ProcessaConfirmacao    : Boolean;
@@ -126,6 +127,7 @@ begin
          cmbUnidade.Enabled := False;
          btnUnidadeProduto.Enabled := False;
          LimpaTela;
+         cmbUnidade.ItemIndex := -1;
 
          stbBarraStatus.Panels[0].Text := EmptyStr;
          stbBarraStatus.Panels[1].Text := EmptyStr;
@@ -280,7 +282,7 @@ begin
       if (Components[xI] is TEdit) then
          (Components[xI] as TEdit).Text := EmptyStr;
 
-      cmbUnidade.ItemIndex := -1;
+      cmbUnidade.Clear;
 
    end;
 end;
@@ -346,6 +348,7 @@ procedure TfrmProdutoView.btnCancelarClick(Sender: TObject);
 begin
    vEstadoTela := etPadrao;
    DefineEstadoTela;
+
 end;
 
 procedure TfrmProdutoView.btnSairClick(Sender: TObject);
@@ -437,6 +440,7 @@ begin
       vObjProduto.Descricao         := edtDescricao.Text;
       vObjProduto.QuantidadeEstoque := edtQuantidadeEstoque.Value;
       vObjProduto.PrecoVenda        := edtPreco.Value;
+      vObjProduto.Unidade           := cmbUnidade.Text;
 
       //Gravação no banco
       TProdutoController.getInstancia.GravaProduto(vObjProduto);
@@ -512,7 +516,10 @@ begin
             StrToIntDef(edtCodigo.Text, 0));
 
       if (vObjProduto <> nil) then
-         CarregaDadosTela
+      begin
+         CarregaDadosTela;
+         carregaDescUnidade;
+      end
       else
       begin
          TMessageUtil.Alerta('Nenhum dado de produto encontrado.');
@@ -544,6 +551,7 @@ begin
    edtDescricao.Text          := vObjProduto.Descricao;
    edtQuantidadeEstoque.Value := vObjProduto.QuantidadeEstoque;
    edtPreco.Value             := vObjProduto.PrecoVenda;
+   cmbUnidade.Text            := vObjProduto.Unidade;
 
    btnCancelar.Enabled := True;
    btnAlterar.Enabled  := True;
@@ -692,7 +700,7 @@ begin
       xListaUnidade := TColUnidadeProd.Create;
 
       xListaUnidade :=
-         TUnidadeProdController.getInstancia.PesquisaUnidade(Trim(cmbUnidade.Text));
+         TUnidadeProdController.getInstancia.PesquisaUnidade('');  // Trim(cmbUnidade.Text)
 
       cmbUnidade.Items.Clear;
 
@@ -728,20 +736,46 @@ end;
 
 procedure TfrmProdutoView.btnUnidadeProdutoClick(Sender: TObject);
 begin
-   if frmUnidadeProd  = nil then
-         frmUnidadeProd := TfrmUnidadeProd.Create(Application);
+   try
+      Screen.Cursor := crHourGlass;
 
-      frmUnidadeProd.Show;
+      if edtDescricao.CanFocus then
+         edtDescricao.SetFocus;
+
+      if frmUnidadeProd  = nil then
+            frmUnidadeProd := TfrmUnidadeProd.Create(Application);
+
+         frmUnidadeProd.Show;
+
+   finally
+      Screen.Cursor := crDefault;
+   end;
 end;
-
-//procedure TfrmProdutoView.cmbUnidadeClick(Sender: TObject);
-//begin
-//   carregaCMB;
-//end;
 
 procedure TfrmProdutoView.cmbUnidadeEnter(Sender: TObject);
 begin
    carregaCMB;
+end;
+
+procedure TfrmProdutoView.carregaDescUnidade;
+var
+   xDescricaoUnidade : TUnidadeProduto;
+begin
+   try
+      xDescricaoUnidade := nil;
+      xDescricaoUnidade := TUnidadeProduto.create;
+
+      if vObjProduto.Unidade <> '' then
+      begin
+         xDescricaoUnidade := TUnidadeProdController.getInstancia.BuscaUnidade(vObjProduto.Unidade);
+         edtUnidadeDesc.Text := xDescricaoUnidade.Descricao;
+      end
+      else
+         edtUnidadeDesc.Text := '';
+   finally
+      if xDescricaoUnidade <> nil then
+         FreeAndNil(xDescricaoUnidade);
+   end
 end;
 
 end.
