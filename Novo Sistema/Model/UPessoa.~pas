@@ -51,7 +51,7 @@ begin
   Self.vTipo_Pessoa         := 0;
   Self.vNome                := EmptyStr;
   Self.vFisica_Juridica     := 0;
-  Self.vIdentificadorPessoa := EmptyStr; // é tipo a inicialização 0 dos inteiros
+  Self.vIdentificadorPessoa := EmptyStr;
   Self.vAtivo               := False;
 
 end;

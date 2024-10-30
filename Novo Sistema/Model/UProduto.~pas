@@ -41,7 +41,7 @@ begin
    Self.vDescricao         := EmptyStr;
    Self.vQuantidadeEstoque := 0;
    Self.vPrecoVenda        := 0;
-   Self.vUnidade           := 0;
+   Self.vUnidade           := EmptyStr;
 end;
 
 { TColPessoa }

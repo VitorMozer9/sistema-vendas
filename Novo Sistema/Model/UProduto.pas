@@ -44,7 +44,7 @@ begin
    Self.vUnidade           := EmptyStr;
 end;
 
-{ TColPessoa }
+{ TColProduto }
 
 procedure TColProduto.Adiciona(pProduto: TProduto);
 begin

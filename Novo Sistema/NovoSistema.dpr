@@ -28,7 +28,10 @@ uses
   UProdutoDAO in 'Model\UProdutoDAO.pas',
   UProdutoController in 'Controller\UProdutoController.pas',
   UProdutoPesqView in 'View\UProdutoPesqView.pas' {frmProdutoPesq},
-  UCadUsuaView in 'View\UCadUsuaView.pas' {frmCadUsua};
+  UCadUsuaView in 'View\UCadUsuaView.pas' {frmCadUsua},
+  UUsuario in 'Model\UUsuario.pas',
+  UCadUsuaDAO in 'Model\UCadUsuaDAO.pas',
+  UCadUsuaController in 'Controller\UCadUsuaController.pas';
 
 {$R *.res}
 

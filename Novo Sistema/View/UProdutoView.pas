@@ -348,7 +348,6 @@ procedure TfrmProdutoView.btnCancelarClick(Sender: TObject);
 begin
    vEstadoTela := etPadrao;
    DefineEstadoTela;
-
 end;
 
 procedure TfrmProdutoView.btnSairClick(Sender: TObject);

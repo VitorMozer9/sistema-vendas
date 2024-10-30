@@ -570,7 +570,6 @@ begin
       vObjCliente.Nome                := edtNome.Text;
       vObjCliente.Fisica_Juridica     :=  rdgTipoPessoa.ItemIndex;
       vObjCliente.Ativo               := chkAtivo.Checked;
-//      vObjCliente.IdentificadorPessoa := 'S';
       vObjCliente.IdentificadorPessoa := edtCPFCNPJ.Text;
 
       Result := True;

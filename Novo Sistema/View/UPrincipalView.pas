@@ -23,12 +23,14 @@ type
     stbBarraStatus: TStatusBar;
     Image1: TImage;
     MenUniProduto: TMenuItem;
+    menUsuario: TMenuItem;
     //Métodos criados ate o momento
     procedure menSairClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure menClientesClick(Sender: TObject);
     procedure MenUniProdutoClick(Sender: TObject);
     procedure menProdutosClick(Sender: TObject);
+    procedure menUsuarioClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -41,7 +43,7 @@ var
 implementation    //codigo fonte
   uses
      //exemplo de herança, chamou a "classe" Uconexoes
-    UConexao, UClienteView, UUnidadeProdView, UProdutoView;
+    UConexao, UClienteView, UUnidadeProdView, UProdutoView, UCadUsuaView;
 
 {$R *.dfm}
 
@@ -96,6 +98,21 @@ begin
          frmProdutoView := TfrmProdutoView.Create(Application);
 
       frmProdutoView.Show;
+
+   finally
+      Screen.Cursor := crDefault;
+   end;
+end;
+
+procedure TfmPrincipal.menUsuarioClick(Sender: TObject);
+begin
+   try
+      Screen.Cursor := crHourGlass;
+
+      if frmCadUsua  = nil then
+         frmCadUsua := TfrmCadUsua.Create(Application);
+
+      frmCadUsua.Show;
 
    finally
       Screen.Cursor := crDefault;

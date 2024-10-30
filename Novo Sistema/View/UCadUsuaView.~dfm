@@ -1,8 +1,9 @@
 object frmCadUsua: TfrmCadUsua
-  Left = 399
-  Top = 228
-  Width = 402
-  Height = 244
+  Left = 704
+  Top = 244
+  Width = 403
+  Height = 239
+  BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Cadastro de Usu'#225'rio'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -10,13 +11,19 @@ object frmCadUsua: TfrmCadUsua
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnKeyUp = FormKeyUp
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 186
-    Width = 386
+    Top = 181
+    Width = 387
     Height = 19
     Panels = <
       item
@@ -28,18 +35,25 @@ object frmCadUsua: TfrmCadUsua
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 116
-    Width = 386
-    Height = 70
+    Top = 120
+    Width = 387
+    Height = 61
     Align = alBottom
     TabOrder = 1
     object btnIncluir: TBitBtn
       Left = 37
-      Top = 8
-      Width = 75
-      Height = 25
+      Top = 11
+      Width = 70
+      Height = 22
       Caption = '&Incluir'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 0
+      OnClick = btnIncluirClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -70,11 +84,18 @@ object frmCadUsua: TfrmCadUsua
     end
     object btnAlterar: TBitBtn
       Left = 120
-      Top = 8
-      Width = 75
-      Height = 25
+      Top = 11
+      Width = 70
+      Height = 22
       Caption = '&Alterar'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 1
+      OnClick = btnAlterarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E000000000000000000000A2B95062082
@@ -105,11 +126,18 @@ object frmCadUsua: TfrmCadUsua
     end
     object btnExcluir: TBitBtn
       Left = 200
-      Top = 40
-      Width = 75
-      Height = 25
+      Top = 35
+      Width = 70
+      Height = 22
       Caption = '&Excluir'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 2
+      OnClick = btnExcluirClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -140,11 +168,18 @@ object frmCadUsua: TfrmCadUsua
     end
     object btnConsultar: TBitBtn
       Left = 37
-      Top = 40
-      Width = 75
-      Height = 25
+      Top = 35
+      Width = 70
+      Height = 22
       Caption = '&Consultar'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 5
+      OnClick = btnConsultarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -175,11 +210,18 @@ object frmCadUsua: TfrmCadUsua
     end
     object btnPesquisar: TBitBtn
       Left = 120
-      Top = 40
-      Width = 75
-      Height = 25
+      Top = 35
+      Width = 70
+      Height = 22
       Caption = 'Pesquisar'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 6
+      OnClick = btnPesquisarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -210,12 +252,19 @@ object frmCadUsua: TfrmCadUsua
     end
     object btnConfirmar: TBitBtn
       Left = 199
-      Top = 8
-      Width = 75
-      Height = 25
+      Top = 11
+      Width = 70
+      Height = 22
       Caption = 'C&onfirmar'
       Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 3
+      OnClick = btnConfirmarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -246,12 +295,19 @@ object frmCadUsua: TfrmCadUsua
     end
     object btnCancelar: TBitBtn
       Left = 279
-      Top = 8
-      Width = 75
-      Height = 25
+      Top = 11
+      Width = 70
+      Height = 22
       Caption = '&Cancelar'
       Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 4
+      OnClick = btnCancelarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFF5B57D9
@@ -282,11 +338,18 @@ object frmCadUsua: TfrmCadUsua
     end
     object btnSair: TBitBtn
       Left = 279
-      Top = 40
-      Width = 75
-      Height = 25
+      Top = 35
+      Width = 70
+      Height = 22
       Caption = '&Sair'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 7
+      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -319,8 +382,8 @@ object frmCadUsua: TfrmCadUsua
   object pnlArea: TPanel
     Left = 0
     Top = 0
-    Width = 386
-    Height = 116
+    Width = 387
+    Height = 120
     Align = alClient
     TabOrder = 2
     object lblUsuario: TLabel
@@ -362,7 +425,7 @@ object frmCadUsua: TfrmCadUsua
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object edtCodigo: TEdit
+    object edtUsuario: TEdit
       Left = 56
       Top = 20
       Width = 90
@@ -398,7 +461,7 @@ object frmCadUsua: TfrmCadUsua
       CharCase = ecUpperCase
       TabOrder = 3
     end
-    object Edit1: TEdit
+    object edtSenha: TEdit
       Left = 56
       Top = 50
       Width = 90

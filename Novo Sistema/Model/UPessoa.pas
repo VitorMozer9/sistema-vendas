@@ -46,14 +46,12 @@ implementation
 
 constructor TPessoa.Create;
 begin
-
-  Self.vId                  := 0;
-  Self.vTipo_Pessoa         := 0;
-  Self.vNome                := EmptyStr;
-  Self.vFisica_Juridica     := 0;
-  Self.vIdentificadorPessoa := EmptyStr;
-  Self.vAtivo               := False;
-
+   Self.vId                  := 0;
+   Self.vTipo_Pessoa         := 0;
+   Self.vNome                := EmptyStr;
+   Self.vFisica_Juridica     := 0;
+   Self.vIdentificadorPessoa := EmptyStr;
+   Self.vAtivo               := False;
 end;
 
 { TColPessoa }
