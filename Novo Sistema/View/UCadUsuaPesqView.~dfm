@@ -1,37 +1,41 @@
-object frmUnidadePesq: TfrmUnidadePesq
-  Left = 502
-  Top = 234
-  Width = 626
-  Height = 319
-  Caption = 'Pesquisa de Unidade de Produto'
+object frmCadUsuaPesq: TfrmCadUsuaPesq
+  Left = 472
+  Top = 235
+  Width = 702
+  Height = 317
+  Caption = 'Pesquisa de Usu'#225'rio'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
-  FormStyle = fsMDIForm
   KeyPreview = True
   OldCreateOrder = False
-  Position = poScreenCenter
   OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
+  object stbBarraStatus: TStatusBar
+    Left = 0
+    Top = 259
+    Width = 686
+    Height = 19
+    Panels = <>
+  end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 221
-    Width = 610
+    Top = 219
+    Width = 686
     Height = 40
     Align = alBottom
     TabOrder = 1
     object btnConfirmar: TBitBtn
-      Left = 367
+      Left = 439
       Top = 8
       Width = 75
       Height = 25
       Caption = 'C&onfirmar'
       TabOrder = 0
-      OnClick = btnConfirmarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -61,13 +65,12 @@ object frmUnidadePesq: TfrmUnidadePesq
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnLimpar: TBitBtn
-      Left = 447
+      Left = 519
       Top = 8
       Width = 75
       Height = 25
       Caption = '&Limpar'
       TabOrder = 1
-      OnClick = btnLimparClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -97,13 +100,12 @@ object frmUnidadePesq: TfrmUnidadePesq
         AF8DC2AA84AA9161A98B5DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnSair: TBitBtn
-      Left = 527
+      Left = 599
       Top = 8
       Width = 75
       Height = 25
       Caption = '&Sair'
       TabOrder = 2
-      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -136,48 +138,47 @@ object frmUnidadePesq: TfrmUnidadePesq
   object pnlFiltro: TPanel
     Left = 0
     Top = 0
-    Width = 610
-    Height = 65
+    Width = 686
+    Height = 57
     Align = alTop
-    TabOrder = 0
-    object grbFiltrar: TGroupBox
+    TabOrder = 2
+    object gbrFiltrar: TGroupBox
       Left = 1
       Top = 1
-      Width = 608
-      Height = 63
+      Width = 684
+      Height = 55
       Align = alClient
       Caption = 'Filtrar'
       TabOrder = 0
-      object lblUnidade: TLabel
+      object lblNome: TLabel
         Left = 6
-        Top = 38
-        Width = 40
+        Top = 30
+        Width = 82
         Height = 13
-        Caption = 'Unidade'
+        Caption = 'Nome do Usu'#225'rio'
       end
       object lblInfo: TLabel
-        Left = 53
-        Top = 16
+        Left = 98
+        Top = 8
         Width = 233
         Height = 13
         Caption = 'Digite parte ou todo o conte'#250'do a ser pesquisado'
       end
-      object edtUnidade: TEdit
-        Left = 53
-        Top = 32
-        Width = 455
+      object edtNome: TEdit
+        Left = 96
+        Top = 24
+        Width = 473
         Height = 21
         CharCase = ecUpperCase
         TabOrder = 0
       end
       object btnFiltrar: TBitBtn
-        Left = 521
-        Top = 29
+        Left = 601
+        Top = 21
         Width = 75
         Height = 25
         Caption = '&Filtrar'
         TabOrder = 1
-        OnClick = btnFiltrarClick
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -208,100 +209,108 @@ object frmUnidadePesq: TfrmUnidadePesq
       end
     end
   end
-  object pnlResultado: TPanel
+  object pnlResultadoBusca: TPanel
     Left = 0
-    Top = 65
-    Width = 610
-    Height = 156
+    Top = 57
+    Width = 686
+    Height = 162
     Align = alClient
-    TabOrder = 2
-    object grbGrid: TGroupBox
+    TabOrder = 3
+    object gbrGrid: TGroupBox
       Left = 1
       Top = 1
-      Width = 608
-      Height = 154
+      Width = 684
+      Height = 160
       Align = alClient
-      Caption = 'Reseultado da Busca'
+      Caption = 'Resultado da Busca'
       TabOrder = 0
       object dbgResultadoBusca: TDBGrid
         Left = 2
         Top = 15
-        Width = 604
-        Height = 137
+        Width = 680
+        Height = 143
         Align = alClient
-        DataSource = dtsUnidade
-        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgCancelOnExit]
+        DataSource = dtsUsuario
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
-        OnDblClick = dbgResultadoBuscaDblClick
-        OnKeyDown = dbgResultadoBuscaKeyDown
         Columns = <
           item
             Expanded = False
-            FieldName = 'Unidade'
-            Width = 56
+            FieldName = 'Usuario'
+            Title.Caption = 'Usu'#225'rio'
+            Width = 123
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'Descricao'
-            Title.Caption = 'Descri'#231#227'o'
-            Width = 375
+            FieldName = 'Nome'
+            Width = 365
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CargoDesc'
+            Title.Caption = 'Cargo'
+            Width = 108
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'AtivoDesc'
             Title.Caption = 'Ativo'
-            Width = 45
             Visible = True
           end>
       end
     end
   end
-  object stbBarraStatus: TStatusBar
-    Left = 0
-    Top = 261
-    Width = 610
-    Height = 19
-    Panels = <>
+  object dtsUsuario: TDataSource
+    DataSet = cdsUsuario
+    Left = 7
+    Top = 111
   end
-  object dtsUnidade: TDataSource
-    DataSet = cdsUnidade
-    Left = 5
-    Top = 119
-  end
-  object cdsUnidade: TClientDataSet
+  object cdsUsuario: TClientDataSet
     Active = True
     Aggregates = <>
     Params = <>
-    BeforeDelete = cdsUnidadeBeforeDelete
-    Left = 33
-    Top = 119
+    Left = 36
+    Top = 111
     Data = {
-      8B0000009619E0BD0100000018000000050000000000030000008B0002494404
-      0001000000000007556E69646164650100490000000100055749445448020002
-      0002000944657363726963616F01004900000001000557494454480200020014
-      0005417469766F040001000000000009417469766F4465736301004900000001
-      000557494454480200020003000000}
-    object cdsUnidadeID: TIntegerField
-      FieldName = 'ID'
+      C10000009619E0BD010000001800000007000000000003000000C10007557375
+      6172696F0100490000000100055749445448020002000A000553656E68610100
+      490000000100055749445448020002003C00044E6F6D65010049000000010005
+      574944544802000200280005436172676F040001000000000009436172676F44
+      657363010049000000010005574944544802000200080005417469766F040001
+      000000000009417469766F446573630100490000000100055749445448020002
+      0003000000}
+    object cdsUsuarioUsuario: TStringField
+      DisplayWidth = 12
+      FieldName = 'Usuario'
+      Size = 10
     end
-    object cdsUnidadeUnidade: TStringField
-      FieldName = 'Unidade'
-      Size = 2
+    object cdsUsuarioNome: TStringField
+      DisplayWidth = 23
+      FieldName = 'Nome'
+      Size = 40
     end
-    object cdsUnidadeDescricao: TStringField
-      FieldName = 'Descricao'
+    object cdsUsuarioCargo: TIntegerField
+      DisplayWidth = 12
+      FieldName = 'Cargo'
     end
-    object cdsUnidadeAtivo: TIntegerField
+    object cdsUsuarioCargoDesc: TStringField
+      DisplayWidth = 11
+      FieldName = 'CargoDesc'
+      Size = 8
+    end
+    object cdsUsuarioAtivo: TIntegerField
+      DisplayWidth = 12
       FieldName = 'Ativo'
     end
-    object cdsUnidadeAtivoDesc: TStringField
+    object cdsUsuarioAtivoDesc: TStringField
+      DisplayWidth = 10
       FieldName = 'AtivoDesc'
       Size = 3
     end

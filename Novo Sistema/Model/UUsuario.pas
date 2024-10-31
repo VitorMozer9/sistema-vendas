@@ -21,7 +21,7 @@ type
        property Usuario : String read vUsuario write vUsuario;
        property Senha   : String  read vSenha write vSenha;
        property Nome    : String  read vNome write vNome;
-       property Cargo   : Integer read vCargo write vCargo;
+       property Cargo   : integer read vCargo write vCargo;
        property Ativo   : Boolean read vAtivo write vAtivo;
 
    end;

@@ -12,7 +12,9 @@ type
             pInclusao : Boolean) : Boolean;
 
          function RetornaCondicaoUsuario(pUsuario : String) : String;
-         function BuscaUsuario(pUsuario : String): TUsuario; 
+         function BuscaUsuario(pUsuario : String): TUsuario;
+         function ExcluiUsuario(pUsuario : TUsuario) : Boolean;
+         function PesquisaUsuario(pUsuario : String) : TColUsuario; 
 
       published
          class function getInstancia : TCadUsuaController;
@@ -58,6 +60,43 @@ begin
    inherited Create;
 end;
 
+function TCadUsuaController.ExcluiUsuario(pUsuario: TUsuario): Boolean;
+var
+   xUsuarioDAO : TCadUsuaDAO;
+begin
+   try
+      try
+         Result := False;
+         TConexao.getInstance.iniciaTransacao;
+         xUsuarioDAO := Nil;
+
+         xUsuarioDAO := TCadUsuaDAO.Create(TConexao.get.getConn);
+
+         if (pUsuario.Usuario = EmptyStr) then
+            exit
+         else
+         begin
+            xUsuarioDAO.Deleta(RetornaCondicaoUsuario(pUsuario.Usuario));
+         end;
+
+         TConexao.get.confirmaTransacao;
+
+         Result := True;
+      finally
+         if xUsuarioDAO <> nil then
+            FreeAndNil(xUsuarioDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         TConexao.get.cancelaTransacao;
+         raise Exception.Create(
+            'Falha ao excluir dados de usuário. [Controller]'+ #13 +
+            e.Message);
+      end;
+   end;
+end;
+
 class function TCadUsuaController.getInstancia: TCadUsuaController;
 begin
    if _instance = nil then
@@ -100,6 +139,40 @@ begin
             e.Message);
       end;
    end;  
+end;
+
+function TCadUsuaController.PesquisaUsuario(pUsuario: String): TColUsuario;
+var
+   xUsuarioDAO : TCadUsuaDAO;
+   xCondicao   : String;
+begin
+   try
+      try
+         Result := nil;
+
+         xUsuarioDAO :=
+            TCadUsuaDAO.Create(TConexao.getInstance.getConn);
+
+         xCondicao :=
+            IfThen(pUsuario <> EmptyStr,
+            'WHERE                                            '#13 +
+            '    (NOME LIKE UPPER(''%' + pUsuario + '%'' ))'#13 +
+               'ORDER BY NOME, USUARIO ', EmptyStr);
+
+         Result := xUsuarioDAO.RetornaLista(xCondicao);
+
+      finally
+       if (xUsuarioDAO <> nil) then
+         FreeAndNil(xUsuarioDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao buscar os dados da Unidade de Produto [Controller]'#13 +
+            e.Message);
+      end;
+   end;
 end;
 
 function TCadUsuaController.RetornaCondicaoUsuario(

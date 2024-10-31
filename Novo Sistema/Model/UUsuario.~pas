@@ -39,7 +39,7 @@ implementation
 
 constructor TUsuario.Create;
 begin
-   Self.vUsuario := EmptyStr
+   Self.vUsuario := EmptyStr;
    Self.vSenha   := EmptyStr;
    Self.vNome    := EmptyStr;
    Self.vCargo   := 0;

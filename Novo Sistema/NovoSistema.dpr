@@ -31,7 +31,8 @@ uses
   UCadUsuaView in 'View\UCadUsuaView.pas' {frmCadUsua},
   UUsuario in 'Model\UUsuario.pas',
   UCadUsuaDAO in 'Model\UCadUsuaDAO.pas',
-  UCadUsuaController in 'Controller\UCadUsuaController.pas';
+  UCadUsuaController in 'Controller\UCadUsuaController.pas',
+  UCadUsuaPesqView in 'View\UCadUsuaPesqView.pas' {frmCadUsuaPesq};
 
 {$R *.res}
 

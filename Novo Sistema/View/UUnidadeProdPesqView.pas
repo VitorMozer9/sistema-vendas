@@ -9,7 +9,6 @@ uses
 
 type
   TfrmUnidadePesq = class(TForm)
-    stbBarraStatus: TStatusBar;
     pnlBotoes: TPanel;
     btnConfirmar: TBitBtn;
     btnLimpar: TBitBtn;
@@ -30,6 +29,7 @@ type
     cdsUnidadeDescricao: TStringField;
     cdsUnidadeAtivo: TIntegerField;
     cdsUnidadeAtivoDesc: TStringField;
+    stbBarraStatus: TStatusBar;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnFiltrarClick(Sender: TObject);
@@ -51,7 +51,6 @@ type
 
   public
     { Public declarations }
-    mUnidadeID   : Integer;
     mUnidade      : String;
   end;
 
@@ -61,9 +60,6 @@ var
 implementation
 
 {$R *.dfm}
-
-
-
 
 procedure TfrmUnidadePesq.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
@@ -175,7 +171,6 @@ end;
 
 procedure TfrmUnidadePesq.btnFiltrarClick(Sender: TObject);
 begin
-   mUnidadeID := 0;
    mUnidade := EmptyStr;
    ProcessaPesquisa;
 end;
@@ -189,7 +184,6 @@ procedure TfrmUnidadePesq.ProcessaConfirmacao;
 begin
    if not cdsUnidade.IsEmpty then
    begin
-      mUnidadeID       := cdsUnidadeID.Value;
       mUnidade     := cdsUnidadeUnidade.Value;
       Self.ModalResult := mrOk;
       LimpaTela;
@@ -206,7 +200,6 @@ end;
 
 procedure TfrmUnidadePesq.btnLimparClick(Sender: TObject);
 begin
-   mUnidadeID := 0;
    mUnidade := EmptyStr;
    LimpaTela;
 end;

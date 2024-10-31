@@ -12,6 +12,8 @@ type
             pInclusao : Boolean) : Boolean;
 
          function RetornaCondicaoUsuario(pUsuario : String) : String;
+         function BuscaUsuario(pUsuario : String): TUsuario;
+         function ExcluiUsuario(pUsuario : TUsuario) : Boolean; 
 
       published
          class function getInstancia : TCadUsuaController;
@@ -26,9 +28,72 @@ var _instance : TCadUsuaController;
 
 { TCadUsuaController }
 
+function TCadUsuaController.BuscaUsuario(pUsuario: String): TUsuario;
+var
+   xUsuarioDAO : TCadUsuaDAO;
+begin
+   try
+      try
+         Result := nil;
+
+         xUsuarioDAO := TCadUsuaDAO.Create(TConexao.get.getConn);
+
+         Result := xUsuarioDAO.Retorna(RetornaCondicaoUsuario(pUsuario));
+
+      finally
+         if (xUsuarioDAO <> nil) then
+            FreeAndNil(xUsuarioDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+         'Falha ao retornar dados do Usuário. [Controller]'#13 +
+         e.Message);
+      end;
+   end;
+end;
+
 constructor TCadUsuaController.Create;
 begin
    inherited Create;
+end;
+
+function TCadUsuaController.ExcluiUsuario(pUsuario: TUsuario): Boolean;
+var
+   xUsuarioDAO : TCadUsuaDAO;
+begin
+   try
+      try
+         Result := False;
+         TConexao.getInstance.iniciaTransacao;
+         xUsuarioDAO := Nil;
+
+         xUsuarioDAO := TCadUsuaDAO.Create(TConexao.get.getConn);
+
+         if (pUsuario.Usuario = EmptyStr) then
+            exit
+         else
+         begin
+            xUsuarioDAO.Deleta(RetornaCondicaoUsuario(pUsuario.Usuario));
+         end;
+
+         TConexao.get.confirmaTransacao;
+
+         Result := True;
+      finally
+         if xUsuarioDAO <> nil then
+            FreeAndNil(xUsuarioDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         TConexao.get.cancelaTransacao;
+         raise Exception.Create(
+            'Falha ao excluir dados de usuário. [Controller]'+ #13 +
+            e.Message);
+      end;
+   end;
 end;
 
 class function TCadUsuaController.getInstancia: TCadUsuaController;

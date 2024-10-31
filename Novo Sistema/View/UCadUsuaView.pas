@@ -51,12 +51,14 @@ type
     procedure DefineEstadoTela;
     procedure LimpaTela;
     procedure CarregaDadosTela;
+    procedure ConsultaPesquisa;
 
     function ProcessaConfirmacao : Boolean;
     function ProcessaInclusao    : Boolean;
     function ProcessaUsuario     : Boolean;
     function ProcessaConsulta    : Boolean;
     function ProcessaAlteracao   : Boolean;
+    function ProcessaExclusao    : Boolean;
     function ValidaCampos        : Boolean;
 
   public
@@ -68,7 +70,7 @@ var
 
 implementation
 
-uses UCadUsuaController;
+uses UCadUsuaController, UCadUsuaPesqView;
 
 {$R *.dfm}
 
@@ -158,6 +160,22 @@ begin
          end;
       end;
 
+      etExcluir:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Exclusão';
+
+         if (edtUsuario.Text <> EmptyStr) then
+            ProcessaExclusao
+         else
+         begin
+            lblUsuario.Enabled := True;
+            edtUsuario.Enabled := True;
+
+            if (edtUsuario.CanFocus) then
+               edtUsuario.SetFocus;
+         end;
+      end;
+
       etConsultar:
       begin
          stbBarraStatus.Panels[0].Text := 'Consulta';
@@ -184,6 +202,12 @@ begin
             if edtUsuario.CanFocus then
                edtUsuario.SetFocus;
          end;
+      end;
+
+      etPesquisar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Pesquisa';
+         ConsultaPesquisa;
       end;
    end;
 end;
@@ -246,7 +270,7 @@ begin
       case vEstadoTela of
            etIncluir:   Result := ProcessaInclusao;
            etAlterar:   Result := ProcessaAlteracao;
-//           etExcluir:   Result := ProcessaExclusao;
+           etExcluir:   Result := ProcessaExclusao;
            etConsultar: Result := ProcessaConsulta;
       end;
 
@@ -366,9 +390,9 @@ function TfrmCadUsua.ProcessaUsuario: Boolean;
 var
    xInclusao : Boolean;
 begin
+   xInclusao := False;
    try
       Result := False;
-      xInclusao := False;
 
       if not ValidaCampos then
          exit;
@@ -397,7 +421,7 @@ begin
       vObjUsuario.Ativo   := chkAtivo.Checked;
 
       //Gravação no banco
-      TCadUsuaController.getInstancia.GravaUsuario(vObjUsuario, True);
+      TCadUsuaController.getInstancia.GravaUsuario(vObjUsuario, xInclusao);
 
       Result := True;
 
@@ -510,6 +534,13 @@ begin
       chkAtivo.Enabled   := true;
    end;
 
+   if vEstadoTela = etConsultar then
+   begin
+      btnAlterar.Enabled := true;
+      btnExcluir.Enabled := true;
+
+   end;
+
 end;
 
 function TfrmCadUsua.ProcessaAlteracao: Boolean;
@@ -518,7 +549,7 @@ begin
       Result := False;
 
       if (Trim(edtUsuario.Text) <> EmptyStr) and
-      (Trim(edtNome.Text) = EmptyStr) then
+         (Trim(edtNome.Text) = EmptyStr) then
       begin
          ProcessaConsulta;
          exit;
@@ -541,6 +572,91 @@ begin
             e.Message);
       end;
    end;
+end;
+
+function TfrmCadUsua.ProcessaExclusao: Boolean;
+begin
+   try
+      Result := False;
+
+      if (edtUsuario.Text <> EmptyStr) and (edtNome.Text = EmptyStr) then
+      begin
+         ProcessaConsulta;
+         exit
+      end;
+
+      if (vObjUsuario = nil) then
+      begin
+         TMessageUtil.Alerta('Não foi possível carregar os dados do usuário. ');
+
+         LimpaTela;
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         exit;
+      end;
+
+      try
+         if TMessageUtil.Pergunta(
+            'Confirma a exclusão dos dados do Usuário?') then
+         begin
+            Screen.Cursor := crHourGlass;
+
+            TCadUsuaController.getInstancia.ExcluiUsuario(
+               vObjUsuario);
+
+            TMessageUtil.Informacao('Usuário excluído com sucesso. ');
+         end
+         else
+         begin
+            LimpaTela;
+            vEstadoTela := etPadrao;
+            DefineEstadoTela;
+            exit;
+         end;
+
+      finally
+         Screen.Cursor := crDefault;
+         Application.ProcessMessages;
+      end;
+
+      Result := True;
+
+      LimpaTela;
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao excluir dados do usuário. [View]: '#13 +
+            e.Message);
+      end;
+   end;
+end;
+
+procedure TfrmCadUsua.ConsultaPesquisa;
+begin
+   if (frmCadUsuaPesq = nil) then
+      frmCadUsuaPesq := TfrmCadUsuaPesq.Create(Application);
+
+      frmCadUsuaPesq.ShowModal;
+
+   if (frmCadUsuaPesq.mUsuario <> EmptyStr) then
+   begin
+      edtUsuario.Text := frmCadUsuaPesq.mUsuario;
+      vEstadoTela := etConsultar;
+      ProcessaConsulta;
+   end
+   else
+   begin
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
+   end;
+
+   frmCadUsuaPesq.mUsuario := EmptyStr;
+
+   if (edtUsuario.CanFocus) then
+      edtUsuario.SetFocus;
 end;
 
 end.

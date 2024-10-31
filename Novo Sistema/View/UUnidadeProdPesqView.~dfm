@@ -1,6 +1,6 @@
 object frmUnidadePesq: TfrmUnidadePesq
-  Left = 593
-  Top = 216
+  Left = 502
+  Top = 234
   Width = 626
   Height = 319
   Caption = 'Pesquisa de Unidade de Produto'
@@ -17,13 +17,6 @@ object frmUnidadePesq: TfrmUnidadePesq
   OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
-  object stbBarraStatus: TStatusBar
-    Left = 0
-    Top = 261
-    Width = 610
-    Height = 19
-    Panels = <>
-  end
   object pnlBotoes: TPanel
     Left = 0
     Top = 221
@@ -249,12 +242,6 @@ object frmUnidadePesq: TfrmUnidadePesq
         Columns = <
           item
             Expanded = False
-            FieldName = 'ID'
-            Title.Caption = 'C'#243'digo'
-            Visible = True
-          end
-          item
-            Expanded = False
             FieldName = 'Unidade'
             Width = 56
             Visible = True
@@ -275,6 +262,13 @@ object frmUnidadePesq: TfrmUnidadePesq
           end>
       end
     end
+  end
+  object stbBarraStatus: TStatusBar
+    Left = 0
+    Top = 261
+    Width = 610
+    Height = 19
+    Panels = <>
   end
   object dtsUnidade: TDataSource
     DataSet = cdsUnidade
