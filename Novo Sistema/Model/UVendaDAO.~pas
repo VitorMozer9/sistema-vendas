@@ -1,0 +1,22 @@
+unit UVendaDAO;
+
+interface
+
+uses SqlExpr, DBXpress, SimpleDS, Db , Classes, SysUtils, DateUtils,
+     StdCtrls, UGenericDAO, UVenda;
+
+type
+   TVendaDAO = class(TGenericDAO)
+      public
+         constructor Create(pConexao : TSQLConnection);
+       function Insere(pVenda : TVenda) : Boolean; //a variavel pPessoa terá todos os atributos da classe pessoa
+       function InsereLista(pColVenda : TColVenda) : Boolean;
+       function Atualiza(pVenda : TVenda; pCondicao : String) : Boolean;
+       function Retorna(pCondicao : String) : TVenda;
+       function RetornaLista(pCondicao : String = '') : TColVenda;
+   end;
+
+implementation
+
+end.
+ 

@@ -32,7 +32,8 @@ uses
   UUsuario in 'Model\UUsuario.pas',
   UCadUsuaDAO in 'Model\UCadUsuaDAO.pas',
   UCadUsuaController in 'Controller\UCadUsuaController.pas',
-  UCadUsuaPesqView in 'View\UCadUsuaPesqView.pas' {Form1};
+  UCadUsuaPesqView in 'View\UCadUsuaPesqView.pas' {frmCadUsuaPesq},
+  UVendaView in 'View\UVendaView.pas' {frmVendasView};
 
 {$R *.res}
 

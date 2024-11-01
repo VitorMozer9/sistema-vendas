@@ -441,16 +441,16 @@ end;
 
 procedure TfrmClientes.btnSairClick(Sender: TObject);
 begin //para n rolar de fechar a tela sem querer e perder os dados
-  if (vEstadoTela <> etPadrao) then
-  begin
-     if (TMessageUtil.Pergunta('Deseja realmente abortar esta operação?')) then
-     begin
-       vEstadoTela  := etPadrao;
-       DefineEstadoTela;
-     end;
-  end
-  else;
-   Close;
+   if (vEstadoTela <> etPadrao) then
+   begin
+      if (TMessageUtil.Pergunta('Deseja realmente abortar esta operação?')) then
+      begin
+         vEstadoTela  := etPadrao;
+         DefineEstadoTela;
+      end;
+   end
+   else;
+      Close;
 end;
 
 procedure TfrmClientes.FormCreate(Sender: TObject);

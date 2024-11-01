@@ -893,6 +893,7 @@ object fmPrincipal: TfmPrincipal
       Caption = 'Movimentos'
       object menRelVendas: TMenuItem
         Caption = 'Vendas'
+        OnClick = menRelVendasClick
       end
     end
     object menSair: TMenuItem

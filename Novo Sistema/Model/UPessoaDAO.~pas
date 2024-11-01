@@ -50,7 +50,12 @@ end;
 
 function TPessoaDAO.Retorna(pCondicao: String): TPessoa;
 begin
-   Result := TPeessoa(inherited Retorna(pCondicao));
+   Result := TPessoa(inherited Retorna(pCondicao));
+end;
+
+function TPessoaDAO.RetornaLista(pCondicao: String): TColPessoa;
+begin
+   Result := TColPessoa(inherited RetornaLista(pCondicao));
 end;
 
 end.
