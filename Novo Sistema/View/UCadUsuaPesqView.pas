@@ -33,6 +33,14 @@ type
     cdsUsuarioAtivoDesc: TStringField;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure btnFiltrarClick(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
+    procedure btnLimparClick(Sender: TObject);
+    procedure btnSairClick(Sender: TObject);
+    procedure cdsUsuarioBeforeDelete(DataSet: TDataSet);
+    procedure dbgResultadoBuscaDblClick(Sender: TObject);
+    procedure dbgResultadoBuscaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
 
@@ -199,6 +207,47 @@ begin
       if edtNome.CanFocus then
          edtNome.SetFocus;
    end;
+end;
+
+procedure TfrmCadUsuaPesq.btnFiltrarClick(Sender: TObject);
+begin
+   mUsuario := EmptyStr;
+   ProcessaPesquisa;
+end;
+
+procedure TfrmCadUsuaPesq.btnConfirmarClick(Sender: TObject);
+begin
+   ProcessaConfirmacao;
+end;
+
+procedure TfrmCadUsuaPesq.btnLimparClick(Sender: TObject);
+begin
+    mUsuario := EmptyStr;
+   LimpaTela;
+end;
+
+procedure TfrmCadUsuaPesq.btnSairClick(Sender: TObject);
+begin
+   LimpaTela;
+   Close;
+end;
+
+procedure TfrmCadUsuaPesq.cdsUsuarioBeforeDelete(DataSet: TDataSet);
+begin
+   Abort;
+end;
+
+procedure TfrmCadUsuaPesq.dbgResultadoBuscaDblClick(Sender: TObject);
+begin
+   ProcessaConfirmacao;
+end;
+
+procedure TfrmCadUsuaPesq.dbgResultadoBuscaKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+   if (Key = VK_RETURN) and
+      (btnConfirmar.CanFocus) then
+      btnConfirmar.SetFocus;
 end;
 
 end.

@@ -3,6 +3,7 @@ object frmCadUsuaPesq: TfrmCadUsuaPesq
   Top = 235
   Width = 702
   Height = 317
+  BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Pesquisa de Usu'#225'rio'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -12,6 +13,7 @@ object frmCadUsuaPesq: TfrmCadUsuaPesq
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
+  Position = poScreenCenter
   OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
@@ -36,6 +38,7 @@ object frmCadUsuaPesq: TfrmCadUsuaPesq
       Height = 25
       Caption = 'C&onfirmar'
       TabOrder = 0
+      OnClick = btnConfirmarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -71,6 +74,7 @@ object frmCadUsuaPesq: TfrmCadUsuaPesq
       Height = 25
       Caption = '&Limpar'
       TabOrder = 1
+      OnClick = btnLimparClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -106,6 +110,7 @@ object frmCadUsuaPesq: TfrmCadUsuaPesq
       Height = 25
       Caption = '&Sair'
       TabOrder = 2
+      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -179,6 +184,7 @@ object frmCadUsuaPesq: TfrmCadUsuaPesq
         Height = 25
         Caption = '&Filtrar'
         TabOrder = 1
+        OnClick = btnFiltrarClick
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -231,12 +237,15 @@ object frmCadUsuaPesq: TfrmCadUsuaPesq
         Height = 143
         Align = alClient
         DataSource = dtsUsuario
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgCancelOnExit]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
+        OnDblClick = dbgResultadoBuscaDblClick
+        OnKeyDown = dbgResultadoBuscaKeyDown
         Columns = <
           item
             Expanded = False
@@ -276,6 +285,7 @@ object frmCadUsuaPesq: TfrmCadUsuaPesq
     Active = True
     Aggregates = <>
     Params = <>
+    BeforeDelete = cdsUsuarioBeforeDelete
     Left = 36
     Top = 111
     Data = {

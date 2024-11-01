@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, DB, DBClient, Grids, DBGrids, StdCtrls, Buttons, ExtCtrls,
-  ComCtrls, UUsuario;
+  ComCtrls, UUsuario, UMessageUtil,UCadUsuaController, Math, StrUtils;
 
 type
   TfrmCadUsuaPesq = class(TForm)
@@ -33,6 +33,14 @@ type
     cdsUsuarioAtivoDesc: TStringField;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure btnFiltrarClick(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
+    procedure btnLimparClick(Sender: TObject);
+    procedure btnSairClick(Sender: TObject);
+    procedure cdsUsuarioBeforeDelete(DataSet: TDataSet);
+    procedure dbgResultadoBuscaDblClick(Sender: TObject);
+    procedure dbgResultadoBuscaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
 
@@ -52,7 +60,6 @@ var
 
 implementation
 
-uses UCadUsuaController, Math, StrUtils;
 
 {$R *.dfm}
 
@@ -91,11 +98,11 @@ begin
 
          if xListaUsuarios <> nil then
          begin
-            for xAux := 0 to pred(xListaUnidade.Count) do
+            for xAux := 0 to pred(xListaUsuarios.Count) do
             begin
                cdsUsuario.Append;
                cdsUsuarioUsuario.Value := xListaUsuarios.Retorna(xAux).Usuario;
-               cdsClienteNome.Value  := xListaUsuarios.Retorna(xAux).Nome;
+               cdsUsuarioNome.Value  := xListaUsuarios.Retorna(xAux).Nome;
 
                cdsUsuarioAtivo.Value :=
                   IfThen(xListaUsuarios.Retorna(xAux).Ativo,1, 0);
@@ -104,12 +111,22 @@ begin
                   IfThen(
                      xListaUsuarios.Retorna(xAux).Ativo, 'Sim', 'Não');
 
-               cdsUsuarioCargo.Value :=
-                  IfThen(xListaUsuarios.Retorna(xAux).Cargo,1, 0);
+//               cdsUsuarioCargo.Value :=
+//                  IfThen(xListaUsuarios.Retorna(xAux).Cargo,1, 0);
 
-               cdsUsuarioCargoDesc.Value :=
-                  IfThen(
-                     xListaUsuarios.Retorna(xAux).Cargo, 'Gerente', 'Vendedor');
+               if (xListaUsuarios.Retorna(xAux).Cargo = 0) then
+                  cdsUsuarioCargo.Value := 1
+               else
+                  cdsUsuarioCargo.Value := 0;
+
+//               cdsUsuarioCargoDesc.Value :=
+//                  IfThen(
+//                     xListaUsuarios.Retorna(xAux).Cargo, 'Gerente', 'Vendedor');
+
+               if (xListaUsuarios.Retorna(xAux).Cargo = 0) then
+                  cdsUsuarioCargoDesc.Text := 'Gerente'
+               else
+                  cdsUsuarioCargoDesc.Text := 'Vendedor';
 
                cdsUsuario.Post;
             end;
@@ -117,8 +134,8 @@ begin
 
          if (cdsUsuario.RecordCount = 0) then
          begin
-            if edtUsuario.CanFocus then
-               edtUsuario.SetFocus;
+            if edtNome.CanFocus then
+               edtNome.SetFocus;
 
             TMessageUtil.Alerta(
                'Nenhum usuário encontrado para este filtro.');
@@ -190,6 +207,47 @@ begin
       if edtNome.CanFocus then
          edtNome.SetFocus;
    end;
+end;
+
+procedure TfrmCadUsuaPesq.btnFiltrarClick(Sender: TObject);
+begin
+   mUsuario := EmptyStr;
+   ProcessaPesquisa;
+end;
+
+procedure TfrmCadUsuaPesq.btnConfirmarClick(Sender: TObject);
+begin
+   ProcessaConfirmacao;
+end;
+
+procedure TfrmCadUsuaPesq.btnLimparClick(Sender: TObject);
+begin
+    mUsuario := EmptyStr;
+   LimpaTela;
+end;
+
+procedure TfrmCadUsuaPesq.btnSairClick(Sender: TObject);
+begin
+   LimpaTela;
+   Close;
+end;
+
+procedure TfrmCadUsuaPesq.cdsUsuarioBeforeDelete(DataSet: TDataSet);
+begin
+   Abort;
+end;
+
+procedure TfrmCadUsuaPesq.dbgResultadoBuscaDblClick(Sender: TObject);
+begin
+   ProcessaConfirmacao;
+end;
+
+procedure TfrmCadUsuaPesq.dbgResultadoBuscaKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+   if (Key = VK_RETURN) and
+      (btnConfirmar.CanFocus) then
+      btnConfirmar.SetFocus;
 end;
 
 end.
