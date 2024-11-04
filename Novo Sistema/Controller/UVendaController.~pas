@@ -1,0 +1,99 @@
+unit UVendaController;
+
+interface
+
+uses SysUtils, Math, StrUtils, UConexao, UVenda, SqlExpr,UClassFuncoes;
+
+type
+   TVendaController = class
+      public
+         constructor Create;
+         function GravaVenda(pVenda : TVenda) : Boolean;
+         function BuscaVenda(pID : Integer) : TVenda;
+         function RetornaCondicaoVenda(pId : Integer) : String;
+
+      published
+         class function getInstancia : TVendaController;
+
+
+   end;
+
+implementation
+
+uses UVendaDAO;
+
+var
+   _instance : TVendaController;
+
+{ TVendaController }
+
+function TVendaController.BuscaVenda(pID: Integer): TVenda;
+var
+   xVendaDAO : TVendaDAO;
+begin
+   try
+      try
+         Result := nil;
+
+         xVendaDAO := TVendaDAO.Create(TConexao.getInstance.getConn);
+
+         Result := xVendaDAO.Retorna(RetornaCondicaoProduto(pID));
+
+      finally
+         if (xVendaDAO <> nil) then
+            FreeAndNil(xVendaDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao buscar dados do produto[Controller]: '#13 +
+            e.Message);
+      end;
+   end;
+end;
+
+constructor TVendaController.Create;
+begin
+   inherited Create;
+end;
+
+class function TVendaController.getInstancia: TVendaController;
+begin
+   if _instance = nil then
+      _instance := TVendaController.Create;
+
+   Result := _instance;
+end;
+
+function TVendaController.GravaVenda(pVenda: TVenda): Boolean;
+var
+   xVendaDAO : TVendaDAO;
+begin
+   try
+      try
+         TConexao.get.iniciaTransacao;
+         Result := False;
+         xVendaDAO := nil;
+
+         xVendaDAO := TVendaDAO.Create(TConexao.get.getConn);
+
+         if (pVenda.ID = 0) then
+            xVendaDAO.Insere(pVenda);
+
+         TConexao.get.confirmaTransacao;
+      finally
+         if (xVendaDAO <> nil) then
+            FreeAndNil(xVendaDAO);
+      end;
+   except
+       on E: Exception do
+       begin
+         TConexao.get.cancelaTransacao;
+         Raise Exception.Create(
+            'Falha ao gravar dados da venda. [Controller]'+ #13 +
+            e.Message);
+       end;
+   end;
+end;
+end.

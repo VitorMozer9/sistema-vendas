@@ -12,9 +12,10 @@ type
          vID_Cliente     : Integer;
          vDataVenda      : TDateTime;
          vFaturada       : Integer;
-         vTotalAcrescimo : Double;
+         vValorVenda     : Double;
          vTotalDesconto  : Double;
          vTotalVenda     : Double;
+         vFormaPagamento : String;
 
       public
          constructor Create;
@@ -24,9 +25,10 @@ type
          property ID_Cliente     : Integer read vID_Cliente write vID_Cliente;
          property DataVenda      : TDateTime read vDataVenda write vDataVenda;
          property Faturada       : Integer read vFaturada write vFaturada;
-         property TotalAcrescimo : Double read vTotalAcrescimo write vTotalAcrescimo;
+         property ValorVenda     : Double read vValorVenda write vValorVenda;
          property TotalDesconto  : Double read vTotalDesconto write vTotalDesconto;
          property TotalVenda     : Double read vTotalVenda write vTotalVenda;
+         property FormaPagamento : String read vFormaPagamento write vFormaPagamento;
 
    end;
 
@@ -42,7 +44,7 @@ implementation
 
 procedure TColVenda.Adiciona(pVenda: TVenda);
 begin
-   Self.Add(TVenda(pProduto));
+   Self.Add(TVenda(pVenda));
 end;
 
 function TColVenda.Retorna(pIndex: Integer): TVenda;
@@ -58,8 +60,9 @@ begin
    Self.vID_Cliente      := 0;
    Self.vDataVenda       := 0;
    Self.vFaturada        := 0;
-   Self.vTotalAcrescimo  := 0;
+   Self.vValorVenda      := 0;
    Self.vTotalDesconto   := 0;
    Self.vTotalVenda      := 0;
+   self.vFormaPagamento  := EmptyStr;
 end;
 end.

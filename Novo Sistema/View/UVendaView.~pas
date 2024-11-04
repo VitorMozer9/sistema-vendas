@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, Mask, NumEdit, DB,
-  DBClient, Grids, DBGrids, UEnumerationUtil, uMessageUtil;
+  DBClient, Grids, DBGrids, UEnumerationUtil, uMessageUtil, UVenda, UVendaController;
 
 type
   TfrmVendasView = class(TForm)
@@ -24,12 +24,12 @@ type
     gbrProdutos: TGroupBox;
     lblNome: TLabel;
     edtNome: TEdit;
-    btnUnidadeProduto: TSpeedButton;
+    btnCliente: TSpeedButton;
     lblCodigo: TLabel;
     edtCodigo: TEdit;
     mskData: TMaskEdit;
     lblData: TLabel;
-    Label1: TLabel;
+    lblNumeroVenda: TLabel;
     edtNumeroVenda: TEdit;
     cmbPagamento: TComboBox;
     lblPagamento: TLabel;
@@ -56,18 +56,26 @@ type
     procedure btnConfirmarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
     procedure btnSairClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
    vKey : Word;
    vEstadoTela : TEstadoTela;
+   vObjVenda   : TVenda;
 
    procedure CamposEnable(pOpcao : Boolean);
    procedure LimpaTela;
    procedure DefineEstadoTela;
+   procedure CarregaDadosTela;
 
    function ProcessaConfirmacao : Boolean;
    function ProcessaInclusao    : Boolean;
    function ProcessaVenda       : Boolean;
+   function ProcessaConsulta    : Boolean;
+   function ValidaCampos        : Boolean;
 
   public
     { Public declarations }
@@ -77,6 +85,8 @@ var
   frmVendasView: TfrmVendasView;
 
 implementation
+
+uses Types, Math;
 
 {$R *.dfm}
 
@@ -134,6 +144,44 @@ begin
 
          Application.ProcessMessages;
       end;
+
+      etIncluir:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Inclusão';
+         CamposEnable(True);
+
+         btnCliente.Enabled     := True;
+         cmbPagamento.Enabled   := True;
+         edtTotalValor.Enabled  := False;
+         edtNumeroVenda.Enabled := False;
+
+         if (edtCodigo.CanFocus) then
+            edtCodigo.SetFocus;
+      end;
+
+      etConsultar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Consulta';
+
+         CamposEnable(False);
+
+         if (edtNumeroVenda.Text <> EmptyStr) then
+         begin
+            edtNumeroVenda.Enabled  := False;
+            btnConfirmar.Enabled := False;
+
+            if (btnConfirmar.CanFocus) then
+               btnConfirmar.SetFocus;
+         end
+         else
+         begin
+            lblNumeroVenda.Enabled := True;
+            edtNumeroVenda.Enabled := True;
+
+            if edtNumeroVenda.CanFocus then
+               edtNumeroVenda.SetFocus;
+         end;
+      end;
    end;
 end;
 
@@ -173,19 +221,16 @@ procedure TfrmVendasView.LimpaTela;
 var
    xI : Integer;
 begin
+   edtTotalValor.Value := 0;
+   edtValor.Value := 0;
+   mskData.Text := EmptyStr;
+   edtDesconto.Value := 0;
+
    for xI := 0 to pred(ComponentCount) do
    begin
      if (Components[xI] is TEdit) then
         (Components[xI] as TEdit).Text := EmptyStr;
 
-     if (Components[xI] is TNumEdit) then
-      begin
-         (Components[xI] as TNumEdit).Value := 0;
-         exit;
-      end;
-
-     if (Components[xI] is TMaskEdit) then
-        (Components[xI] as TMaskEdit).Text := EmptyStr;
 
      if (Components[xI] is TComboBox) then
       begin
@@ -218,7 +263,7 @@ end;
 
 procedure TfrmVendasView.btnConfirmarClick(Sender: TObject);
 begin
-   //ProcessaConfirmacao;
+   ProcessaConfirmacao;
 end;
 
 procedure TfrmVendasView.btnCancelarClick(Sender: TObject);
@@ -247,8 +292,8 @@ begin
 
    try
       case vEstadoTela of
-//         etIncluir:   Result := ProcessaInclusao;
-//         etConsultar: Result := ProcessaConsulta;
+         etIncluir: Result := ProcessaInclusao;
+         etConsultar: Result := ProcessaConsulta;
       end;
 
       if not Result then
@@ -266,11 +311,10 @@ begin
     Result := False;
    try
       try
-
         if ProcessaVenda then
         begin
-           TMessageUtil.Informacao('Venda cadastrado com sucesso'#13 +
-             'Código cadastrado: ' + IntToStr(vObjProduto.ID));
+           TMessageUtil.Informacao('Venda cadastrada com sucesso'#13 +
+             'Código cadastrado: ' + IntToStr(vObjVenda.ID));
 
            vEstadoTela := etPadrao;
            DefineEstadoTela;
@@ -287,8 +331,8 @@ begin
          end;
       end;
    finally
-//      if vObjVenda <> nil then
-//         FreeAndNil(vObjVenda);
+      if vObjVenda <> nil then
+         FreeAndNil(vObjVenda);
    end;
 end;
 
@@ -304,19 +348,19 @@ begin
       begin
          if vObjVenda = nil then
             vObjVenda := TVenda.Create;
-      end
+      end;
 
       if (vObjVenda = nil) then
          Exit;
 
-//      vObjVenda. := edtNumeroVenda.Text;
-//      vObjVenda. := edtDesconto.Value;
-//      vObjVenda. := edtValor.Value;
-//      vObjVenda. := cmbPagamento.Text;
-//      vObjVenda. := edtTotalValor.Value;
+//      vObjVenda.ID := StrToInt(edtNumeroVenda.Text);
+      vObjVenda.TotalDesconto := edtDesconto.Value;
+      vObjVenda.ValorVenda := edtValor.Value;
+      vObjVenda.DataVenda  := Now;             //StrToDateTime(mskData.Text);
+      vObjVenda.TotalVenda := edtTotalValor.Value;
 
       //Gravação no banco
-      //TVendaController.getInstancia.GravaVenda(vObjVenda);
+      TVendaController.getInstancia.GravaVenda(vObjVenda);
 
       Result := True;
 
@@ -328,6 +372,130 @@ begin
          e.Message);
       end;
    end;
+end;
+
+function TfrmVendasView.ValidaCampos: Boolean;
+begin
+   Result := False;
+
+//   if (edtCodigo.Text = EmptyStr) then
+//   begin
+//      TMessageUtil.Alerta(
+//         'O código do cliente não pode ficar em branco.  ');
+//
+//      if (edtCodigo.CanFocus) then
+//         edtCodigo.SetFocus;
+//         exit;
+//   end;
+
+//   if (edtNome.Text = EmptyStr) then
+//   begin
+//      TMessageUtil.Alerta(
+//         'O nome do cliente não pode ficar em branco.  ');
+//
+//      if (edtNome.CanFocus) then
+//         edtNome.SetFocus;
+//         exit;
+//   end;
+
+   if (cmbPagamento.Text = EmptyStr) then
+   begin
+      TMessageUtil.Alerta(
+         'A forma de pagamento da venda não pode ficar em branco.  ');
+
+      if (cmbPagamento.CanFocus) then
+         cmbPagamento.SetFocus;
+         exit;
+   end;
+
+   if CompareValue(edtValor.Value,0,0.001) = EqualsValue then
+   begin
+      TMessageUtil.Alerta(
+         'O valor da venda não pode ficae em branco. ');
+
+      if (edtValor.CanFocus) then
+         edtValor.SetFocus;
+         exit;
+   end;
+
+
+   Result := True;
+end;
+
+procedure TfrmVendasView.FormCreate(Sender: TObject);
+begin
+   vEstadoTela := etPadrao;
+end;
+
+procedure TfrmVendasView.FormShow(Sender: TObject);
+begin
+   DefineEstadoTela;
+end;
+
+procedure TfrmVendasView.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   vKey := VK_CLEAR;
+end;
+
+function TfrmVendasView.ProcessaConsulta: Boolean;
+begin
+   try
+      Result := False;
+
+      if (edtNumeroVenda.Text = EmptyStr) then
+      begin
+         TMessageUtil.Alerta('Número da venda não pode ficar em branco.');
+
+         if (edtNumeroVenda.CanFocus) then
+            edtNumeroVenda.SetFocus;
+
+         exit;
+      end;
+
+      vObjVenda :=
+         TVendaController.getInstancia.BuscaVenda(
+            StrToIntDef(edtNumeroVenda.Text, 0));
+
+      if (vObjVenda <> nil) then
+      begin
+         CarregaDadosTela;
+      end
+      else
+      begin
+         TMessageUtil.Alerta('Nenhum dado de venda encontrado.');
+
+         edtNumeroVenda.Clear;
+
+         if (edtNumeroVenda.CanFocus) then
+            edtNumeroVenda.SetFocus;
+         exit;
+      end;
+
+      Result := True;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao processar dados de consulta de venda [View]: '#13 +
+            e.Message);
+      end;
+   end;
+end;
+
+procedure TfrmVendasView.CarregaDadosTela;
+begin
+   if (vObjVenda = nil) then
+      exit;
+
+   edtNumeroVenda.Text        := IntToStr(vObjVenda.ID);
+   mskData.Text               := DateTimeToStr(vObjVenda.DataVenda);
+   cmbPagamento.Text          := vObjVenda.FormaPagamento;
+   edtValor.Value             := vObjVenda.ValorVenda;
+   edtDesconto.Value          := vObjVenda.TotalDesconto;
+   edtTotalValor.Value        := vObjVenda.TotalVenda;
+
+   btnCancelar.Enabled := True;
 end;
 
 end.

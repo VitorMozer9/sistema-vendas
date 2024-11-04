@@ -1,6 +1,6 @@
 object frmVendasView: TfrmVendasView
-  Left = 215
-  Top = 147
+  Left = 444
+  Top = 142
   Width = 828
   Height = 478
   BorderIcons = [biSystemMenu, biMinimize]
@@ -14,7 +14,10 @@ object frmVendasView: TfrmVendasView
   KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
+  OnCreate = FormCreate
   OnKeyDown = FormKeyDown
+  OnKeyUp = FormKeyUp
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object stbBarraStatus: TStatusBar
@@ -316,6 +319,11 @@ object frmVendasView: TfrmVendasView
       Height = 21
       ItemHeight = 13
       TabOrder = 0
+      Items.Strings = (
+        'Cart'#227'o de Cr'#233'dito'
+        'Cart'#227'o de D'#233'bito'
+        'Dinheiro'
+        'Pix')
     end
     object edtDesconto: TNumEdit
       Left = 376
@@ -376,7 +384,7 @@ object frmVendasView: TfrmVendasView
         Font.Style = [fsBold]
         ParentFont = False
       end
-      object btnUnidadeProduto: TSpeedButton
+      object btnCliente: TSpeedButton
         Left = 415
         Top = 20
         Width = 25
@@ -454,7 +462,7 @@ object frmVendasView: TfrmVendasView
         Height = 13
         Caption = 'Data'
       end
-      object Label1: TLabel
+      object lblNumeroVenda: TLabel
         Left = 16
         Top = 32
         Width = 46
