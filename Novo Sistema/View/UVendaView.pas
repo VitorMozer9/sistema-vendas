@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, Mask, NumEdit, DB,
-  DBClient, Grids, DBGrids, UEnumerationUtil, uMessageUtil, UVenda, UVendaController;
+  DBClient, Grids, DBGrids, UEnumerationUtil, uMessageUtil, UVenda, UVendaController,
+  UPessoaController;
 
 type
   TfrmVendasView = class(TForm)
@@ -60,6 +61,11 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure btnClienteClick(Sender: TObject);
+    procedure edtCodigoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure edtCodigoExit(Sender: TObject);
+    procedure cmbPagamentoChange(Sender: TObject);
   private
     { Private declarations }
    vKey : Word;
@@ -71,6 +77,7 @@ type
    procedure DefineEstadoTela;
    procedure CarregaDadosTela;
 
+   function CarregaCliente      : Boolean;
    function ProcessaConfirmacao : Boolean;
    function ProcessaInclusao    : Boolean;
    function ProcessaVenda       : Boolean;
@@ -86,7 +93,7 @@ var
 
 implementation
 
-uses Types, Math;
+uses Types, Math, UClientesPesqView, UClienteView,UPessoa;
 
 {$R *.dfm}
 
@@ -154,6 +161,10 @@ begin
          cmbPagamento.Enabled   := True;
          edtTotalValor.Enabled  := False;
          edtNumeroVenda.Enabled := False;
+         edtNome.Enabled        := False;
+         mskData.Enabled        := False;
+
+         mskData.Text := DateTimeToStr(Now);
 
          if (edtCodigo.CanFocus) then
             edtCodigo.SetFocus;
@@ -354,6 +365,7 @@ begin
          Exit;
 
 //      vObjVenda.ID := StrToInt(edtNumeroVenda.Text);
+      vObjVenda.ID_Cliente := StrToInt(edtCodigo.Text);
       vObjVenda.TotalDesconto := edtDesconto.Value;
       vObjVenda.ValorVenda := edtValor.Value;
       vObjVenda.DataVenda  := Now;             //StrToDateTime(mskData.Text);
@@ -378,25 +390,25 @@ function TfrmVendasView.ValidaCampos: Boolean;
 begin
    Result := False;
 
-//   if (edtCodigo.Text = EmptyStr) then
-//   begin
-//      TMessageUtil.Alerta(
-//         'O código do cliente não pode ficar em branco.  ');
-//
-//      if (edtCodigo.CanFocus) then
-//         edtCodigo.SetFocus;
-//         exit;
-//   end;
+   if (edtCodigo.Text = EmptyStr) then
+   begin
+      TMessageUtil.Alerta(
+         'O código do cliente não pode ficar em branco.  ');
 
-//   if (edtNome.Text = EmptyStr) then
-//   begin
-//      TMessageUtil.Alerta(
-//         'O nome do cliente não pode ficar em branco.  ');
-//
-//      if (edtNome.CanFocus) then
-//         edtNome.SetFocus;
-//         exit;
-//   end;
+      if (edtCodigo.CanFocus) then
+         edtCodigo.SetFocus;
+         exit;
+   end;
+
+   if (edtNome.Text = EmptyStr) then
+   begin
+      TMessageUtil.Alerta(
+         'O nome do cliente não pode ficar em branco.  ');
+
+      if (edtNome.CanFocus) then
+         edtNome.SetFocus;
+         exit;
+   end;
 
    if (cmbPagamento.Text = EmptyStr) then
    begin
@@ -489,13 +501,106 @@ begin
       exit;
 
    edtNumeroVenda.Text        := IntToStr(vObjVenda.ID);
+   edtCodigo.Text             := IntToStr(vObjVenda.ID_Cliente);
    mskData.Text               := DateTimeToStr(vObjVenda.DataVenda);
    cmbPagamento.Text          := vObjVenda.FormaPagamento;
    edtValor.Value             := vObjVenda.ValorVenda;
    edtDesconto.Value          := vObjVenda.TotalDesconto;
    edtTotalValor.Value        := vObjVenda.TotalVenda;
+   btnCancelar.Enabled        := True;
 
-   btnCancelar.Enabled := True;
+   CarregaCliente;
+end;
+
+procedure TfrmVendasView.btnClienteClick(Sender: TObject);
+begin
+   try
+      Screen.Cursor := crHourGlass;
+
+      if frmClientes  = nil then
+            frmClientes := TfrmClientes.Create(Application);
+
+         frmClientes.Show;
+
+   finally
+      Screen.Cursor := crDefault;
+   end;
+end;
+
+procedure TfrmVendasView.edtCodigoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   if vKey = VK_RETURN then
+   begin
+      if (edtCodigo.Text = EmptyStr) Then
+      begin
+         Screen.Cursor := crHourGlass;
+         if frmClientesPesq  = nil then
+            frmClientesPesq := TfrmClientesPesq.Create(Application);
+
+            frmClientesPesq.Show;
+         Screen.Cursor := crDefault;
+      end
+      else
+         CarregaCliente;
+   end;
+   vKey := VK_CLEAR;
+end;
+
+
+function TfrmVendasView.CarregaCliente: Boolean;
+var
+   xPessoa : TPessoa;
+begin
+   try
+      Result := False;
+      xPessoa := nil;
+      xPessoa := TPessoa.Create;
+
+      xPessoa :=
+         TPessoa(TPessoaController.getInstancia.BuscaPessoa(
+            StrToIntDef(edtCodigo.Text, 0)));
+
+      if (xPessoa <> nil) then
+      begin
+         edtCodigo.Text := IntToStr(xPessoa.ID);
+         edtNome.Text := xPessoa.Nome;
+      end
+      else
+      begin
+         TMessageUtil.Alerta(
+            'Nenhum cliente encontrado para o código informado.');
+
+         LimpaTela;
+
+         if (edtCodigo.CanFocus) then
+            edtCodigo.SetFocus;
+
+         Exit;
+      end;
+      DefineEstadoTela;
+   finally
+      if (xPessoa <> nil) then
+         FreeAndNil(xPessoa);
+   end;
+end;
+
+
+procedure TfrmVendasView.edtCodigoExit(Sender: TObject);
+begin
+   if (edtCodigo.Text = EmptyStr) then
+      edtNome.Text := EmptyStr;
+end;
+
+procedure TfrmVendasView.cmbPagamentoChange(Sender: TObject);
+begin
+   if cmbPagamento.Text = EmptyStr then
+   begin
+      cmbPagamento.Items.Add('Cartão de Crédito');
+      cmbPagamento.Items.Add('Cartão de Débito');
+      cmbPagamento.Items.Add('Dinheiro');
+      cmbPagamento.Items.Add('Pix');
+   end;
 end;
 
 end.

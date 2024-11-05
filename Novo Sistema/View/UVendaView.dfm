@@ -318,7 +318,9 @@ object frmVendasView: TfrmVendasView
       Width = 129
       Height = 21
       ItemHeight = 13
+      MaxLength = 4
       TabOrder = 0
+      OnChange = cmbPagamentoChange
       Items.Strings = (
         'Cart'#227'o de Cr'#233'dito'
         'Cart'#227'o de D'#233'bito'
@@ -441,6 +443,7 @@ object frmVendasView: TfrmVendasView
           FFFF00FFFF00FFFF00FFFF00FF90909090909090909090909090909090909090
           9090898989FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         NumGlyphs = 2
+        OnClick = btnClienteClick
       end
       object lblCodigo: TLabel
         Left = 325
@@ -475,14 +478,16 @@ object frmVendasView: TfrmVendasView
         Width = 313
         Height = 21
         CharCase = ecUpperCase
-        TabOrder = 0
+        TabOrder = 3
       end
       object edtCodigo: TEdit
         Left = 369
         Top = 24
         Width = 37
         Height = 21
-        TabOrder = 1
+        TabOrder = 2
+        OnExit = edtCodigoExit
+        OnKeyDown = edtCodigoKeyDown
       end
       object mskData: TMaskEdit
         Left = 184
@@ -491,7 +496,7 @@ object frmVendasView: TfrmVendasView
         Height = 21
         EditMask = '##/##/####;1;_'
         MaxLength = 10
-        TabOrder = 2
+        TabOrder = 1
         Text = '  /  /    '
       end
       object edtNumeroVenda: TEdit
@@ -499,7 +504,7 @@ object frmVendasView: TfrmVendasView
         Top = 24
         Width = 56
         Height = 21
-        TabOrder = 3
+        TabOrder = 0
       end
     end
   end
