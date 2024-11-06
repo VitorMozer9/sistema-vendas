@@ -35,7 +35,8 @@ uses
   UCadUsuaPesqView in 'View\UCadUsuaPesqView.pas' {frmCadUsuaPesq},
   UVendaView in 'View\UVendaView.pas' {frmVendasView},
   UVenda in 'Model\UVenda.pas',
-  UVendaDAO in 'Model\UVendaDAO.pas';
+  UVendaDAO in 'Model\UVendaDAO.pas',
+  UVendaController in 'Controller\UVendaController.pas';
 
 {$R *.res}
 

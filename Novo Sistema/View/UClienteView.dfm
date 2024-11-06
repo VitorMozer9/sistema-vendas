@@ -1,11 +1,11 @@
 object frmClientes: TfrmClientes
-  Left = 456
+  Left = 457
   Top = 229
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Clientes'
   ClientHeight = 335
-  ClientWidth = 637
+  ClientWidth = 634
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -26,7 +26,7 @@ object frmClientes: TfrmClientes
   object stbBarraStatus: TStatusBar
     Left = 0
     Top = 316
-    Width = 637
+    Width = 634
     Height = 19
     Panels = <
       item
@@ -39,7 +39,7 @@ object frmClientes: TfrmClientes
   object pnlBotoes: TPanel
     Left = 0
     Top = 246
-    Width = 637
+    Width = 634
     Height = 70
     Align = alBottom
     TabOrder = 1
@@ -373,7 +373,7 @@ object frmClientes: TfrmClientes
   object pnlArea: TPanel
     Left = 0
     Top = 0
-    Width = 637
+    Width = 634
     Height = 246
     Align = alClient
     TabOrder = 0
@@ -571,6 +571,7 @@ object frmClientes: TfrmClientes
         Height = 21
         CharCase = ecUpperCase
         ItemHeight = 13
+        MaxLength = 2
         TabOrder = 4
         Items.Strings = (
           'SP'

@@ -1,5 +1,5 @@
 object frmClientesPesq: TfrmClientesPesq
-  Left = 646
+  Left = 647
   Top = 210
   Width = 656
   Height = 325

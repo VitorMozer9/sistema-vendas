@@ -1,5 +1,5 @@
 object frmVendasView: TfrmVendasView
-  Left = 444
+  Left = 445
   Top = 142
   Width = 828
   Height = 478
@@ -318,7 +318,6 @@ object frmVendasView: TfrmVendasView
       Width = 129
       Height = 21
       ItemHeight = 13
-      MaxLength = 4
       TabOrder = 0
       Items.Strings = (
         'Cart'#227'o de Cr'#233'dito'
@@ -332,9 +331,11 @@ object frmVendasView: TfrmVendasView
       Width = 81
       Height = 21
       Alignment = taRightJustify
-      Decimals = 2
+      Decimals = 1
+      MaxLength = 3
       ShowSeparator = True
       TabOrder = 1
+      OnExit = edtDescontoExit
     end
     object edtValor: TNumEdit
       Left = 520

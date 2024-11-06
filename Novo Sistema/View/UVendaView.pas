@@ -49,6 +49,7 @@ type
     cdsProdutosUniSaida: TStringField;
     cdsProdutosQuantidade: TFloatField;
     cdsProdutosTotalPreco: TFloatField;
+    btnLimpar: TBitBtn;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnIncluirClick(Sender: TObject);
@@ -65,7 +66,7 @@ type
     procedure edtCodigoKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure edtCodigoExit(Sender: TObject);
-    procedure cmbPagamentoChange(Sender: TObject);
+    procedure edtDescontoExit(Sender: TObject);
   private
     { Private declarations }
    vKey : Word;
@@ -77,15 +78,18 @@ type
    procedure DefineEstadoTela;
    procedure CarregaDadosTela;
 
+
    function CarregaCliente      : Boolean;
    function ProcessaConfirmacao : Boolean;
    function ProcessaInclusao    : Boolean;
    function ProcessaVenda       : Boolean;
    function ProcessaConsulta    : Boolean;
    function ValidaCampos        : Boolean;
+   function InsereDesconto(pDesconto : Double; pValorTotal : Double) : Double;
 
   public
     { Public declarations }
+
   end;
 
 var
@@ -148,6 +152,8 @@ begin
             (frmVendasView.Active) and
             (btnConfirmar.CanFocus)then
             btnConfirmar.SetFocus;
+
+         cmbPagamento.Text := EmptyStr;
 
          Application.ProcessMessages;
       end;
@@ -245,7 +251,6 @@ begin
 
      if (Components[xI] is TComboBox) then
       begin
-        (Components[xI] as TComboBox).Clear;
         (Components[xI] as TComboBox).ItemIndex := -1;
       end;
 
@@ -364,14 +369,13 @@ begin
       if (vObjVenda = nil) then
          Exit;
 
-//      vObjVenda.ID := StrToInt(edtNumeroVenda.Text);
-      vObjVenda.ID_Cliente := StrToInt(edtCodigo.Text);
-      vObjVenda.TotalDesconto := edtDesconto.Value;
-      vObjVenda.ValorVenda := edtValor.Value;
-      vObjVenda.DataVenda  := Now;             //StrToDateTime(mskData.Text);
-      vObjVenda.TotalVenda := edtTotalValor.Value;
+      vObjVenda.ID_Cliente     := StrToInt(edtCodigo.Text);
+      vObjVenda.TotalDesconto  := edtDesconto.Value;
+      vObjVenda.ValorVenda     := edtValor.Value;
+      vObjVenda.DataVenda      := Now;
+      vObjVenda.TotalVenda     := InsereDesconto(edtDesconto.Value, edtValor.Value);
+      vObjVenda.FormaPagamento := cmbPagamento.Text;
 
-      //Gravação no banco
       TVendaController.getInstancia.GravaVenda(vObjVenda);
 
       Result := True;
@@ -442,6 +446,11 @@ end;
 procedure TfrmVendasView.FormShow(Sender: TObject);
 begin
    DefineEstadoTela;
+   cmbPagamento.Items.Clear;
+   cmbPagamento.Items.Add('Cartão de crédito');
+   cmbPagamento.Items.Add('Cartão de Débito');
+   cmbPagamento.Items.Add('Dinheiro');
+   cmbPagamento.Items.Add('Pix');
 end;
 
 procedure TfrmVendasView.FormKeyUp(Sender: TObject; var Key: Word;
@@ -455,7 +464,7 @@ begin
    try
       Result := False;
 
-      if (edtNumeroVenda.Text = EmptyStr) then
+      if (edtNumeroVenda.Text = EmptyStr) and (frmClientesPesq.mClienteID = 0) then
       begin
          TMessageUtil.Alerta('Número da venda não pode ficar em branco.');
 
@@ -469,9 +478,10 @@ begin
          TVendaController.getInstancia.BuscaVenda(
             StrToIntDef(edtNumeroVenda.Text, 0));
 
-      if (vObjVenda <> nil) then
+      if (vObjVenda <> nil) or (frmClientesPesq.mClienteID <> 0)  then
       begin
          CarregaDadosTela;
+         CarregaCliente;
       end
       else
       begin
@@ -497,19 +507,19 @@ end;
 
 procedure TfrmVendasView.CarregaDadosTela;
 begin
-   if (vObjVenda = nil) then
-      exit;
-
-   edtNumeroVenda.Text        := IntToStr(vObjVenda.ID);
-   edtCodigo.Text             := IntToStr(vObjVenda.ID_Cliente);
-   mskData.Text               := DateTimeToStr(vObjVenda.DataVenda);
-   cmbPagamento.Text          := vObjVenda.FormaPagamento;
-   edtValor.Value             := vObjVenda.ValorVenda;
-   edtDesconto.Value          := vObjVenda.TotalDesconto;
-   edtTotalValor.Value        := vObjVenda.TotalVenda;
-   btnCancelar.Enabled        := True;
-
-   CarregaCliente;
+   if (vObjVenda = nil) and (frmClientesPesq.mClienteID <> 0) then
+      CarregaCliente
+   else
+   begin
+      edtNumeroVenda.Text        := IntToStr(vObjVenda.ID);
+      edtCodigo.Text             := IntToStr(vObjVenda.ID_Cliente);
+      mskData.Text               := DateTimeToStr(vObjVenda.DataVenda);
+      cmbPagamento.Text          := vObjVenda.FormaPagamento;
+      edtValor.Value             := vObjVenda.ValorVenda;
+      edtDesconto.Value          := vObjVenda.TotalDesconto;
+      edtTotalValor.Value        := InsereDesconto(vObjVenda.TotalDesconto, vObjVenda.ValorVenda);
+      btnCancelar.Enabled        := True;
+   end;
 end;
 
 procedure TfrmVendasView.btnClienteClick(Sender: TObject);
@@ -538,7 +548,12 @@ begin
          if frmClientesPesq  = nil then
             frmClientesPesq := TfrmClientesPesq.Create(Application);
 
-            frmClientesPesq.Show;
+         frmClientesPesq.ShowModal;
+         if (frmClientesPesq.mClienteID <> 0) then
+         begin
+            edtCodigo.Text := IntToStr(frmClientesPesq.mClienteID);
+            CarregaCliente;
+         end;
          Screen.Cursor := crDefault;
       end
       else
@@ -554,7 +569,6 @@ var
 begin
    try
       Result := False;
-      xPessoa := nil;
       xPessoa := TPessoa.Create;
 
       xPessoa :=
@@ -562,17 +576,11 @@ begin
             StrToIntDef(edtCodigo.Text, 0)));
 
       if (xPessoa <> nil) then
-      begin
-         edtCodigo.Text := IntToStr(xPessoa.ID);
-         edtNome.Text := xPessoa.Nome;
-      end
+         edtNome.Text := xPessoa.Nome
       else
       begin
-         TMessageUtil.Alerta(
-            'Nenhum cliente encontrado para o código informado.');
-
+         TMessageUtil.Alerta('Nenhum cliente encontrado para o código informado.');
          LimpaTela;
-
          if (edtCodigo.CanFocus) then
             edtCodigo.SetFocus;
 
@@ -592,14 +600,22 @@ begin
       edtNome.Text := EmptyStr;
 end;
 
-procedure TfrmVendasView.cmbPagamentoChange(Sender: TObject);
+
+
+function TfrmVendasView.InsereDesconto(pDesconto: Double;
+pValorTotal : Double): Double;
+var
+   xDesconto : Double;
 begin
-   if cmbPagamento.Text = EmptyStr then
+   xDesconto := pValorTotal * (pDesconto / 100);
+   Result := pValorTotal - xDesconto;
+end;
+
+procedure TfrmVendasView.edtDescontoExit(Sender: TObject);
+begin
+   if (CompareValue(edtDesconto.Value,100,0.001) = GreaterThanValue) then
    begin
-      cmbPagamento.Items.Add('Cartão de Crédito');
-      cmbPagamento.Items.Add('Cartão de Débito');
-      cmbPagamento.Items.Add('Dinheiro');
-      cmbPagamento.Items.Add('Pix');
+      edtDesconto.Value := 100;
    end;
 end;
 

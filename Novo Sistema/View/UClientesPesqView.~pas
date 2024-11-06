@@ -47,6 +47,7 @@ type
    procedure LimparTela;
    procedure ProcessaPesquisa;
    procedure ProcessaConfirmacao;
+
   public
     { Public declarations }
     mClienteID   : Integer;
