@@ -1,0 +1,57 @@
+unit UVendaItemDAO;
+
+interface
+
+uses SqlExpr, DBXpress, SimpleDS, Db , Classes, SysUtils, DateUtils,
+     StdCtrls, UGenericDAO, UVendaItem;
+
+type
+   TVendaDAO = class(TGenericDAO)
+      public
+         constructor Create(pConexao : TSQLConnection);
+         function Insere(pVendaItem : TVendaItem) : Boolean;
+         function InsereLista(pColVendaItem : TColVendaItem) : Boolean;
+         function Atualiza(pVendaItem : TVendaItem; pCondicao : String) : Boolean;
+         function Retorna(pCondicao : String) : TVendaItem;
+         function RetornaLista(pCondicao : String = '') : TColVendaItem;
+
+   end;
+implementation
+
+{ TVendaDAO }
+
+function TVendaDAO.Atualiza(pVendaItem: TVendaItem;
+  pCondicao: String): Boolean;
+begin
+   Result := inherited Atualiza(pVendaItem, pCondicao);
+end;
+
+constructor TVendaDAO.Create(pConexao: TSQLConnection);
+begin
+   inherited  Create;
+   vEntidade := 'VENDAITEM';
+   vConexao := pConexao;
+   vClass := TVendaItem;
+end;
+
+function TVendaDAO.Insere(pVendaItem: TVendaItem): Boolean;
+begin
+   Result := inherited Insere(pVendaItem, 'ID');
+end;
+
+function TVendaDAO.InsereLista(pColVendaItem: TColVendaItem): Boolean;
+begin
+   Result := inherited InsereLista(pColVendaItem);
+end;
+
+function TVendaDAO.Retorna(pCondicao: String): TVendaItem;
+begin
+   Result := TVendaItem(inherited Retorna(pCondicao));
+end;
+
+function TVendaDAO.RetornaLista(pCondicao: String): TColVendaItem;
+begin
+   Result := TColVendaItem(inherited RetornaLista(pCondicao));
+end;
+
+end.

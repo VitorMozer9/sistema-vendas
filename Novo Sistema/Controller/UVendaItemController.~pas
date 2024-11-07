@@ -1,0 +1,38 @@
+unit UVendaItemController;
+
+interface
+
+uses SysUtils, Math, StrUtils, UConexao, UVendaItem, SqlExpr,UClassFuncoes;
+
+type
+   TVendaItemController = class
+      public
+         constructor Create;
+
+      published
+         class function getInstancia : TVendaItemController;
+   end;
+
+implementation
+
+uses UVendaItemDAO;
+
+var
+   _instance : TVendaItemController;
+
+{ TVendaItemController }
+
+constructor TVendaItemController.Create;
+begin
+   inherited Create;
+end;
+
+class function TVendaItemController.getInstancia: TVendaItemController;
+begin
+   if _instance = nil then
+      _instance := TVendaItemController.Create;
+
+   Result := _instance;
+end;
+
+end.

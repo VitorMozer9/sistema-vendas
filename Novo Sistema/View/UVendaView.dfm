@@ -1,6 +1,6 @@
 object frmVendasView: TfrmVendasView
-  Left = 445
-  Top = 142
+  Left = 478
+  Top = 110
   Width = 828
   Height = 478
   BorderIcons = [biSystemMenu, biMinimize]
@@ -265,6 +265,7 @@ object frmVendasView: TfrmVendasView
       Height = 25
       Caption = '&Limpar'
       TabOrder = 5
+      OnClick = btnLimparClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF

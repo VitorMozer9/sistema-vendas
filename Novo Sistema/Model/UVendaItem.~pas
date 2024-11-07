@@ -11,21 +11,20 @@ type
          vID_Venda       : Integer;
          vID_Produto     : Integer;
          vQuantidade     : Double;
-         vUnidadeDeSaida : String;
+         vUnidadeSaida : String;
          vValorDesconto  : Double;
          vValorUnitario  : Double;
          vTotalItem      : Double;
-    function vID_Cliente: Integer;
 
    public
          constructor Create;
 
    published
          property ID             : Integer read vID write vID;
-         property ID_Cliente     : Integer read vID_Cliente write vID_Cliente;
+         property ID_Venda     : Integer read vID_Venda write vID_Venda;
          property ID_Produto     : Integer read vID_Produto write vID_Produto;
          property Quantidade     : Double read vQuantidade write vQuantidade;
-         property UnidadeDeSaida : String read vUnidadeDeSaida write vUnidadeDeSaida;
+         property UnidadeSaida : String read vUnidadeSaida write vUnidadeSaida;
          property ValorDesconto  : Double read vValorDesconto write vValorDesconto;
          property ValorUnitario  : Double read vValorUnitario write vValorUnitario;
          property TotalItem      : Double read vTotalItem write vTotalItem;
@@ -44,12 +43,12 @@ implementation
 
 procedure TColVendaItem.Adiciona(pVendaItem: TVendaItem);
 begin
-
+   Self.Add(TVendaItem(pVendaItem));
 end;
 
 function TColVendaItem.Retorna(pIndex: Integer): TVendaItem;
 begin
-
+   Result := TVendaItem(Self[pIndex]);
 end;
 
 { TVendaItem }
@@ -64,11 +63,6 @@ begin
    Self.ValorDesconto  := 0;
    Self.ValorUnitario  := 0;
    Self.TotalItem      := 0;
-end;
-
-function TVendaItem.vID_Cliente: Integer;
-begin
-
 end;
 
 end.

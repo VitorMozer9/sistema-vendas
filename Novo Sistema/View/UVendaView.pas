@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, Mask, NumEdit, DB,
   DBClient, Grids, DBGrids, UEnumerationUtil, uMessageUtil, UVenda, UVendaController,
-  UPessoaController;
+  UPessoaController, UVendaItem;
 
 type
   TfrmVendasView = class(TForm)
@@ -67,11 +67,13 @@ type
       Shift: TShiftState);
     procedure edtCodigoExit(Sender: TObject);
     procedure edtDescontoExit(Sender: TObject);
+    procedure btnLimparClick(Sender: TObject);
   private
     { Private declarations }
    vKey : Word;
    vEstadoTela : TEstadoTela;
    vObjVenda   : TVenda;
+//   vObjColVendaItem : TColVendaItem;
 
    procedure CamposEnable(pOpcao : Boolean);
    procedure LimpaTela;
@@ -83,6 +85,7 @@ type
    function ProcessaConfirmacao : Boolean;
    function ProcessaInclusao    : Boolean;
    function ProcessaVenda       : Boolean;
+   function ProcessaItemVenda   : Boolean;
    function ProcessaConsulta    : Boolean;
    function ValidaCampos        : Boolean;
    function InsereDesconto(pDesconto : Double; pValorTotal : Double) : Double;
@@ -97,7 +100,8 @@ var
 
 implementation
 
-uses Types, Math, UClientesPesqView, UClienteView,UPessoa;
+uses Types, Math, UClientesPesqView, UClienteView,UPessoa,UProduto,UProdutoController,
+   UVendaItemController;
 
 {$R *.dfm}
 
@@ -143,6 +147,7 @@ begin
       begin
          CamposEnable(False);
          cmbPagamento.Enabled := False;
+         btnLimpar.Enabled := False;
          LimpaTela;
 
          stbBarraStatus.Panels[0].Text := EmptyStr;
@@ -163,6 +168,7 @@ begin
          stbBarraStatus.Panels[0].Text := 'Inclusão';
          CamposEnable(True);
 
+         btnLimpar.Enabled      := True;
          btnCliente.Enabled     := True;
          cmbPagamento.Enabled   := True;
          edtTotalValor.Enabled  := False;
@@ -181,6 +187,7 @@ begin
          stbBarraStatus.Panels[0].Text := 'Consulta';
 
          CamposEnable(False);
+         btnLimpar.Enabled := True;
 
          if (edtNumeroVenda.Text <> EmptyStr) then
          begin
@@ -451,6 +458,8 @@ begin
    cmbPagamento.Items.Add('Cartão de Débito');
    cmbPagamento.Items.Add('Dinheiro');
    cmbPagamento.Items.Add('Pix');
+
+   cdsProdutos.Open;
 end;
 
 procedure TfrmVendasView.FormKeyUp(Sender: TObject; var Key: Word;
@@ -478,7 +487,7 @@ begin
          TVendaController.getInstancia.BuscaVenda(
             StrToIntDef(edtNumeroVenda.Text, 0));
 
-      if (vObjVenda <> nil) or (frmClientesPesq.mClienteID <> 0)  then
+      if (vObjVenda <> nil) then
       begin
          CarregaDadosTela;
          CarregaCliente;
@@ -616,6 +625,77 @@ begin
    if (CompareValue(edtDesconto.Value,100,0.001) = GreaterThanValue) then
    begin
       edtDesconto.Value := 100;
+   end;
+end;
+
+procedure TfrmVendasView.btnLimparClick(Sender: TObject);
+begin
+   LimpaTela;
+end;
+
+function TfrmVendasView.ProcessaItemVenda: Boolean;
+var
+   xAux : Integer;
+   xProduto : TProduto;
+begin
+   try
+      try
+         Result := False;
+         xProduto := nil;
+
+         if (xProduto <> nil) then
+            FreeAndNil(xProduto);
+
+         xProduto := TProduto.Create;
+         xProduto :=
+            TProdutoController.getInstancia.BuscaProduto(cdsProdutosID.Value);
+
+         cdsProdutos.EmptyDataSet;
+
+
+         if xProduto <> nil then
+         begin
+            for xAux := 0 to pred(xProduto.Count) do
+            begin
+               cdsProdutos.Append;
+               cdsProdutosID.Value := xProduto.Retorna(xAux).Id;
+               cdsProdutosDescricao.Value := xProduto.Retorna(xAux).Descricao;
+               cdsProdutosUniPreco.Value  := xProduto.Retorna(xAux).PrecoVenda;
+               cdsProdutosQuantidade.Value := xProduto.Retorna(xAux).QuantidadeEstoque;
+               cdsProdutosTotalPreco.Value := xProduto.Retorna(xAux).PrecoVenda;
+
+               cdsProdutos.Post;
+            end;
+         end;
+
+         if (cdsProdutos.RecordCount = 0) then
+         begin
+            if cdsProdutosID.CanFocus then
+               cdsProdutosID.SetFocus;
+
+            TMessageUtil.Alerta(
+               'Nenhum produto encontrado.');
+         end
+         else
+         begin
+            cdsProdutos.First;
+
+            if dbgProdutos.CanFocus then
+               dbgProdutos.SetFocus;
+         end;
+
+         Result := True;
+      finally
+         if (xProduto <> nil) then
+            FreeAndNil(xProduto);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao processar dados da venda do item [View]'#13 +
+            e.Message);
+      end;
    end;
 end;
 

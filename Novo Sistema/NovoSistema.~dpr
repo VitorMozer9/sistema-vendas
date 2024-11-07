@@ -36,7 +36,8 @@ uses
   UVendaView in 'View\UVendaView.pas' {frmVendasView},
   UVenda in 'Model\UVenda.pas',
   UVendaDAO in 'Model\UVendaDAO.pas',
-  UVendaController in 'Controller\UVendaController.pas';
+  UVendaController in 'Controller\UVendaController.pas',
+  UVendaItem in 'Model\UVendaItem.pas';
 
 {$R *.res}
 

@@ -9,11 +9,11 @@ type
    TVendaDAO = class(TGenericDAO)
       public
          constructor Create(pConexao : TSQLConnection);
-       function Insere(pVenda : TVenda) : Boolean; //a variavel pPessoa terá todos os atributos da classe pessoa
-       function InsereLista(pColVenda : TColVenda) : Boolean;
-       function Atualiza(pVenda : TVenda; pCondicao : String) : Boolean;
-       function Retorna(pCondicao : String) : TVenda;
-       function RetornaLista(pCondicao : String = '') : TColVenda;
+         function Insere(pVenda : TVenda) : Boolean;
+         function InsereLista(pColVenda : TColVenda) : Boolean;
+         function Atualiza(pVenda : TVenda; pCondicao : String) : Boolean;
+         function Retorna(pCondicao : String) : TVenda;
+         function RetornaLista(pCondicao : String = '') : TColVenda;
    end;
 
 implementation
@@ -22,7 +22,7 @@ implementation
 
 function TVendaDAO.Atualiza(pVenda: TVenda; pCondicao: String): Boolean;
 begin
-   Result := inherited Atualiza(pVenda, pCondicao)
+   Result := inherited Atualiza(pVenda, pCondicao);
 end;
 
 constructor TVendaDAO.Create(pConexao: TSQLConnection);
