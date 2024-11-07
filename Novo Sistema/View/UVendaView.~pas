@@ -100,7 +100,7 @@ var
 
 implementation
 
-uses Types, Math, UClientesPesqView, UClienteView,UPessoa,UProduto,UProdutoController
+uses Types, Math, UClientesPesqView, UClienteView,UPessoa,UProduto,UProdutoController,
    UVendaItemController;
 
 {$R *.dfm}
@@ -636,33 +636,33 @@ end;
 function TfrmVendasView.ProcessaItemVenda: Boolean;
 var
    xAux : Integer;
-   xListaProduto : TColProduto;
+   xProduto : TProduto;
 begin
    try
       try
          Result := False;
-         xListaProduto := nil;
+         xProduto := nil;
 
-         if (xListaProduto <> nil) then
-            FreeAndNil(xListaProduto);
+         if (xProduto <> nil) then
+            FreeAndNil(xProduto);
 
-         xListaProduto := TColProduto.Create;
-         xListaProduto :=
-            TProdutoController.getInstancia.BuscaVendaItem(cdsProdutosID.Value);
+         xProduto := TProduto.Create;
+         xProduto :=
+            TProdutoController.getInstancia.BuscaProduto(cdsProdutosID.Value);
 
          cdsProdutos.EmptyDataSet;
 
 
-         if xListaProduto <> nil then
+         if xProduto <> nil then
          begin
-            for xAux := 0 to pred(xListaProduto.Count) do
+            for xAux := 0 to pred(xProduto.Count) do
             begin
                cdsProdutos.Append;
-               cdsProdutosID.Value := xListaProduto.Retorna(xAux).Id;
-               cdsProdutosDescricao.Value := xListaProduto.Retorna(xAux).Descricao;
-               cdsProdutosUniPreco.Value  := xListaProduto.Retorna(xAux).PrecoVenda;
-               cdsProdutosQuantidade.Value := xListaProduto.Retorna(xAux).QuantidadeEstoque;
-               cdsProdutosTotalPreco.Value := xListaProduto.Retorna(xAux).PrecoVenda;
+               cdsProdutosID.Value := xProduto.Retorna(xAux).Id;
+               cdsProdutosDescricao.Value := xProduto.Retorna(xAux).Descricao;
+               cdsProdutosUniPreco.Value  := xProduto.Retorna(xAux).PrecoVenda;
+               cdsProdutosQuantidade.Value := xProduto.Retorna(xAux).QuantidadeEstoque;
+               cdsProdutosTotalPreco.Value := xProduto.Retorna(xAux).PrecoVenda;
 
                cdsProdutos.Post;
             end;
@@ -686,8 +686,8 @@ begin
 
          Result := True;
       finally
-         if (xListaProduto <> nil) then
-            FreeAndNil(xListaProduto);
+         if (xProduto <> nil) then
+            FreeAndNil(xProduto);
       end;
    except
       on E : Exception do

@@ -655,7 +655,7 @@ begin
 
          if xProduto <> nil then
          begin
-            for xAux := 0 to pred(xProduto.Count) do
+            for xAux := 0 to pred(xProduto.) do
             begin
                cdsProdutos.Append;
                cdsProdutosID.Value := xProduto.Retorna(xAux).Id;
