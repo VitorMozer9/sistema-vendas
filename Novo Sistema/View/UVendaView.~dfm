@@ -572,6 +572,7 @@ object frmVendasView: TfrmVendasView
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
+        OnKeyPress = dbgProdutosKeyPress
         Columns = <
           item
             Expanded = False
@@ -583,33 +584,34 @@ object frmVendasView: TfrmVendasView
             Expanded = False
             FieldName = 'Descricao'
             Title.Caption = 'Descri'#231#227'o'
-            Width = 423
+            Width = 410
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'UniPreco'
             Title.Caption = 'Pre'#231'o Uni.'
-            Width = 72
+            Width = 65
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'UniSaida'
             Title.Caption = 'Unidade de Sa'#237'da'
-            Width = 86
+            Width = 93
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'Quantidade'
-            Width = 75
+            Width = 68
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'TotalPreco'
             Title.Caption = 'Pre'#231'o Total'
+            Width = 75
             Visible = True
           end>
       end

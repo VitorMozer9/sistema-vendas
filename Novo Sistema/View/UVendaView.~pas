@@ -68,6 +68,7 @@ type
     procedure edtCodigoExit(Sender: TObject);
     procedure edtDescontoExit(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);
+    procedure dbgProdutosKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
    vKey : Word;
@@ -79,13 +80,13 @@ type
    procedure LimpaTela;
    procedure DefineEstadoTela;
    procedure CarregaDadosTela;
+   procedure ProcessaItemVenda;
 
 
    function CarregaCliente      : Boolean;
    function ProcessaConfirmacao : Boolean;
    function ProcessaInclusao    : Boolean;
    function ProcessaVenda       : Boolean;
-   function ProcessaItemVenda   : Boolean;
    function ProcessaConsulta    : Boolean;
    function ValidaCampos        : Boolean;
    function InsereDesconto(pDesconto : Double; pValorTotal : Double) : Double;
@@ -633,59 +634,37 @@ begin
    LimpaTela;
 end;
 
-function TfrmVendasView.ProcessaItemVenda: Boolean;
+Procedure TfrmVendasView.ProcessaItemVenda;
 var
-   xAux : Integer;
+   xIDProduto : Integer;
    xProduto : TProduto;
 begin
    try
       try
-         Result := False;
          xProduto := nil;
 
-         if (xProduto <> nil) then
-            FreeAndNil(xProduto);
-
          xProduto := TProduto.Create;
+
+         xIDProduto :=
+            dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger;
          xProduto :=
-            TProdutoController.getInstancia.BuscaProduto(cdsProdutosID.Value);
-
-         cdsProdutos.EmptyDataSet;
-
+            TProdutoController.getInstancia.BuscaProduto(xIDProduto);
 
          if xProduto <> nil then
          begin
-            for xAux := 0 to pred(xProduto.Count) do
-            begin
-               cdsProdutos.Append;
-               cdsProdutosID.Value := xProduto.Retorna(xAux).Id;
-               cdsProdutosDescricao.Value := xProduto.Retorna(xAux).Descricao;
-               cdsProdutosUniPreco.Value  := xProduto.Retorna(xAux).PrecoVenda;
-               cdsProdutosQuantidade.Value := xProduto.Retorna(xAux).QuantidadeEstoque;
-               cdsProdutosTotalPreco.Value := xProduto.Retorna(xAux).PrecoVenda;
-
-               cdsProdutos.Post;
-            end;
-         end;
-
-         if (cdsProdutos.RecordCount = 0) then
-         begin
-            if cdsProdutosID.CanFocus then
-               cdsProdutosID.SetFocus;
-
-            TMessageUtil.Alerta(
-               'Nenhum produto encontrado.');
+            dbgProdutos.DataSource.DataSet.Edit;
+            dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString := xProduto.Descricao;
+            dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat := xProduto.PrecoVenda;
+            dbgProdutos.DataSource.DataSet.FieldByName('UniSaida').AsString := xProduto.Unidade;
+            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat := 1;
+            dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat := xProduto.PrecoVenda;
+            dbgProdutos.DataSource.DataSet.Post;
          end
          else
-         begin
-            cdsProdutos.First;
+            TMessageUtil.Alerta('Nenhum Produto Encontrado para este código');
 
-            if dbgProdutos.CanFocus then
-               dbgProdutos.SetFocus;
-         end;
-
-         Result := True;
       finally
+         //dbgProdutos.SelectedIndex := 4;
          if (xProduto <> nil) then
             FreeAndNil(xProduto);
       end;
@@ -693,10 +672,21 @@ begin
       on E : Exception do
       begin
          raise Exception.Create(
-            'Falha ao processar dados da venda do item [View]'#13 +
+            'Falha ao processar dados da venda do item [View]'+#13 +
             e.Message);
       end;
    end;
+end;
+
+procedure TfrmVendasView.dbgProdutosKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if vKey = VK_RETURN then
+   begin
+      ProcessaItemVenda;
+   end;
+
+   vKey := VK_CLEAR;
 end;
 
 end.

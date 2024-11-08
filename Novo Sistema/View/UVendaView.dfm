@@ -1,6 +1,6 @@
 object frmVendasView: TfrmVendasView
-  Left = 478
-  Top = 110
+  Left = 358
+  Top = 151
   Width = 828
   Height = 478
   BorderIcons = [biSystemMenu, biMinimize]
@@ -572,44 +572,47 @@ object frmVendasView: TfrmVendasView
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
+        OnKeyPress = dbgProdutosKeyPress
         Columns = <
           item
             Expanded = False
             FieldName = 'ID'
             Title.Caption = 'C'#243'digo'
+            Width = 54
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'Descricao'
             Title.Caption = 'Descri'#231#227'o'
-            Width = 423
+            Width = 410
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'UniPreco'
             Title.Caption = 'Pre'#231'o Uni.'
-            Width = 72
+            Width = 65
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'UniSaida'
             Title.Caption = 'Unidade de Sa'#237'da'
-            Width = 86
+            Width = 93
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'Quantidade'
-            Width = 75
+            Width = 68
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'TotalPreco'
             Title.Caption = 'Pre'#231'o Total'
+            Width = 75
             Visible = True
           end>
       end
@@ -624,6 +627,8 @@ object frmVendasView: TfrmVendasView
     Active = True
     Aggregates = <>
     Params = <>
+    AfterPost = cdsProdutosAfterPost
+    BeforeDelete = cdsProdutosBeforeDelete
     Left = 36
     Top = 119
     Data = {

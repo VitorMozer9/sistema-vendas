@@ -40,7 +40,6 @@ type
     edtValor: TNumEdit;
     lblValorTotal: TLabel;
     edtTotalValor: TNumEdit;
-    dbgProdutos: TDBGrid;
     dtsProdutos: TDataSource;
     cdsProdutos: TClientDataSet;
     cdsProdutosID: TIntegerField;
@@ -50,6 +49,7 @@ type
     cdsProdutosQuantidade: TFloatField;
     cdsProdutosTotalPreco: TFloatField;
     btnLimpar: TBitBtn;
+    dbgProdutos: TDBGrid;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnIncluirClick(Sender: TObject);
@@ -68,24 +68,28 @@ type
     procedure edtCodigoExit(Sender: TObject);
     procedure edtDescontoExit(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);
+    procedure dbgProdutosKeyPress(Sender: TObject; var Key: Char);
+    procedure cdsProdutosAfterPost(DataSet: TDataSet);
+    procedure cdsProdutosBeforeDelete(DataSet: TDataSet);
   private
     { Private declarations }
    vKey : Word;
    vEstadoTela : TEstadoTela;
    vObjVenda   : TVenda;
+   vTotalPreco : Double;
 //   vObjColVendaItem : TColVendaItem;
 
    procedure CamposEnable(pOpcao : Boolean);
    procedure LimpaTela;
    procedure DefineEstadoTela;
    procedure CarregaDadosTela;
+   procedure ProcessaItemVenda;
 
 
    function CarregaCliente      : Boolean;
    function ProcessaConfirmacao : Boolean;
    function ProcessaInclusao    : Boolean;
    function ProcessaVenda       : Boolean;
-   function ProcessaItemVenda   : Boolean;
    function ProcessaConsulta    : Boolean;
    function ValidaCampos        : Boolean;
    function InsereDesconto(pDesconto : Double; pValorTotal : Double) : Double;
@@ -217,7 +221,8 @@ begin
    case vKey of
       VK_RETURN:
       begin
-         Perform(WM_NEXTDLGCTL,0,0);
+         //dbgProdutos.SelectedIndex := 4;
+         //Perform(WM_NEXTDLGCTL,0,0);
       end;
 
       VK_ESCAPE:
@@ -249,6 +254,7 @@ begin
    edtValor.Value := 0;
    mskData.Text := EmptyStr;
    edtDesconto.Value := 0;
+   vTotalPreco := 0;
 
    for xI := 0 to pred(ComponentCount) do
    begin
@@ -380,7 +386,7 @@ begin
       vObjVenda.TotalDesconto  := edtDesconto.Value;
       vObjVenda.ValorVenda     := edtValor.Value;
       vObjVenda.DataVenda      := Now;
-      vObjVenda.TotalVenda     := InsereDesconto(edtDesconto.Value, edtValor.Value);
+      vObjVenda.TotalVenda     := InsereDesconto(edtDesconto.Value, edtTotalValor.Value);
       vObjVenda.FormaPagamento := cmbPagamento.Text;
 
       TVendaController.getInstancia.GravaVenda(vObjVenda);
@@ -526,7 +532,7 @@ begin
       cmbPagamento.Text          := vObjVenda.FormaPagamento;
       edtValor.Value             := vObjVenda.ValorVenda;
       edtDesconto.Value          := vObjVenda.TotalDesconto;
-      edtTotalValor.Value        := InsereDesconto(vObjVenda.TotalDesconto, vObjVenda.ValorVenda);
+      edtTotalValor.Value        := InsereDesconto(vObjVenda.TotalDesconto, vObjVenda.TotalVenda);
       btnCancelar.Enabled        := True;
    end;
 end;
@@ -633,59 +639,39 @@ begin
    LimpaTela;
 end;
 
-function TfrmVendasView.ProcessaItemVenda: Boolean;
+Procedure TfrmVendasView.ProcessaItemVenda;
 var
-   xAux : Integer;
+   xIDProduto : Integer;
    xProduto : TProduto;
 begin
    try
       try
-         Result := False;
          xProduto := nil;
 
-         if (xProduto <> nil) then
-            FreeAndNil(xProduto);
-
          xProduto := TProduto.Create;
+
+         xIDProduto :=
+            dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger;
          xProduto :=
-            TProdutoController.getInstancia.BuscaProduto(cdsProdutosID.Value);
-
-         cdsProdutos.EmptyDataSet;
-
+            TProdutoController.getInstancia.BuscaProduto(xIDProduto);
 
          if xProduto <> nil then
          begin
-            for xAux := 0 to pred(xProduto.) do
-            begin
-               cdsProdutos.Append;
-               cdsProdutosID.Value := xProduto.Retorna(xAux).Id;
-               cdsProdutosDescricao.Value := xProduto.Retorna(xAux).Descricao;
-               cdsProdutosUniPreco.Value  := xProduto.Retorna(xAux).PrecoVenda;
-               cdsProdutosQuantidade.Value := xProduto.Retorna(xAux).QuantidadeEstoque;
-               cdsProdutosTotalPreco.Value := xProduto.Retorna(xAux).PrecoVenda;
-
-               cdsProdutos.Post;
-            end;
-         end;
-
-         if (cdsProdutos.RecordCount = 0) then
-         begin
-            if cdsProdutosID.CanFocus then
-               cdsProdutosID.SetFocus;
-
-            TMessageUtil.Alerta(
-               'Nenhum produto encontrado.');
+            dbgProdutos.DataSource.DataSet.Edit;
+            dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString := xProduto.Descricao;
+            dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat := xProduto.PrecoVenda;
+            dbgProdutos.DataSource.DataSet.FieldByName('UniSaida').AsString := xProduto.Unidade;
+            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat := 1;
+            dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat := xProduto.PrecoVenda;
+            dbgProdutos.DataSource.DataSet.Post;
          end
          else
-         begin
-            cdsProdutos.First;
+            TMessageUtil.Alerta('Nenhum Produto Encontrado para este código');
 
-            if dbgProdutos.CanFocus then
-               dbgProdutos.SetFocus;
-         end;
-
-         Result := True;
+//         edtTotalValor.Value :=
+//            dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat;
       finally
+         //dbgProdutos.SetFocus(4);
          if (xProduto <> nil) then
             FreeAndNil(xProduto);
       end;
@@ -693,10 +679,48 @@ begin
       on E : Exception do
       begin
          raise Exception.Create(
-            'Falha ao processar dados da venda do item [View]'#13 +
+            'Falha ao processar dados da venda do item [View]'+#13 +
             e.Message);
       end;
    end;
+end;
+
+procedure TfrmVendasView.dbgProdutosKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if (vKey = VK_RETURN) then
+   begin
+      if (dbgProdutos.SelectedIndex = 0) then
+         ProcessaItemVenda;
+
+      if(dbgProdutos.SelectedIndex = 0) then
+         dbgProdutos.SelectedIndex := 0
+      else
+         dbgProdutos.SelectedIndex := 4;
+
+      if (dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString <> EmptyStr) then
+      begin
+         dbgProdutos.DataSource.DataSet.Append;
+      end;
+
+   end;
+
+   vKey := VK_CLEAR;
+end;
+
+procedure TfrmVendasView.cdsProdutosAfterPost(DataSet: TDataSet);
+begin
+   vTotalPreco :=
+      vTotalPreco + dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat;
+
+      edtTotalValor.Text := FloatToStr(vTotalPreco);
+end;
+
+procedure TfrmVendasView.cdsProdutosBeforeDelete(DataSet: TDataSet);
+begin
+   vTotalPreco := vTotalPreco - dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat;
+
+   edtTotalValor.Text := FloatToStr(vTotalPreco);
 end;
 
 end.
