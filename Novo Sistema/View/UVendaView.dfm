@@ -371,6 +371,7 @@ object frmVendasView: TfrmVendasView
       MaxLength = 3
       ShowSeparator = True
       TabOrder = 1
+      OnChange = edtDescontoChange
       OnExit = edtDescontoExit
     end
     object edtValor: TNumEdit

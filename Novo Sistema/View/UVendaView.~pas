@@ -40,7 +40,6 @@ type
     edtValor: TNumEdit;
     lblValorTotal: TLabel;
     edtTotalValor: TNumEdit;
-    dbgProdutos: TDBGrid;
     dtsProdutos: TDataSource;
     cdsProdutos: TClientDataSet;
     cdsProdutosID: TIntegerField;
@@ -50,6 +49,7 @@ type
     cdsProdutosQuantidade: TFloatField;
     cdsProdutosTotalPreco: TFloatField;
     btnLimpar: TBitBtn;
+    dbgProdutos: TDBGrid;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnIncluirClick(Sender: TObject);
@@ -69,11 +69,15 @@ type
     procedure edtDescontoExit(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);
     procedure dbgProdutosKeyPress(Sender: TObject; var Key: Char);
+    procedure cdsProdutosAfterPost(DataSet: TDataSet);
+    procedure cdsProdutosBeforeDelete(DataSet: TDataSet);
+    procedure edtDescontoChange(Sender: TObject);
   private
     { Private declarations }
    vKey : Word;
    vEstadoTela : TEstadoTela;
    vObjVenda   : TVenda;
+   vTotalPreco : Double;
 //   vObjColVendaItem : TColVendaItem;
 
    procedure CamposEnable(pOpcao : Boolean);
@@ -218,7 +222,8 @@ begin
    case vKey of
       VK_RETURN:
       begin
-         Perform(WM_NEXTDLGCTL,0,0);
+         //dbgProdutos.SelectedIndex := 4;
+         //Perform(WM_NEXTDLGCTL,0,0);
       end;
 
       VK_ESCAPE:
@@ -246,6 +251,7 @@ procedure TfrmVendasView.LimpaTela;
 var
    xI : Integer;
 begin
+   vTotalPreco := 0;
    edtTotalValor.Value := 0;
    edtValor.Value := 0;
    mskData.Text := EmptyStr;
@@ -381,7 +387,7 @@ begin
       vObjVenda.TotalDesconto  := edtDesconto.Value;
       vObjVenda.ValorVenda     := edtValor.Value;
       vObjVenda.DataVenda      := Now;
-      vObjVenda.TotalVenda     := InsereDesconto(edtDesconto.Value, edtValor.Value);
+      vObjVenda.TotalVenda     := edtTotalValor.Value;
       vObjVenda.FormaPagamento := cmbPagamento.Text;
 
       TVendaController.getInstancia.GravaVenda(vObjVenda);
@@ -527,7 +533,7 @@ begin
       cmbPagamento.Text          := vObjVenda.FormaPagamento;
       edtValor.Value             := vObjVenda.ValorVenda;
       edtDesconto.Value          := vObjVenda.TotalDesconto;
-      edtTotalValor.Value        := InsereDesconto(vObjVenda.TotalDesconto, vObjVenda.ValorVenda);
+      edtTotalValor.Value        := InsereDesconto(vObjVenda.TotalDesconto, vObjVenda.TotalVenda);
       btnCancelar.Enabled        := True;
    end;
 end;
@@ -663,8 +669,10 @@ begin
          else
             TMessageUtil.Alerta('Nenhum Produto Encontrado para este código');
 
+//         edtTotalValor.Value :=
+//            dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat;
       finally
-         //dbgProdutos.SelectedIndex := 4;
+         //dbgProdutos.SetFocus(4);
          if (xProduto <> nil) then
             FreeAndNil(xProduto);
       end;
@@ -681,12 +689,56 @@ end;
 procedure TfrmVendasView.dbgProdutosKeyPress(Sender: TObject;
   var Key: Char);
 begin
-   if vKey = VK_RETURN then
+   if (vKey = VK_RETURN) then
    begin
-      ProcessaItemVenda;
+      if (dbgProdutos.SelectedIndex = 0) then
+         ProcessaItemVenda;
+
+      if(dbgProdutos.SelectedIndex = 0) then
+         dbgProdutos.SelectedIndex := 0
+      else
+         dbgProdutos.SelectedIndex := 4;
+
+      if (dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString <> EmptyStr) then
+      begin
+         dbgProdutos.DataSource.DataSet.Append;
+      end;
+
    end;
 
    vKey := VK_CLEAR;
+end;
+
+procedure TfrmVendasView.cdsProdutosAfterPost(DataSet: TDataSet);
+begin
+   vTotalPreco :=
+      vTotalPreco + dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat;
+
+      edtTotalValor.Value := vTotalPreco;
+end;
+
+procedure TfrmVendasView.cdsProdutosBeforeDelete(DataSet: TDataSet);
+begin
+   vTotalPreco := vTotalPreco - dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat;
+
+   edtTotalValor.Value := vTotalPreco;
+end;
+
+procedure TfrmVendasView.edtDescontoChange(Sender: TObject);
+var
+   xDesconto : Double;
+begin
+   if (vTotalPreco = 0) then
+      vTotalPreco := edtTotalValor.Value;
+
+   if (edtDesconto.Value <> 0) then
+   begin
+      xDesconto := vTotalPreco * (edtDesconto.Value / 100);
+
+      edtTotalValor.Value := vTotalPreco - xDesconto;
+   end
+   else
+      edtTotalValor.Value := vTotalPreco;
 end;
 
 end.
