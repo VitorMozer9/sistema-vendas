@@ -1,6 +1,6 @@
 object frmVendasView: TfrmVendasView
-  Left = 358
-  Top = 151
+  Left = 326
+  Top = 170
   Width = 828
   Height = 478
   BorderIcons = [biSystemMenu, biMinimize]
@@ -323,16 +323,16 @@ object frmVendasView: TfrmVendasView
       Caption = 'Desconto (%)'
     end
     object lblValor: TLabel
-      Left = 485
-      Top = 21
-      Width = 30
+      Left = 461
+      Top = 20
+      Width = 85
       Height = 13
-      Caption = 'Valor'
+      Caption = 'Valor Descontado'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
     end
     object lblValorTotal: TLabel
@@ -375,7 +375,7 @@ object frmVendasView: TfrmVendasView
       OnExit = edtDescontoExit
     end
     object edtValor: TNumEdit
-      Left = 520
+      Left = 549
       Top = 14
       Width = 81
       Height = 21
@@ -523,6 +523,7 @@ object frmVendasView: TfrmVendasView
         Width = 37
         Height = 21
         TabOrder = 2
+        OnChange = edtCodigoChange
         OnExit = edtCodigoExit
         OnKeyDown = edtCodigoKeyDown
       end
