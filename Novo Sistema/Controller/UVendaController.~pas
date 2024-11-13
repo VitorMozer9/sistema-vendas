@@ -37,7 +37,7 @@ begin
 
          xVendaDAO := TVendaDAO.Create(TConexao.getInstance.getConn);
 
-         Result := xVendaDAO.Retorna(RetornaCondicaoProduto(pID));
+         Result := xVendaDAO.Retorna(RetornaCondicaoVenda(pID));
 
       finally
          if (xVendaDAO <> nil) then
@@ -96,4 +96,15 @@ begin
        end;
    end;
 end;
+function TVendaController.RetornaCondicaoVenda(pId: Integer): String;
+var
+   xChave : string;
+begin
+    xChave := 'ID';
+
+   Result :=
+   'WHERE                                             '#13+
+   '    '+xChave+ ' = ' + QuotedStr(IntToStr(pId))+ ' '#13;
+end;
+
 end.

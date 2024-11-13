@@ -47,7 +47,7 @@ begin
       on E : Exception do
       begin
          raise Exception.Create(
-            'Falha ao buscar dados do produto[Controller]: '#13 +
+            'Falha ao buscar dados da venda[Controller]: '#13 +
             e.Message);
       end;
    end;

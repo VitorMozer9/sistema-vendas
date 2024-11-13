@@ -11,23 +11,25 @@ type
          vID_Venda       : Integer;
          vID_Produto     : Integer;
          vQuantidade     : Double;
-         vUnidadeSaida : String;
+         vUnidadeSaida   : String;
          vValorDesconto  : Double;
          vValorUnitario  : Double;
          vTotalItem      : Double;
+         vDescricao_Produto : String;
 
    public
          constructor Create;
 
    published
          property ID             : Integer read vID write vID;
-         property ID_Venda     : Integer read vID_Venda write vID_Venda;
+         property ID_Venda       : Integer read vID_Venda write vID_Venda;
          property ID_Produto     : Integer read vID_Produto write vID_Produto;
          property Quantidade     : Double read vQuantidade write vQuantidade;
-         property UnidadeSaida : String read vUnidadeSaida write vUnidadeSaida;
+         property UnidadeSaida   : String read vUnidadeSaida write vUnidadeSaida;
          property ValorDesconto  : Double read vValorDesconto write vValorDesconto;
          property ValorUnitario  : Double read vValorUnitario write vValorUnitario;
          property TotalItem      : Double read vTotalItem write vTotalItem;
+         property Descricao_Produto : String read vDescricao_Produto write vDescricao_Produto;
 
    end;
 
@@ -63,6 +65,7 @@ begin
    Self.ValorDesconto  := 0;
    Self.ValorUnitario  := 0;
    Self.TotalItem      := 0;
+   Self.vDescricao_Produto := EmptyStr
 end;
 
 end.

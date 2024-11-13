@@ -2,12 +2,14 @@ unit UVendaItemController;
 
 interface
 
-uses SysUtils, Math, StrUtils, UConexao, UVendaItem, SqlExpr,UClassFuncoes;
+uses SysUtils, Math, StrUtils, UConexao, UVendaItem, SqlExpr,UClassFuncoes, UProduto,
+   UProdutoController, UVenda;
 
 type
    TVendaItemController = class
       public
          constructor Create;
+         function GravaVendaItem(pVendaItem : TVendaItem) : Boolean;
 
       published
          class function getInstancia : TVendaItemController;
@@ -15,7 +17,7 @@ type
 
 implementation
 
-uses UVendaItemDAO;
+uses UVendaItemDAO, UProdutoDAO;
 
 var
    _instance : TVendaItemController;
@@ -33,6 +35,36 @@ begin
       _instance := TVendaItemController.Create;
 
    Result := _instance;
+end;
+
+function TVendaItemController.GravaVendaItem(pVendaItem : TVendaItem): Boolean;
+var
+   xVendaItemDAO : TVendaItemDAO;
+begin
+   try
+      try
+         TConexao.get.iniciaTransacao;
+         Result := False;
+         xVendaItemDAO := nil;
+         xVendaItemDAO := TVendaItemDAO.Create(TConexao.get.getConn);
+
+         if (pVendaItem.ID = 0) then
+            xVendaItemDAO.Insere(pVendaItem);
+
+         TConexao.get.confirmaTransacao;
+      finally
+         if (xVendaItemDAO <> nil) then
+            FreeAndNil(xVendaItemDAO)
+      end
+   except
+      on E: Exception do
+       begin
+         TConexao.get.cancelaTransacao;
+         Raise Exception.Create(
+            'Falha ao gravar dados do Item Venda. [Controller]'+ #13 +
+            e.Message);
+       end;
+   end;
 end;
 
 end.

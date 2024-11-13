@@ -76,9 +76,10 @@ type
   private
     { Private declarations }
    vKey : Word;
-   vEstadoTela : TEstadoTela;
-   vObjVenda   : TVenda;
-   vTotalPreco : Double;
+   vEstadoTela   : TEstadoTela;
+   vObjVenda     : TVenda;
+   vObjVendaItem : TVendaItem;
+   vTotalPreco   : Double;
 //   vObjColVendaItem : TColVendaItem;
 
    procedure CamposEnable(pOpcao : Boolean);
@@ -86,13 +87,14 @@ type
    procedure DefineEstadoTela;
    procedure CarregaDadosTela;
    procedure CarregaProduto;
-   procedure ProcessaItemVenda;
+   procedure ProcessaProdutoVenda;
 
 
    function CarregaCliente      : Boolean;
    function ProcessaConfirmacao : Boolean;
    function ProcessaInclusao    : Boolean;
    function ProcessaVenda       : Boolean;
+   function ProcessaVendaItem   : Boolean;
    function ProcessaConsulta    : Boolean;
    function ValidaCampos        : Boolean;
    function PesquisaProduto(pKey : Word; pIDproduto : Integer) : Boolean;
@@ -345,7 +347,7 @@ begin
     Result := False;
    try
       try
-        if ProcessaVenda then
+        if (ProcessaVenda) and (ProcessaVendaItem)  then
         begin
            TMessageUtil.Informacao('Venda cadastrada com sucesso'#13 +
              'Código cadastrado: ' + IntToStr(vObjVenda.ID));
@@ -442,14 +444,14 @@ begin
          exit;
    end;
 
-   if CompareValue(edtValor.Value,0,0.001) = EqualsValue then
+   if (dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger = 0) then
    begin
       TMessageUtil.Alerta(
-         'O valor da venda não pode ficar em branco. ');
+         'O código do produto a ser vendido não pode ficar em branco.  ');
 
-      if (edtValor.CanFocus) then
-         edtValor.SetFocus;
-         exit;
+      dbgProdutos.SetFocus;
+      dbgProdutos.SelectedIndex := 0;
+      exit;
    end;
 
 
@@ -498,6 +500,10 @@ begin
          TVendaController.getInstancia.BuscaVenda(
             StrToIntDef(edtNumeroVenda.Text, 0));
 
+      vObjVendaItem :=
+         TVendaItemController.getInstancia.BuscaVendaItem(
+            StrToIntDef(edtNumeroVenda.Text, 0));
+
       if (vObjVenda <> nil) then
       begin
          CarregaDadosTela;
@@ -537,8 +543,22 @@ begin
       cmbPagamento.Text          := vObjVenda.FormaPagamento;
       edtValor.Value             := vObjVenda.ValorVenda;
       edtDesconto.Value          := vObjVenda.TotalDesconto;
-      edtTotalValor.Value        := InsereDesconto(vObjVenda.TotalDesconto, vObjVenda.TotalVenda);
+      edtTotalValor.Value        := vObjVenda.TotalVenda;
       btnCancelar.Enabled        := True;
+   end;
+
+   if (vObjVendaItem = nil) then
+      exit
+   else
+   begin
+      dbgProdutos.DataSource.DataSet.Edit;
+      dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger       := vObjVendaItem.ID_Produto;
+      dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString := vObjVendaItem.Descricao_Produto;
+      dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat   := vObjVendaItem.ValorUnitario;
+      dbgProdutos.DataSource.DataSet.FieldByName('UniSaida').AsString  := vObjVendaItem.UnidadeSaida;
+      dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat := vObjVendaItem.Quantidade;
+      dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat := vObjVendaItem.TotalItem;
+      dbgProdutos.DataSource.DataSet.Post;
    end;
 end;
 
@@ -644,7 +664,7 @@ begin
    LimpaTela;
 end;
 
-Procedure TfrmVendasView.ProcessaItemVenda;
+Procedure TfrmVendasView.ProcessaProdutoVenda;
 var
    xIDProduto : Integer;
    xProduto : TProduto;
@@ -652,7 +672,6 @@ begin
    try
       try
          xProduto := nil;
-
          xProduto := TProduto.Create;
 
          xIDProduto :=
@@ -677,11 +696,7 @@ begin
 //         else
 //            TMessageUtil.Alerta('Nenhum Produto Encontrado para este código');
 
-//         edtTotalValor.Value :=
-//            dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat;
-
       finally
-         //dbgProdutos.SetFocus(4);
          if (xProduto <> nil) then
             FreeAndNil(xProduto);
       end;
@@ -702,7 +717,7 @@ begin
    begin
       if (dbgProdutos.SelectedIndex = 0) then
       begin
-         ProcessaItemVenda;
+         ProcessaProdutoVenda;
          dbgProdutos.SelectedIndex := 4;
          exit;
       end;
@@ -711,7 +726,7 @@ begin
          and (dbgProdutos.SelectedIndex = 4) then
       begin
          dbgProdutos.DataSource.DataSet.Append;
-         dbgProdutos.SelectedIndex := 0
+         dbgProdutos.SelectedIndex := 0;
       end;
    end;
 
@@ -844,6 +859,58 @@ begin
    finally
       if (xProduto <> nil) then
          FreeAndNil(xProduto);
+   end;
+end;
+
+function TfrmVendasView.ProcessaVendaItem: Boolean;
+var
+   xPrecoTotal : Double;
+begin
+   try
+      try
+         Result := False;
+         vObjVendaItem := nil;
+         xPrecoTotal := 0;
+
+         xPrecoTotal :=
+            dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat *
+            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
+
+         if not ValidaCampos then
+            exit;
+
+         if vEstadoTela = etIncluir then
+         begin
+            if vObjVendaItem = nil then
+               vObjVendaItem := TVendaItem.Create;
+         end;
+
+         if (vObjVendaItem = nil) then
+            Exit;
+
+         vObjVendaItem.ID_Venda      := vObjVenda.ID;
+         vObjVendaItem.ID_Produto    := dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger;
+         vObjVendaItem.Quantidade    := dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
+         vObjVendaItem.UnidadeSaida  := dbgProdutos.DataSource.DataSet.FieldByName('UniSaida').AsString;
+         vObjVendaItem.Descricao_Produto  := dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString;
+         vObjVendaItem.ValorDesconto := edtValor.Value;
+         vObjVendaItem.ValorUnitario := dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat;
+         vObjVendaItem.TotalItem     := xPrecoTotal;
+
+         TVendaItemController.getInstancia.GravaVendaItem(vObjVendaItem);
+
+         Result := True;
+      finally
+         if (vObjVendaItem <> nil) then
+            FreeAndNil(vObjVendaItem);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+         'Falha ao processar os dados do produto vendido[View]'#13 +
+         e.Message);
+      end;
    end;
 end;
 
