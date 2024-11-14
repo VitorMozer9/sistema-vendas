@@ -9,7 +9,11 @@ type
    TVendaItemController = class
       public
          constructor Create;
-         function GravaVendaItem(pVendaItem : TVendaItem) : Boolean;
+         function GravaVendaItem(pVendaItem : TVendaItem;
+            pColVendaItem : TColVendaItem) : Boolean;
+
+         function BuscaVendaItem(pID_Venda : Integer) : TColVendaItem;
+         function RetornaCondicaoVendaItem(pID_Venda : Integer) : String;
 
       published
          class function getInstancia : TVendaItemController;
@@ -24,6 +28,32 @@ var
 
 { TVendaItemController }
 
+function TVendaItemController.BuscaVendaItem(pID_Venda: Integer): TColVendaItem;
+var
+   xVendaItemDAO : TVendaItemDAO;
+begin
+   try
+      try
+         Result := nil;
+
+         xVendaItemDAO := TVendaItemDAO.Create(TConexao.getInstance.getConn);
+
+         Result := xVendaItemDAO.RetornaLista(RetornaCondicaoVendaItem(pID_Venda));
+
+      finally
+         if (xVendaItemDAO <> nil) then
+            FreeAndNil(xVendaItemDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao buscar dados do produto[Controller]: '#13 +
+            e.Message);
+      end;
+   end;
+end;
+
 constructor TVendaItemController.Create;
 begin
    inherited Create;
@@ -37,9 +67,11 @@ begin
    Result := _instance;
 end;
 
-function TVendaItemController.GravaVendaItem(pVendaItem : TVendaItem): Boolean;
+function TVendaItemController.GravaVendaItem(pVendaItem : TVendaItem;
+   pColVendaItem : TColVendaItem): Boolean;
 var
    xVendaItemDAO : TVendaItemDAO;
+   xAux          : Integer;
 begin
    try
       try
@@ -49,7 +81,12 @@ begin
          xVendaItemDAO := TVendaItemDAO.Create(TConexao.get.getConn);
 
          if (pVendaItem.ID = 0) then
-            xVendaItemDAO.Insere(pVendaItem);
+         begin
+            for xAux := 0 to pred(pColVendaItem.Count) do
+              pColVendaItem.Retorna(xAux).ID_Venda := pVendaItem.Id; //amarra entre as tabelas
+
+           xVendaItemDAO.InsereLista(pColVendaItem);
+         end;
 
          TConexao.get.confirmaTransacao;
       finally
@@ -65,6 +102,18 @@ begin
             e.Message);
        end;
    end;
+end;
+
+function TVendaItemController.RetornaCondicaoVendaItem(
+  pID_Venda: Integer): String;
+var
+   xChave : String;
+begin
+   xChave := 'ID_VENDA';
+
+   Result :=
+   'WHERE                                                   '#13+
+   '    '+xChave+ ' = ' + QuotedStr(IntToStr(pID_Venda))+ ' '#13;
 end;
 
 end.

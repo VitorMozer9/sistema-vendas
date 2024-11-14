@@ -9,8 +9,9 @@ type
    TVendaItemController = class
       public
          constructor Create;
-         function GravaVendaItem(pVendaItem : TVendaItem) : Boolean;
-         function BuscaVendaItem(pID_Venda : Integer) : TVendaItem;
+         function GravaVendaItem(pColVendaItem : TColVendaItem) : Boolean;
+
+         function BuscaVendaItem(pID_Venda : Integer) : TColVendaItem;
          function RetornaCondicaoVendaItem(pID_Venda : Integer) : String;
 
       published
@@ -26,7 +27,7 @@ var
 
 { TVendaItemController }
 
-function TVendaItemController.BuscaVendaItem(pID_Venda: Integer): TVendaItem;
+function TVendaItemController.BuscaVendaItem(pID_Venda: Integer): TColVendaItem;
 var
    xVendaItemDAO : TVendaItemDAO;
 begin
@@ -36,7 +37,7 @@ begin
 
          xVendaItemDAO := TVendaItemDAO.Create(TConexao.getInstance.getConn);
 
-         Result := xVendaItemDAO.Retorna(RetornaCondicaoVendaItem(pID_Venda));
+         Result := xVendaItemDAO.RetornaLista(RetornaCondicaoVendaItem(pID_Venda));
 
       finally
          if (xVendaItemDAO <> nil) then
@@ -65,9 +66,10 @@ begin
    Result := _instance;
 end;
 
-function TVendaItemController.GravaVendaItem(pVendaItem : TVendaItem): Boolean;
+function TVendaItemController.GravaVendaItem(pColVendaItem : TColVendaItem): Boolean;
 var
    xVendaItemDAO : TVendaItemDAO;
+   xAux          : Integer;
 begin
    try
       try
@@ -76,8 +78,8 @@ begin
          xVendaItemDAO := nil;
          xVendaItemDAO := TVendaItemDAO.Create(TConexao.get.getConn);
 
-         if (pVendaItem.ID = 0) then
-            xVendaItemDAO.Insere(pVendaItem);
+         if (pColVendaItem.Retorna(0).ID = 0) then
+            xVendaItemDAO.InsereLista(pColVendaItem);
 
          TConexao.get.confirmaTransacao;
       finally

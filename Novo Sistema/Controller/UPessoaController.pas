@@ -52,7 +52,7 @@ begin
          xEnderecoDAO :=
             TEnderecoDAO.Create(TConexao.getInstance.getConn);
 
-            Result :=
+         Result :=
             xEnderecoDAO.RetornaLista(RetornaCondicaoPessoa(pID_Pessoa, True));
 
       finally
@@ -184,7 +184,6 @@ begin
               pColEndereco.Retorna(xAux).ID_Pessoa := pPessoa.Id; //amarra entre as tabelas
 
            xEnderecoDAO.InsereLista(pColEndereco);
-
         end
         else
         begin

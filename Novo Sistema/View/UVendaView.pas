@@ -78,7 +78,7 @@ type
    vKey : Word;
    vEstadoTela   : TEstadoTela;
    vObjVenda     : TVenda;
-   vObjVendaItem : TVendaItem;
+   vObjColVendaItem : TColVendaItem;
    vTotalPreco   : Double;
 //   vObjColVendaItem : TColVendaItem;
 
@@ -228,7 +228,11 @@ begin
    case vKey of
       VK_RETURN:
       begin
-         //dbgProdutos.SelectedIndex := 4;
+//         if (edtNome.Text <> EmptyStr) then
+//         begin
+//            dbgProdutos.SetFocus;
+//            dbgProdutos.SelectedIndex := 0;
+//         end;
          //Perform(WM_NEXTDLGCTL,0,0);
       end;
 
@@ -500,7 +504,7 @@ begin
          TVendaController.getInstancia.BuscaVenda(
             StrToIntDef(edtNumeroVenda.Text, 0));
 
-      vObjVendaItem :=
+      vObjColVendaItem :=
          TVendaItemController.getInstancia.BuscaVendaItem(
             StrToIntDef(edtNumeroVenda.Text, 0));
 
@@ -532,6 +536,8 @@ begin
 end;
 
 procedure TfrmVendasView.CarregaDadosTela;
+var
+   xAux : Integer;
 begin
    if (vObjVenda = nil) and (frmClientesPesq.mClienteID <> 0) then
       CarregaCliente
@@ -547,18 +553,21 @@ begin
       btnCancelar.Enabled        := True;
    end;
 
-   if (vObjVendaItem = nil) then
+   if (vObjColVendaItem = nil) then
       exit
    else
    begin
-      dbgProdutos.DataSource.DataSet.Edit;
-      dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger       := vObjVendaItem.ID_Produto;
-      dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString := vObjVendaItem.Descricao_Produto;
-      dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat   := vObjVendaItem.ValorUnitario;
-      dbgProdutos.DataSource.DataSet.FieldByName('UniSaida').AsString  := vObjVendaItem.UnidadeSaida;
-      dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat := vObjVendaItem.Quantidade;
-      dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat := vObjVendaItem.TotalItem;
-      dbgProdutos.DataSource.DataSet.Post;
+      for xAux := 0 to pred(vObjColVendaItem.Count) do
+      begin
+         cdsProdutos.Append;
+         cdsProdutosID.Value         := vObjColVendaItem.Retorna(xAux).ID_Produto;
+         cdsProdutosDescricao.Value  := vObjColVendaItem.Retorna(xAux).Descricao_Produto;
+         cdsProdutosUniPreco.Value   := vObjColVendaItem.Retorna(xAux).ValorUnitario;
+         cdsProdutosUniSaida.Value   := vObjColVendaItem.Retorna(xAux).UnidadeSaida;
+         cdsProdutosQuantidade.Value := vObjColVendaItem.Retorna(xAux).Quantidade;
+         cdsProdutosTotalPreco.Value := vObjColVendaItem.Retorna(xAux).TotalItem;
+         cdsProdutos.Post;
+      end;
    end;
 end;
 
@@ -597,7 +606,14 @@ begin
          Screen.Cursor := crDefault;
       end
       else
+      begin
          CarregaCliente;
+         if (edtCodigo.Text <> EmptyStr) then
+         begin
+            dbgProdutos.SelectedIndex := 0;
+            dbgProdutos.SetFocus;
+         end;
+      end;
    end;
    vKey := VK_CLEAR;
 end;
@@ -776,15 +792,24 @@ begin
    if (vTotalPreco = 0) then
       vTotalPreco := edtTotalValor.Value;
 
+   vTotalPreco := 0;
+
+   cdsProdutos.First;
+   while not cdsProdutos.Eof do
+   begin
+      vTotalPreco := vTotalPreco + (cdsProdutosQuantidade.Value * cdsProdutosUniPreco.Value);
+      cdsProdutos.Next;
+   end;
+
    if (edtDesconto.Value <> 0) then
    begin
       xDesconto := vTotalPreco * (edtDesconto.Value / 100);
-
-      edtTotalValor.Value := (vTotalPreco - xDesconto) * dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
-      edtValor.Value := xDesconto * dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
+      edtTotalValor.Value := (vTotalPreco - xDesconto);
    end
    else
-      edtTotalValor.Value := vTotalPreco * dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
+      edtTotalValor.Value := vTotalPreco;
+
+   edtValor.Value := xDesconto;
 
    if (edtDesconto.Value = 0) then
       edtValor.Value := 0;
@@ -864,12 +889,14 @@ end;
 
 function TfrmVendasView.ProcessaVendaItem: Boolean;
 var
+   xVendaItem  : TVendaItem;
    xPrecoTotal : Double;
 begin
    try
       try
          Result := False;
-         vObjVendaItem := nil;
+         xVendaItem := nil;
+         vObjColVendaItem := nil;
          xPrecoTotal := 0;
 
          xPrecoTotal :=
@@ -881,28 +908,42 @@ begin
 
          if vEstadoTela = etIncluir then
          begin
-            if vObjVendaItem = nil then
-               vObjVendaItem := TVendaItem.Create;
+            if (xVendaItem = nil) then
+               xVendaItem := TVendaItem.Create;
+
+            if vObjColVendaItem = nil then
+               vObjColVendaItem := TColVendaItem.Create;
          end;
 
-         if (vObjVendaItem = nil) then
+         if (xVendaItem = nil) then
             Exit;
 
-         vObjVendaItem.ID_Venda      := vObjVenda.ID;
-         vObjVendaItem.ID_Produto    := dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger;
-         vObjVendaItem.Quantidade    := dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
-         vObjVendaItem.UnidadeSaida  := dbgProdutos.DataSource.DataSet.FieldByName('UniSaida').AsString;
-         vObjVendaItem.Descricao_Produto  := dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString;
-         vObjVendaItem.ValorDesconto := edtValor.Value;
-         vObjVendaItem.ValorUnitario := dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat;
-         vObjVendaItem.TotalItem     := xPrecoTotal;
+         cdsProdutos.First;
+         while not cdsProdutos.Eof do
+         begin
+            xVendaItem := TVendaItem.Create;
 
-         TVendaItemController.getInstancia.GravaVendaItem(vObjVendaItem);
+            xVendaItem.ID_Venda      := vObjVenda.ID;
+            xVendaItem.ID_Produto    := dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger;
+            xVendaItem.Quantidade    := dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
+            xVendaItem.UnidadeSaida  := dbgProdutos.DataSource.DataSet.FieldByName('UniSaida').AsString;
+            xVendaItem.Descricao_Produto  := dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString;
+            xVendaItem.ValorDesconto := edtValor.Value;
+            xVendaItem.ValorUnitario := dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat;
+            xVendaItem.TotalItem     := xPrecoTotal;
+
+            vObjColVendaItem.Adiciona(xVendaItem);
+            cdsProdutos.Next;
+         end;
+         TVendaItemController.getInstancia.GravaVendaItem(vObjColVendaItem);
 
          Result := True;
       finally
-         if (vObjVendaItem <> nil) then
-            FreeAndNil(vObjVendaItem);
+         if (xVendaItem <> nil) then
+            FreeAndNil(xVendaItem);
+
+         if (vObjColVendaItem <> nil) then
+            FreeAndNil(vObjColVendaItem);
       end;
    except
       on E : Exception do
