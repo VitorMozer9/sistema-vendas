@@ -1,6 +1,6 @@
 object fmPrincipal: TfmPrincipal
-  Left = -8
-  Top = -8
+  Left = -12
+  Top = 19
   Width = 1382
   Height = 744
   Caption = 'Novo Sistema'

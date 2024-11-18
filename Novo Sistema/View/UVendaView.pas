@@ -262,7 +262,7 @@ var
    xI : Integer;
 begin
    vTotalPreco := 0;
-   edtTotalValor.Value := 0;
+//   edtTotalValor.Value := 0;
    edtValor.Value := 0;
    mskData.Text := EmptyStr;
    edtDesconto.Value := 0;
@@ -272,6 +272,8 @@ begin
      if (Components[xI] is TEdit) then
         (Components[xI] as TEdit).Text := EmptyStr;
 
+     if (edtTotalValor.Value <> 0) then
+      edtTotalValor.Value := 0;
 
      if (Components[xI] is TComboBox) then
       begin
@@ -399,6 +401,7 @@ begin
       vObjVenda.DataVenda      := Now;
       vObjVenda.TotalVenda     := edtTotalValor.Value;
       vObjVenda.FormaPagamento := cmbPagamento.Text;
+      vObjVenda.NomeCliente    := edtNome.Text;
 
       TVendaController.getInstancia.GravaVenda(vObjVenda);
 
@@ -623,7 +626,7 @@ function TfrmVendasView.CarregaCliente: Boolean;
 var
    xPessoa : TPessoa;
 begin
-   try
+   try                                                    //count
       Result := False;
       xPessoa := TPessoa.Create;
 
@@ -709,8 +712,6 @@ begin
             dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat := (xProduto.PrecoVenda);
             dbgProdutos.DataSource.DataSet.Post;
          end;
-//         else
-//            TMessageUtil.Alerta('Nenhum Produto Encontrado para este código');
 
       finally
          if (xProduto <> nil) then
@@ -756,20 +757,23 @@ begin
    vTotalPreco := 0;
    dbgProdutos.DataSource.DataSet.DisableControls;
    try
-      dbgProdutos.DataSource.DataSet.First;
-      while not dbgProdutos.DataSource.DataSet.Eof do
+      if vEstadoTela = etIncluir then
       begin
-         xPrecoProduto := dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat;
-         xQuantidade := dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
-         xTotalProduto := xPrecoProduto * xQuantidade;
-         vTotalPreco := vTotalPreco + xTotalProduto;
-         dbgProdutos.DataSource.DataSet.Next;
+         dbgProdutos.DataSource.DataSet.First;
+         while not dbgProdutos.DataSource.DataSet.Eof do
+         begin
+            xPrecoProduto := dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat;
+            xQuantidade := dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
+            xTotalProduto := xPrecoProduto * xQuantidade;
+            vTotalPreco := vTotalPreco + xTotalProduto;
+            dbgProdutos.DataSource.DataSet.Next;
+
+            edtTotalValor.Value := vTotalPreco;
+         end;
       end;
    finally
       dbgProdutos.DataSource.DataSet.EnableControls;
    end;
-
-   edtTotalValor.Value := vTotalPreco;
 end;
 
 procedure TfrmVendasView.cdsProdutosBeforeDelete(DataSet: TDataSet);
@@ -809,9 +813,10 @@ begin
    else
       edtTotalValor.Value := vTotalPreco;
 
-   edtValor.Value := xDesconto;
+   if (vEstadoTela = etIncluir) then
+      edtValor.Value := xDesconto;
 
-   if (edtDesconto.Value = 0) then
+   if (vEstadoTela = etIncluir) and (edtDesconto.Value = 0) then
       edtValor.Value := 0;
 end;
 
@@ -890,18 +895,12 @@ end;
 function TfrmVendasView.ProcessaVendaItem: Boolean;
 var
    xVendaItem  : TVendaItem;
-   xPrecoTotal : Double;
 begin
    try
       try
          Result := False;
          xVendaItem := nil;
          vObjColVendaItem := nil;
-         xPrecoTotal := 0;
-
-         xPrecoTotal :=
-            dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat *
-            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
 
          if not ValidaCampos then
             exit;
@@ -930,7 +929,7 @@ begin
             xVendaItem.Descricao_Produto  := dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString;
             xVendaItem.ValorDesconto := edtValor.Value;
             xVendaItem.ValorUnitario := dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat;
-            xVendaItem.TotalItem     := xPrecoTotal;
+            xVendaItem.TotalItem     := dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat; //xPrecoTotal;
 
             vObjColVendaItem.Adiciona(xVendaItem);
             cdsProdutos.Next;

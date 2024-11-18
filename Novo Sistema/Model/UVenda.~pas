@@ -15,6 +15,7 @@ type
          vValorVenda     : Double;
          vTotalDesconto  : Double;
          vTotalVenda     : Double;
+         vFormaPagamento : String;
 
       public
          constructor Create;
@@ -27,6 +28,7 @@ type
          property ValorVenda     : Double read vValorVenda write vValorVenda;
          property TotalDesconto  : Double read vTotalDesconto write vTotalDesconto;
          property TotalVenda     : Double read vTotalVenda write vTotalVenda;
+         property FormaPagamento : String read vFormaPagamento write vFormaPagamento;
 
    end;
 
@@ -61,5 +63,6 @@ begin
    Self.vValorVenda      := 0;
    Self.vTotalDesconto   := 0;
    Self.vTotalVenda      := 0;
+   self.vFormaPagamento  := EmptyStr;
 end;
 end.

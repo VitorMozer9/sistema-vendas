@@ -228,7 +228,11 @@ begin
    case vKey of
       VK_RETURN:
       begin
-         //dbgProdutos.SelectedIndex := 4;
+//         if (edtNome.Text <> EmptyStr) then
+//         begin
+//            dbgProdutos.SetFocus;
+//            dbgProdutos.SelectedIndex := 0;
+//         end;
          //Perform(WM_NEXTDLGCTL,0,0);
       end;
 
@@ -258,7 +262,7 @@ var
    xI : Integer;
 begin
    vTotalPreco := 0;
-   edtTotalValor.Value := 0;
+//   edtTotalValor.Value := 0;
    edtValor.Value := 0;
    mskData.Text := EmptyStr;
    edtDesconto.Value := 0;
@@ -268,6 +272,8 @@ begin
      if (Components[xI] is TEdit) then
         (Components[xI] as TEdit).Text := EmptyStr;
 
+     if (edtTotalValor.Value <> 0) then
+      edtTotalValor.Value := 0;
 
      if (Components[xI] is TComboBox) then
       begin
@@ -602,7 +608,14 @@ begin
          Screen.Cursor := crDefault;
       end
       else
+      begin
          CarregaCliente;
+         if (edtCodigo.Text <> EmptyStr) then
+         begin
+            dbgProdutos.SelectedIndex := 0;
+            dbgProdutos.SetFocus;
+         end;
+      end;
    end;
    vKey := VK_CLEAR;
 end;
@@ -698,8 +711,6 @@ begin
             dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat := (xProduto.PrecoVenda);
             dbgProdutos.DataSource.DataSet.Post;
          end;
-//         else
-//            TMessageUtil.Alerta('Nenhum Produto Encontrado para este código');
 
       finally
          if (xProduto <> nil) then
@@ -745,20 +756,23 @@ begin
    vTotalPreco := 0;
    dbgProdutos.DataSource.DataSet.DisableControls;
    try
-      dbgProdutos.DataSource.DataSet.First;
-      while not dbgProdutos.DataSource.DataSet.Eof do
+      if vEstadoTela = etIncluir then
       begin
-         xPrecoProduto := dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat;
-         xQuantidade := dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
-         xTotalProduto := xPrecoProduto * xQuantidade;
-         vTotalPreco := vTotalPreco + xTotalProduto;
-         dbgProdutos.DataSource.DataSet.Next;
+         dbgProdutos.DataSource.DataSet.First;
+         while not dbgProdutos.DataSource.DataSet.Eof do
+         begin
+            xPrecoProduto := dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat;
+            xQuantidade := dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
+            xTotalProduto := xPrecoProduto * xQuantidade;
+            vTotalPreco := vTotalPreco + xTotalProduto;
+            dbgProdutos.DataSource.DataSet.Next;
+
+            edtTotalValor.Value := vTotalPreco;
+         end;
       end;
    finally
       dbgProdutos.DataSource.DataSet.EnableControls;
    end;
-
-   edtTotalValor.Value := vTotalPreco;
 end;
 
 procedure TfrmVendasView.cdsProdutosBeforeDelete(DataSet: TDataSet);
@@ -781,17 +795,27 @@ begin
    if (vTotalPreco = 0) then
       vTotalPreco := edtTotalValor.Value;
 
+   vTotalPreco := 0;
+
+   cdsProdutos.First;
+   while not cdsProdutos.Eof do
+   begin
+      vTotalPreco := vTotalPreco + (cdsProdutosQuantidade.Value * cdsProdutosUniPreco.Value);
+      cdsProdutos.Next;
+   end;
+
    if (edtDesconto.Value <> 0) then
    begin
       xDesconto := vTotalPreco * (edtDesconto.Value / 100);
-
-      edtTotalValor.Value := (vTotalPreco - xDesconto) * dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
-      edtValor.Value := xDesconto * dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
+      edtTotalValor.Value := (vTotalPreco - xDesconto);
    end
    else
-      edtTotalValor.Value := vTotalPreco * dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
+      edtTotalValor.Value := vTotalPreco;
 
-   if (edtDesconto.Value = 0) then
+   if (vEstadoTela = etIncluir) then
+      edtValor.Value := xDesconto;
+
+   if (vEstadoTela = etIncluir) and (edtDesconto.Value = 0) then
       edtValor.Value := 0;
 end;
 
@@ -870,25 +894,25 @@ end;
 function TfrmVendasView.ProcessaVendaItem: Boolean;
 var
    xVendaItem  : TVendaItem;
-   xPrecoTotal : Double;
+//   xPrecoTotal : Double;
 begin
    try
       try
          Result := False;
          xVendaItem := nil;
          vObjColVendaItem := nil;
-         xPrecoTotal := 0;
+//         xPrecoTotal := 0;
 
-         xPrecoTotal :=
-            dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat *
-            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
+//         xPrecoTotal :=
+//            dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat *
+//            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
 
          if not ValidaCampos then
             exit;
 
          if vEstadoTela = etIncluir then
          begin
-            if xVendaItem = nil then
+            if (xVendaItem = nil) then
                xVendaItem := TVendaItem.Create;
 
             if vObjColVendaItem = nil then
@@ -901,6 +925,8 @@ begin
          cdsProdutos.First;
          while not cdsProdutos.Eof do
          begin
+            xVendaItem := TVendaItem.Create;
+
             xVendaItem.ID_Venda      := vObjVenda.ID;
             xVendaItem.ID_Produto    := dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger;
             xVendaItem.Quantidade    := dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
@@ -908,7 +934,7 @@ begin
             xVendaItem.Descricao_Produto  := dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString;
             xVendaItem.ValorDesconto := edtValor.Value;
             xVendaItem.ValorUnitario := dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat;
-            xVendaItem.TotalItem     := xPrecoTotal;
+            xVendaItem.TotalItem     := dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat; //xPrecoTotal;
 
             vObjColVendaItem.Adiciona(xVendaItem);
             cdsProdutos.Next;

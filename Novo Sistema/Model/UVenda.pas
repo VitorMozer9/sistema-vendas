@@ -11,11 +11,11 @@ type
          vID             : Integer;
          vID_Cliente     : Integer;
          vDataVenda      : TDateTime;
-         vFaturada       : Integer;
          vValorVenda     : Double;
          vTotalDesconto  : Double;
          vTotalVenda     : Double;
          vFormaPagamento : String;
+         vNomeCliente    : String;
 
       public
          constructor Create;
@@ -24,11 +24,11 @@ type
          property ID             : Integer read vID write vID;
          property ID_Cliente     : Integer read vID_Cliente write vID_Cliente;
          property DataVenda      : TDateTime read vDataVenda write vDataVenda;
-         property Faturada       : Integer read vFaturada write vFaturada;
          property ValorVenda     : Double read vValorVenda write vValorVenda;
          property TotalDesconto  : Double read vTotalDesconto write vTotalDesconto;
          property TotalVenda     : Double read vTotalVenda write vTotalVenda;
          property FormaPagamento : String read vFormaPagamento write vFormaPagamento;
+         property NomeCliente    : String read vNomeCliente write vNomeCliente;
 
    end;
 
@@ -59,10 +59,10 @@ begin
    Self.vID              := 0;
    Self.vID_Cliente      := 0;
    Self.vDataVenda       := 0;
-   Self.vFaturada        := 0;
    Self.vValorVenda      := 0;
    Self.vTotalDesconto   := 0;
    Self.vTotalVenda      := 0;
    self.vFormaPagamento  := EmptyStr;
+   self.vNomeCliente     := EmptyStr;
 end;
 end.

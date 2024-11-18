@@ -1,10 +1,10 @@
-object frmProdutoPesq: TfrmProdutoPesq
-  Left = 1545
-  Top = 173
-  Width = 654
+object frmVendaPesqView: TfrmVendaPesqView
+  Left = 453
+  Top = 160
+  Width = 577
   Height = 327
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Pesquisa de Produto'
+  Caption = 'Pesquisa de Vendas'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,25 +20,24 @@ object frmProdutoPesq: TfrmProdutoPesq
   object stbBarraStatus: TStatusBar
     Left = 0
     Top = 269
-    Width = 638
+    Width = 561
     Height = 19
     Panels = <>
   end
   object pnlBotoes: TPanel
     Left = 0
     Top = 229
-    Width = 638
+    Width = 561
     Height = 40
     Align = alBottom
-    TabOrder = 2
+    TabOrder = 1
     object btnConfirmar: TBitBtn
-      Left = 399
+      Left = 319
       Top = 8
       Width = 75
       Height = 25
       Caption = 'C&onfirmar'
       TabOrder = 0
-      OnClick = btnConfirmarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -68,13 +67,12 @@ object frmProdutoPesq: TfrmProdutoPesq
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnLimpar: TBitBtn
-      Left = 479
+      Left = 399
       Top = 8
       Width = 75
       Height = 25
       Caption = '&Limpar'
       TabOrder = 1
-      OnClick = btnLimparClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -104,13 +102,12 @@ object frmProdutoPesq: TfrmProdutoPesq
         AF8DC2AA84AA9161A98B5DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnSair: TBitBtn
-      Left = 559
+      Left = 479
       Top = 8
       Width = 75
       Height = 25
       Caption = '&Sair'
       TabOrder = 2
-      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -143,48 +140,61 @@ object frmProdutoPesq: TfrmProdutoPesq
   object pnlFiltro: TPanel
     Left = 0
     Top = 0
-    Width = 638
-    Height = 65
+    Width = 561
+    Height = 57
     Align = alTop
-    TabOrder = 3
+    TabOrder = 2
     object grbFiltrar: TGroupBox
       Left = 1
       Top = 1
-      Width = 636
-      Height = 63
+      Width = 559
+      Height = 55
       Align = alClient
       Caption = 'Filtrar'
       TabOrder = 0
-      object lblProduto: TLabel
-        Left = 6
-        Top = 38
-        Width = 37
+      object lblDataInicio: TLabel
+        Left = 161
+        Top = 10
+        Width = 55
         Height = 13
-        Caption = 'Produto'
+        Caption = 'Data in'#237'cio '
       end
-      object lblInfo: TLabel
-        Left = 53
-        Top = 16
-        Width = 233
+      object lblCodigoDoCliente: TLabel
+        Left = 23
+        Top = 11
+        Width = 83
         Height = 13
-        Caption = 'Digite parte ou todo o conte'#250'do a ser pesquisado'
+        Caption = 'C'#243'digo do Cliente'
+      end
+      object lblDataFim: TLabel
+        Left = 284
+        Top = 10
+        Width = 42
+        Height = 13
+        Caption = 'Data Fim'
+      end
+      object lblAte: TLabel
+        Left = 251
+        Top = 29
+        Width = 17
+        Height = 13
+        Caption = 'At'#233
       end
       object edtProduto: TEdit
-        Left = 53
-        Top = 32
-        Width = 455
+        Left = 24
+        Top = 24
+        Width = 65
         Height = 21
         CharCase = ecUpperCase
         TabOrder = 0
       end
       object btnFiltrar: TBitBtn
-        Left = 551
-        Top = 29
+        Left = 475
+        Top = 21
         Width = 75
         Height = 25
         Caption = '&Filtrar'
         TabOrder = 1
-        OnClick = btnFiltrarClick
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -213,103 +223,120 @@ object frmProdutoPesq: TfrmProdutoPesq
           29E0AA43E2AF52E4AF54F9ECD3F4DAACEFCB88F0CA7DEFC56DEFC56CF0C56BF4
           CC7AF4CD7BF0C56DEFC56CEFC66DF0CA7EF2CD8AF4DBADF9ECD3}
       end
+      object mskDataInicio: TMaskEdit
+        Left = 160
+        Top = 24
+        Width = 73
+        Height = 21
+        EditMask = '##/##/####;1;_'
+        MaxLength = 10
+        TabOrder = 2
+        Text = '  /  /    '
+      end
+      object mskDataFim: TMaskEdit
+        Left = 284
+        Top = 24
+        Width = 73
+        Height = 21
+        EditMask = '##/##/####;1;_'
+        MaxLength = 10
+        TabOrder = 3
+        Text = '  /  /    '
+      end
     end
   end
   object pnlArea: TPanel
     Left = 0
-    Top = 65
-    Width = 638
-    Height = 164
+    Top = 57
+    Width = 561
+    Height = 172
     Align = alClient
-    TabOrder = 1
-    object gbrResultadoBusca: TGroupBox
+    TabOrder = 3
+    object grbResultado: TGroupBox
       Left = 1
       Top = 1
-      Width = 636
-      Height = 162
+      Width = 559
+      Height = 170
       Align = alClient
       Caption = 'Resultado Busca'
       TabOrder = 0
-      object dbgResultadoBusca: TDBGrid
+      object dbgPesquisaVenda: TDBGrid
         Left = 2
         Top = 15
-        Width = 632
-        Height = 145
+        Width = 555
+        Height = 153
         Align = alClient
-        DataSource = dtsProduto
-        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgCancelOnExit]
+        DataSource = dtsVendaPesq
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
-        OnDblClick = dbgResultadoBuscaDblClick
-        OnKeyDown = dbgResultadoBuscaKeyDown
         Columns = <
           item
             Expanded = False
-            FieldName = 'ID'
-            Title.Caption = 'C'#243'digo'
+            FieldName = 'CodigoVenda'
+            Title.Caption = 'C'#243'digo Venda'
+            Width = 72
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'Descricao'
-            Title.Caption = 'Produto'
-            Width = 380
+            FieldName = 'NomeCliente'
+            Title.Caption = 'Nome Do Cliente'
+            Width = 283
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'QuantidadeEstoque'
-            Title.Caption = 'Estoque'
-            Width = 75
+            FieldName = 'DataVenda'
+            Title.Caption = 'Data da Venda'
+            Width = 83
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'PrecoVenda'
-            Title.Caption = 'Pre'#231'o'
-            Width = 60
+            FieldName = 'TotalVenda'
+            Title.Caption = 'Valor Total Venda'
             Visible = True
           end>
       end
     end
   end
-  object dtsProduto: TDataSource
-    DataSet = cdsProduto
+  object dtsVendaPesq: TDataSource
+    DataSet = cdsVendaPesq
     Left = 5
-    Top = 120
+    Top = 111
   end
-  object cdsProduto: TClientDataSet
+  object cdsVendaPesq: TClientDataSet
     Active = True
     Aggregates = <>
     Params = <>
-    BeforeDelete = cdsProdutoBeforeDelete
-    Left = 33
-    Top = 119
+    Left = 36
+    Top = 111
     Data = {
-      700000009619E0BD010000001800000004000000000003000000700002494404
-      000100000000000944657363726963616F010049000000010005574944544802
-      0002006400115175616E7469646164654573746F71756508000400000000000A
-      507265636F56656E646108000400000000000000}
-    object cdsProdutoID: TIntegerField
+      730000009619E0BD01000000180000000400000000000300000073000B436F64
+      69676F56656E646104000100000000000B4E6F6D65436C69656E746501004900
+      00000100055749445448020002003C00094461746156656E6461040006000000
+      00000A546F74616C56656E646108000400000000000000}
+    object cdsVendaPesqCodigoVenda: TIntegerField
+      DisplayWidth = 13
+      FieldName = 'CodigoVenda'
+    end
+    object cdsVendaPesqNomeCliente: TStringField
+      DisplayWidth = 63
+      FieldName = 'NomeCliente'
+      Size = 60
+    end
+    object cdsVendaPesqDataVenda: TDateField
       DisplayWidth = 12
-      FieldName = 'ID'
+      FieldName = 'DataVenda'
     end
-    object cdsProdutoDescricao: TStringField
-      DisplayWidth = 80
-      FieldName = 'Descricao'
-      Size = 100
-    end
-    object cdsProdutoQuantidadeEstoque: TFloatField
-      DisplayWidth = 11
-      FieldName = 'QuantidadeEstoque'
-    end
-    object cdsProdutoPrecoVenda: TFloatField
-      DisplayWidth = 14
-      FieldName = 'PrecoVenda'
+    object cdsVendaPesqTotalVenda: TFloatField
+      DisplayWidth = 12
+      FieldName = 'TotalVenda'
     end
   end
 end

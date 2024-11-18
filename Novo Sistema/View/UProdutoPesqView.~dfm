@@ -13,6 +13,7 @@ object frmProdutoPesq: TfrmProdutoPesq
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
+  Position = poScreenCenter
   OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
