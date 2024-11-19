@@ -568,12 +568,14 @@ object frmVendasView: TfrmVendasView
         Height = 202
         Align = alClient
         DataSource = dtsProdutos
+        Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgCancelOnExit]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
+        OnKeyDown = dbgProdutosKeyDown
         OnKeyPress = dbgProdutosKeyPress
         Columns = <
           item

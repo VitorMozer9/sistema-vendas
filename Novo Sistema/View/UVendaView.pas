@@ -73,6 +73,8 @@ type
     procedure cdsProdutosBeforeDelete(DataSet: TDataSet);
     procedure edtDescontoChange(Sender: TObject);
     procedure edtCodigoChange(Sender: TObject);
+    procedure dbgProdutosKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
    vKey : Word;
@@ -406,7 +408,6 @@ begin
       TVendaController.getInstancia.GravaVenda(vObjVenda);
 
       Result := True;
-
    except
       on E : Exception do
       begin
@@ -696,9 +697,6 @@ begin
          xIDProduto :=
             dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger;
 
-         if (xIDProduto = 0) then
-            PesquisaProduto(vKey , xIDProduto);
-
          xProduto :=
             TProdutoController.getInstancia.BuscaProduto(xIDProduto);
 
@@ -708,10 +706,23 @@ begin
             dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString := xProduto.Descricao;
             dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat := xProduto.PrecoVenda;
             dbgProdutos.DataSource.DataSet.FieldByName('UniSaida').AsString := xProduto.Unidade;
-            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat := 1;
-            dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat := (xProduto.PrecoVenda);
+            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat := xProduto.QuantidadeEstoque;
+            dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat:= xProduto.PrecoVenda * cdsProdutosQuantidade.Value;
             dbgProdutos.DataSource.DataSet.Post;
+            exit;
+         end
+         else
+         begin
+            if dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger <> 0 then
+            begin
+               TMessageUtil.Alerta('Nenhum Produto encontrado');
+               exit;
+            end;
          end;
+
+         if (xIDProduto = 0) then
+            PesquisaProduto(vKey , xIDProduto);
+
 
       finally
          if (xProduto <> nil) then
@@ -951,6 +962,22 @@ begin
          'Falha ao processar os dados do produto vendido[View]'#13 +
          e.Message);
       end;
+   end;
+end;
+
+procedure TfrmVendasView.dbgProdutosKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   vKey := Key;
+   if vKey = VK_DELETE then
+   begin
+      if (TMessageUtil.Pergunta(
+      'Deseja mesmo excluir este produto?')) then
+      begin
+         if not (dbgProdutos.DataSource.DataSet.IsEmpty) then
+            dbgProdutos.DataSource.DataSet.Delete;
+      end;
+      vKey := VK_CLEAR;
    end;
 end;
 
