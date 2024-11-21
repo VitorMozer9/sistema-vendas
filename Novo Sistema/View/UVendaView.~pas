@@ -706,23 +706,22 @@ begin
             dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString := xProduto.Descricao;
             dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat := xProduto.PrecoVenda;
             dbgProdutos.DataSource.DataSet.FieldByName('UniSaida').AsString := xProduto.Unidade;
-            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat := 1;
-            dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat := (xProduto.PrecoVenda);
+            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat := xProduto.QuantidadeEstoque;
+            dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat:= xProduto.PrecoVenda * cdsProdutosQuantidade.Value;
             dbgProdutos.DataSource.DataSet.Post;
             exit;
          end
          else
          begin
-            TMessageUtil.Alerta('Nenhum Produto encontrado');
-            exit;
+            if dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger <> 0 then
+            begin
+               TMessageUtil.Alerta('Nenhum Produto encontrado');
+               exit;
+            end;
          end;
-         //if (xProduto = nil) and () then
-
 
          if (xIDProduto = 0) then
             PesquisaProduto(vKey , xIDProduto);
-
-
       finally
          if (xProduto <> nil) then
             FreeAndNil(xProduto);
