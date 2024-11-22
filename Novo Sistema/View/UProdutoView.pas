@@ -436,7 +436,7 @@ begin
       if (vObjProduto = nil) then
          Exit;
 
-      vObjProduto.Descricao         := edtDescricao.Text;
+      vObjProduto.Descricao         := Trim(edtDescricao.Text);
       vObjProduto.QuantidadeEstoque := edtQuantidadeEstoque.Value;
       vObjProduto.PrecoVenda        := edtPreco.Value;
       vObjProduto.Unidade           := cmbUnidade.Text;
@@ -460,7 +460,7 @@ function TfrmProdutoView.ValidaCampos: Boolean;
 begin
    Result := False;
 
-   if (edtDescricao.Text = EmptyStr) then
+   if (Trim(edtDescricao.Text) = EmptyStr) then
    begin
       TMessageUtil.Alerta(
          'A identificação do nome do produto não pode ficar em branco.  ');

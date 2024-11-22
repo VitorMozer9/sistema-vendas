@@ -436,7 +436,7 @@ begin
       if (vObjProduto = nil) then
          Exit;
 
-      vObjProduto.Descricao         := edtDescricao.Text;
+      vObjProduto.Descricao         := Trim(edtDescricao.Text);
       vObjProduto.QuantidadeEstoque := edtQuantidadeEstoque.Value;
       vObjProduto.PrecoVenda        := edtPreco.Value;
       vObjProduto.Unidade           := cmbUnidade.Text;

@@ -575,6 +575,7 @@ object frmVendasView: TfrmVendasView
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
+        OnExit = dbgProdutosExit
         OnKeyDown = dbgProdutosKeyDown
         OnKeyPress = dbgProdutosKeyPress
         Columns = <
@@ -631,6 +632,7 @@ object frmVendasView: TfrmVendasView
     Active = True
     Aggregates = <>
     Params = <>
+    AfterOpen = cdsProdutosAfterOpen
     AfterPost = cdsProdutosAfterPost
     BeforeDelete = cdsProdutosBeforeDelete
     Left = 36
