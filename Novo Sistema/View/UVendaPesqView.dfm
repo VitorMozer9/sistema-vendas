@@ -38,6 +38,7 @@ object frmVendaPesqView: TfrmVendaPesqView
       Height = 25
       Caption = 'C&onfirmar'
       TabOrder = 0
+      OnClick = btnConfirmarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -73,6 +74,7 @@ object frmVendaPesqView: TfrmVendaPesqView
       Height = 25
       Caption = '&Limpar'
       TabOrder = 1
+      OnClick = btnLimparClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -108,6 +110,7 @@ object frmVendaPesqView: TfrmVendaPesqView
       Height = 25
       Caption = '&Sair'
       TabOrder = 2
+      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -176,11 +179,11 @@ object frmVendaPesqView: TfrmVendaPesqView
       object lblAte: TLabel
         Left = 251
         Top = 29
-        Width = 17
+        Width = 16
         Height = 13
         Caption = 'At'#233
       end
-      object edtProduto: TEdit
+      object edtCodigo: TEdit
         Left = 24
         Top = 24
         Width = 65
@@ -195,6 +198,7 @@ object frmVendaPesqView: TfrmVendaPesqView
         Height = 25
         Caption = '&Filtrar'
         TabOrder = 1
+        OnClick = btnFiltrarClick
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -274,6 +278,8 @@ object frmVendaPesqView: TfrmVendaPesqView
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
+        OnDblClick = dbgPesquisaVendaDblClick
+        OnKeyDown = dbgPesquisaVendaKeyDown
         Columns = <
           item
             Expanded = False
@@ -314,6 +320,7 @@ object frmVendaPesqView: TfrmVendaPesqView
     Active = True
     Aggregates = <>
     Params = <>
+    BeforeDelete = cdsVendaPesqBeforeDelete
     Left = 36
     Top = 111
     Data = {

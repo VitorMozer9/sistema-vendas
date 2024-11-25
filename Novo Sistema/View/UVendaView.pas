@@ -104,7 +104,6 @@ type
    function ProcessaConsulta    : Boolean;
    function ValidaCampos        : Boolean;
    function PesquisaProduto(pKey : Word; pIDproduto : Integer) : Boolean;
-   function InsereDesconto(pDesconto : Double; pValorTotal : Double) : Double;
 
   public
     { Public declarations }
@@ -117,7 +116,7 @@ var
 implementation
 
 uses Types, Math, UClientesPesqView, UClienteView,UPessoa,UProduto,UProdutoController,
-   UVendaItemController, UProdutoPesqView;
+   UVendaItemController, UProdutoPesqView, UVendaPesqView;
 
 {$R *.dfm}
 
@@ -223,6 +222,26 @@ begin
 
             if edtNumeroVenda.CanFocus then
                edtNumeroVenda.SetFocus;
+         end;
+      end;
+
+      etPesquisar:
+      begin
+         if (frmVendaPesqView = nil) then
+         frmVendaPesqView := TfrmVendaPesqView.Create(Application);
+
+         frmVendaPesqView.ShowModal;
+
+         if (frmVendaPesqView.mVendaID <> 0) then
+         begin
+            edtNumeroVenda.Text := IntToStr(frmVendaPesqView.mVendaID);
+            vEstadoTela := etConsultar;
+            ProcessaConsulta;
+         end
+         else
+         begin
+            vEstadoTela := etPadrao;
+            DefineEstadoTela;
          end;
       end;
    end;
@@ -666,17 +685,6 @@ begin
       edtNome.Text := EmptyStr;
 end;
 
-
-
-function TfrmVendasView.InsereDesconto(pDesconto: Double;
-pValorTotal : Double): Double;
-var
-   xDesconto : Double;
-begin
-   xDesconto := pValorTotal * (pDesconto / 100);
-   Result := pValorTotal - xDesconto;
-end;
-
 procedure TfrmVendasView.edtDescontoExit(Sender: TObject);
 begin
    if (CompareValue(edtDesconto.Value,100,0.001) = GreaterThanValue) then
@@ -770,7 +778,7 @@ end;
 procedure TfrmVendasView.dbgProdutosKeyPress(Sender: TObject;
   var Key: Char);
 
-  begin
+begin
    if (vKey = VK_RETURN) then
    begin
       if (dbgProdutos.SelectedIndex = 0) then
@@ -789,7 +797,11 @@ procedure TfrmVendasView.dbgProdutosKeyPress(Sender: TObject;
 
       if (dbgProdutos.SelectedIndex = 4) then
       begin
-         AtualizaVenda;
+         dbgProdutos.DataSource.DataSet.Edit;
+         dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat :=
+            dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat *
+            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
+         dbgProdutos.DataSource.DataSet.Post;
       end;
 
       if (dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString <> EmptyStr)
@@ -1064,20 +1076,7 @@ end;
 
 procedure TfrmVendasView.AtualizaVenda;
 begin
-   dbgProdutos.DataSource.DataSet.First;
-   while not dbgProdutos.DataSource.DataSet.Eof do
-   begin
-      if (dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat <> 1) then
-      begin
-         dbgProdutos.DataSource.DataSet.Edit;
-         dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat :=
-            dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat *
-            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
-         dbgProdutos.DataSource.DataSet.Post;
-         dbgProdutos.DataSource.DataSet.Last;
-      end;
-      dbgProdutos.DataSource.DataSet.Next;
-   end;
+   //atualizavenda
 end;
 
 procedure TfrmVendasView.dbgProdutosExit(Sender: TObject);
@@ -1092,7 +1091,5 @@ begin
    (dbgProdutos.DataSource.DataSet.FieldByName('UniPreco') as TFloatField).DisplayFormat := 'R$ ##,##0.00';
    (dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco') as TFloatField).DisplayFormat := 'R$ ##,##0.00';
 end;
-
-
 
 end.

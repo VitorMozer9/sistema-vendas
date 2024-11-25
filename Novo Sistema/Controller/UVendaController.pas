@@ -11,6 +11,8 @@ type
          function GravaVenda(pVenda : TVenda) : Boolean;
          function BuscaVenda(pID : Integer) : TVenda;
          function RetornaCondicaoVenda(pId : Integer) : String;
+         function PesquisaVenda(pCodigoCliente : Integer;
+            pDataInicio : String; pDataFim : String) : TColVenda;
 
       published
          class function getInstancia : TVendaController;
@@ -96,6 +98,38 @@ begin
        end;
    end;
 end;
+function TVendaController.PesquisaVenda(pCodigoCliente: Integer;
+  pDataInicio : String ; pDataFim: String): TColVenda;
+var
+   xVendaDAO : TVendaDAO;
+   xCondicao : string;
+begin
+   try
+      try
+         Result := nil;
+
+         xVendaDAO :=
+            TVendaDAO.Create(TConexao.getInstance.getConn);
+
+         xVendaDAO.RetornaColVenda(pDataInicio, pDataFim, pCodigoCliente);
+
+
+         Result := xVendaDAO.RetornaLista(xCondicao);
+
+      finally
+         if (xVendaDAO <> nil) then
+            FreeAndNil(xVendaDAO);
+      end;
+   except
+      on E : Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao pesquisar dados da venda. [Controller]'#13 +
+            e.Message);
+      end;
+   end;
+end;
+
 function TVendaController.RetornaCondicaoVenda(pId: Integer): String;
 var
    xChave : string;

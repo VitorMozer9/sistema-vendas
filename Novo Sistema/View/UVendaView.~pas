@@ -104,7 +104,6 @@ type
    function ProcessaConsulta    : Boolean;
    function ValidaCampos        : Boolean;
    function PesquisaProduto(pKey : Word; pIDproduto : Integer) : Boolean;
-   function InsereDesconto(pDesconto : Double; pValorTotal : Double) : Double;
 
   public
     { Public declarations }
@@ -164,6 +163,7 @@ begin
          CamposEnable(False);
          cmbPagamento.Enabled := False;
          btnLimpar.Enabled := False;
+         btnCliente.Enabled := False;
          LimpaTela;
 
          stbBarraStatus.Panels[0].Text := EmptyStr;
@@ -204,6 +204,7 @@ begin
          stbBarraStatus.Panels[0].Text := 'Consulta';
 
          CamposEnable(False);
+         btnCliente.Enabled := False;
          btnLimpar.Enabled := True;
 
          if (edtNumeroVenda.Text <> EmptyStr) then
@@ -664,17 +665,6 @@ begin
       edtNome.Text := EmptyStr;
 end;
 
-
-
-function TfrmVendasView.InsereDesconto(pDesconto: Double;
-pValorTotal : Double): Double;
-var
-   xDesconto : Double;
-begin
-   xDesconto := pValorTotal * (pDesconto / 100);
-   Result := pValorTotal - xDesconto;
-end;
-
 procedure TfrmVendasView.edtDescontoExit(Sender: TObject);
 begin
    if (CompareValue(edtDesconto.Value,100,0.001) = GreaterThanValue) then
@@ -767,6 +757,7 @@ end;
 
 procedure TfrmVendasView.dbgProdutosKeyPress(Sender: TObject;
   var Key: Char);
+
 begin
    if (vKey = VK_RETURN) then
    begin
@@ -786,7 +777,11 @@ begin
 
       if (dbgProdutos.SelectedIndex = 4) then
       begin
-         AtualizaVenda;
+         dbgProdutos.DataSource.DataSet.Edit;
+         dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat :=
+            dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat *
+            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
+         dbgProdutos.DataSource.DataSet.Post;
       end;
 
       if (dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString <> EmptyStr)
@@ -918,7 +913,6 @@ begin
 
       xIDProduto := frmProdutoPesq.mProdutoID;
 
-
       xProduto :=
          TProdutoController.getInstancia.BuscaProduto(xIDProduto);
 
@@ -958,6 +952,7 @@ begin
       if(xProduto <> nil) then
       begin
          dbgProdutos.DataSource.DataSet.Edit;
+         dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger :=  xProduto.ID;
          dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString := xProduto.Descricao;
          dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat := xProduto.PrecoVenda;
          dbgProdutos.DataSource.DataSet.FieldByName('UniSaida').AsString := xProduto.Unidade;
@@ -966,6 +961,13 @@ begin
             dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat *
             dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
          dbgProdutos.DataSource.DataSet.Post;
+
+         if (dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString <> EmptyStr)
+            and (dbgProdutos.SelectedIndex = 0) then
+         begin
+            dbgProdutos.DataSource.DataSet.Append;
+         end;
+
          exit;
       end;
    finally
@@ -1054,20 +1056,7 @@ end;
 
 procedure TfrmVendasView.AtualizaVenda;
 begin
-   dbgProdutos.DataSource.DataSet.First;
-   while not dbgProdutos.DataSource.DataSet.Eof do
-   begin
-      if (dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat <> 1) then
-      begin
-         dbgProdutos.DataSource.DataSet.Edit;
-         dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco').AsFloat :=
-            dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat *
-            dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
-         dbgProdutos.DataSource.DataSet.Post;
-         dbgProdutos.DataSource.DataSet.Last;
-      end;
-      dbgProdutos.DataSource.DataSet.Next;
-   end;
+   //atualizavenda
 end;
 
 procedure TfrmVendasView.dbgProdutosExit(Sender: TObject);
@@ -1082,7 +1071,5 @@ begin
    (dbgProdutos.DataSource.DataSet.FieldByName('UniPreco') as TFloatField).DisplayFormat := 'R$ ##,##0.00';
    (dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco') as TFloatField).DisplayFormat := 'R$ ##,##0.00';
 end;
-
-
 
 end.

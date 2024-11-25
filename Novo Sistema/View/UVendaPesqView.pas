@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, DB, DBClient, Grids,
-  DBGrids, Mask,uMessageUtil, UVenda;
+  DBGrids, Mask,uMessageUtil, UVenda, UVendaController;
 
 type
   TfrmVendaPesqView = class(TForm)
@@ -20,7 +20,7 @@ type
     grbResultado: TGroupBox;
     lblDataInicio: TLabel;
     lblCodigoDoCliente: TLabel;
-    edtProduto: TEdit;
+    edtCodigo: TEdit;
     btnFiltrar: TBitBtn;
     mskDataInicio: TMaskEdit;
     lblDataFim: TLabel;
@@ -35,15 +35,26 @@ type
     cdsVendaPesqTotalVenda: TFloatField;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure btnFiltrarClick(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
+    procedure btnLimparClick(Sender: TObject);
+    procedure btnSairClick(Sender: TObject);
+    procedure cdsVendaPesqBeforeDelete(DataSet: TDataSet);
+    procedure dbgPesquisaVendaDblClick(Sender: TObject);
+    procedure dbgPesquisaVendaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     vKey : Word;
 
     procedure LimpaTela;
     procedure ProcessaPesquisa;
+    procedure ProcessaConfirmacao;
 
   public
     { Public declarations }
+    mVendaID : Integer;
+    mNomeCliente : string;
   end;
 
 var
@@ -107,14 +118,18 @@ end;
 procedure TfrmVendaPesqView.ProcessaPesquisa;
 var
    xListaVenda : TColVenda;
+   xID_Cliente : Integer;
    xAux        : Integer;
 begin
    try
       try
          xListaVenda := TColVenda.Create;
 
-//          xListaVenda :=
-//            TVendaController.getInstancia.PesquisaVenda(mskDataInicio.Text, mskDataFim.Text);
+//          if TryStrToInt(edtCodigo.Text, xID_Cliente) then
+//          begin
+             xListaVenda :=
+               TVendaController.getInstancia.PesquisaVenda(xID_Cliente, mskDataInicio.Text, mskDataFim.Text);
+//          end;
 
          cdsVendaPesq.EmptyDataSet;
 
@@ -147,8 +162,6 @@ begin
                dbgPesquisaVenda.SetFocus;
          end;
 
-
-
       finally
          if (xListaVenda <> nil) then
             FreeAndNil(xListaVenda);
@@ -161,6 +174,67 @@ begin
             e.Message);
       end;
    end;
+end;
+
+procedure TfrmVendaPesqView.ProcessaConfirmacao;
+begin
+   if not cdsVendaPesq.IsEmpty then
+   begin
+      mVendaID       := cdsVendaPesqCodigoVenda.Value;
+      mNomeCliente     := cdsVendaPesqNomeCliente.Value;
+      Self.ModalResult := mrOk;
+      LimpaTela;
+      Close;
+   end
+   else
+   begin
+      TMessageUtil.Alerta('Nenhuma venda selecionado.');
+      if mskDataInicio.CanFocus then
+         mskDataInicio.SetFocus;
+   end;
+end;
+
+procedure TfrmVendaPesqView.btnFiltrarClick(Sender: TObject);
+begin
+   mVendaID := 0;
+   mNomeCliente := EmptyStr;
+   ProcessaPesquisa;
+end;
+
+procedure TfrmVendaPesqView.btnConfirmarClick(Sender: TObject);
+begin
+   ProcessaConfirmacao;
+end;
+
+procedure TfrmVendaPesqView.btnLimparClick(Sender: TObject);
+begin
+   mVendaID := 0;
+   mNomeCliente := EmptyStr;
+   LimpaTela;
+end;
+
+procedure TfrmVendaPesqView.btnSairClick(Sender: TObject);
+begin
+   LimpaTela;
+   Close;
+end;
+
+procedure TfrmVendaPesqView.cdsVendaPesqBeforeDelete(DataSet: TDataSet);
+begin
+   Abort;
+end;
+
+procedure TfrmVendaPesqView.dbgPesquisaVendaDblClick(Sender: TObject);
+begin
+   ProcessaConfirmacao;
+end;
+
+procedure TfrmVendaPesqView.dbgPesquisaVendaKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+   if (Key = VK_RETURN) and
+      (btnConfirmar.CanFocus) then
+      btnConfirmar.SetFocus;
 end;
 
 end.
