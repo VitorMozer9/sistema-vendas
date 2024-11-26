@@ -125,12 +125,10 @@ begin
       try
          xListaVenda := TColVenda.Create;
 
-         if (TFuncoes.SoNumero(mskDataInicio.Text) = EmptyStr) and
-            (edtCodigo.Text = 0)  then
+         if (TFuncoes.SoNumero(mskDataInicio.Text) = EmptyStr) then
             mskDataInicio.Text := '01/01/1999';
 
-         if (TFuncoes.SoNumero(mskDataFim.Text) = EmptyStr) and
-            (edtCodigo.Text = 0) then
+         if (TFuncoes.SoNumero(mskDataFim.Text) = EmptyStr) then
             mskDataFim.Text := '01/01/2999';
 
              xListaVenda :=

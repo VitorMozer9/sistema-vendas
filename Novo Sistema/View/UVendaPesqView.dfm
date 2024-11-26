@@ -1,8 +1,8 @@
 object frmVendaPesqView: TfrmVendaPesqView
-  Left = 453
-  Top = 160
+  Left = 629
+  Top = 113
   Width = 600
-  Height = 371
+  Height = 378
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Pesquisa de Vendas'
   Color = clBtnFace
@@ -19,14 +19,14 @@ object frmVendaPesqView: TfrmVendaPesqView
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 313
+    Top = 320
     Width = 584
     Height = 19
     Panels = <>
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 273
+    Top = 280
     Width = 584
     Height = 40
     Align = alBottom
@@ -253,14 +253,14 @@ object frmVendaPesqView: TfrmVendaPesqView
     Left = 0
     Top = 57
     Width = 584
-    Height = 216
+    Height = 223
     Align = alClient
     TabOrder = 3
     object grbResultado: TGroupBox
       Left = 1
       Top = 1
       Width = 582
-      Height = 214
+      Height = 221
       Align = alClient
       Caption = 'Resultado Busca'
       TabOrder = 0
@@ -268,7 +268,7 @@ object frmVendaPesqView: TfrmVendaPesqView
         Left = 2
         Top = 15
         Width = 578
-        Height = 197
+        Height = 204
         Align = alClient
         DataSource = dtsVendaPesq
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]

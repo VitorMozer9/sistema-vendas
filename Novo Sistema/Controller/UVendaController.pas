@@ -102,23 +102,28 @@ function TVendaController.PesquisaVenda(pCodigoVenda: Integer;
   pDataInicio : String ; pDataFim: String): TColVenda;
 var
    xVendaDAO : TVendaDAO;
+   xListaVenda : TColVenda;
    xCondicao : string;
 begin
    try
       try
          Result := nil;
 
-         xVendaDAO :=
-            TVendaDAO.Create(TConexao.getInstance.getConn);
+         xListaVenda := nil;
+         xListaVenda := TColVenda.Create;
 
-         xVendaDAO.RetornaColVenda(pDataInicio, pDataFim, 0);
+         xVendaDAO := TVendaDAO.Create(TConexao.getInstance.getConn);
 
+         xListaVenda :=
+            xVendaDAO.RetornaColVenda(pDataInicio, pDataFim, pCodigoVenda);
 
-         Result := xVendaDAO.RetornaLista(xCondicao);
-
+         Result := xListaVenda;
       finally
          if (xVendaDAO <> nil) then
             FreeAndNil(xVendaDAO);
+
+         if (xListaVenda <> nil) then
+            FreeAndNil(xListaVenda);
       end;
    except
       on E : Exception do

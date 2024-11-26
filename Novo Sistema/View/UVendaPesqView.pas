@@ -125,6 +125,9 @@ begin
       try
          xListaVenda := TColVenda.Create;
 
+         if (edtCodigo.Text <> EmptyStr) then
+            xID_Venda := StrToInt(edtCodigo.Text);
+
          if (TFuncoes.SoNumero(mskDataInicio.Text) = EmptyStr) then
             mskDataInicio.Text := '01/01/1999';
 
@@ -132,7 +135,7 @@ begin
             mskDataFim.Text := '01/01/2999';
 
              xListaVenda :=
-               TVendaController.getInstancia.PesquisaVenda(xID_Venda, mskDataInicio.Text, mskDataFim.Text);
+               TVendaController.getInstancia.PesquisaVenda(xId_Venda, mskDataInicio.Text, mskDataFim.Text);
 
          cdsVendaPesq.EmptyDataSet;
 

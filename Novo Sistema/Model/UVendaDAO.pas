@@ -74,17 +74,16 @@ begin
             ' WHERE DATAVENDA BETWEEN :DATAINIC AND :DATAFIM ';
 
          if pCodVenda > 0 then
-          xQryColVenda.SQL.Text := xQryColVenda.SQL.Text +
+         begin
+            xQryColVenda.SQL.Text := xQryColVenda.SQL.Text +
             '   AND VENDA.ID = :CODVENDA';
-
-         pDataIni := '19/11/2024';
-         pDataFim := '19/11/2024';
+            xQryColVenda.ParamByName('CODVENDA').AsString:= IntToStr(pCodVenda);
+         end;
+//         pDataIni := '19/11/2024';
+//         pDataFim := '19/11/2024';
 
          xQryColVenda.ParamByName('DATAINIC').AsDate := StrToDate(pDataIni);
          xQryColVenda.ParamByName('DATAFIM').AsDate := StrToDate(pDataFim);
-
-         if pCodVenda > 0 then
-            xQryColVenda.ParamByName('CODVENDA').AsInteger := pCodVenda;
 
 //         xQryColVenda.Prepared := True;
          xQryColVenda.Open;
@@ -103,10 +102,9 @@ begin
                xColVenda.Adiciona(xVenda);
                xQryColVenda.Next;
             end;
-            Result := xColVenda;
          end;
 
-
+        Result := xColVenda;
       except
          on E: Exception do
             raise Exception.Create('Falha ao buscar vendas no banco de dados.' +
