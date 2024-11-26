@@ -53,14 +53,20 @@ end;
 function TVendaDAO.RetornaColVenda(pDataIni, pDataFim: String;
   pCodVenda: Integer): TColVenda;
 var
-   xQryColVenda: TSQLQuery;
-   vConexao: TSQLConnection;
+   xQryColVenda : TSQLQuery;
+   xVenda       : TVenda;
+   xColVenda    : TColVenda;
 begin
    try
       try
+         xColVenda := nil;
+         xColVenda := TColVenda.Create;
+
+         xVenda := nil;
+
          xQryColVenda := nil;
          xQryColVenda := TSQLQuery.Create(Nil);
-         xQryColVenda.SQLConnection := TConexao.getConn.Create;
+         xQryColVenda.SQLConnection := vConexao;
          xQryColVenda.Close;
          xQryColVenda.SQL.Clear;
          xQryColVenda.SQL.Text :=
@@ -71,22 +77,29 @@ begin
           xQryColVenda.SQL.Text := xQryColVenda.SQL.Text +
             '   AND (VENDA.ID = :CODVENDA)';
 
-         pDataIni := '01/11/2024';
-         pDataFim := '25/11/2024';
-         pCodVenda := 1;        
-
          xQryColVenda.ParamByName('DATAINIC').AsDate := StrToDate(pDataIni);
          xQryColVenda.ParamByName('DATAFIM').AsDate := StrToDate(pDataFim);
 
          if pCodVenda > 0 then
             xQryColVenda.ParamByName('CODVENDA').AsInteger := pCodVenda;
 
+         xQryColVenda.Prepared := True;
          xQryColVenda.Open;
 
          if not xQryColVenda.IsEmpty then
          begin
-            // popula seu obg de COL
-            exit;
+            xQryColVenda.First;
+            while not xQryColVenda.Eof do
+            begin
+               xVenda := TVenda.Create;
+               xVenda.ID          := xQryColVenda.FieldByName('ID').AsInteger;
+               xVenda.NomeCliente := xQryColVenda.FieldByName('NOMECLIENTE').AsString;
+               xVenda.DataVenda   := xQryColVenda.FieldByName('DATAVENDA').AsDateTime;
+               xVenda.TotalVenda  := xQryColVenda.FieldByName('TOTALVENDA').AsFloat;
+
+               xColVenda.Adiciona(xVenda);
+               xQryColVenda.Next;
+            end;
          end;
       except
          on E: Exception do
@@ -99,6 +112,9 @@ begin
          xQryColVenda.Close;
          FreeAndNil(xQryColVenda);
       end;
+
+      if (xVenda <> nil) then
+         FreeAndNil(xVenda);
    end;
 end;
 
@@ -106,8 +122,6 @@ function TVendaDAO.RetornaLista(pCondicao: String): TColVenda;
 begin
    Result := TColVenda(inherited RetornaLista(pCondicao));
 end;
-
-
 
 end.
  

@@ -11,7 +11,7 @@ type
          function GravaVenda(pVenda : TVenda) : Boolean;
          function BuscaVenda(pID : Integer) : TVenda;
          function RetornaCondicaoVenda(pId : Integer) : String;
-         function PesquisaVenda(pCodigoCliente : Integer;
+         function PesquisaVenda(pCodigoVenda : Integer;
             pDataInicio : String; pDataFim : String) : TColVenda;
 
       published
@@ -98,7 +98,7 @@ begin
        end;
    end;
 end;
-function TVendaController.PesquisaVenda(pCodigoCliente: Integer;
+function TVendaController.PesquisaVenda(pCodigoVenda: Integer;
   pDataInicio : String ; pDataFim: String): TColVenda;
 var
    xVendaDAO : TVendaDAO;
@@ -111,7 +111,7 @@ begin
          xVendaDAO :=
             TVendaDAO.Create(TConexao.getInstance.getConn);
 
-         xVendaDAO.RetornaColVenda(pDataInicio, pDataFim, pCodigoCliente);
+         xVendaDAO.RetornaColVenda(pDataInicio, pDataFim, 0);
 
 
          Result := xVendaDAO.RetornaLista(xCondicao);

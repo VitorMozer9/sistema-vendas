@@ -1,8 +1,8 @@
 object frmVendaPesqView: TfrmVendaPesqView
   Left = 453
   Top = 160
-  Width = 577
-  Height = 327
+  Width = 600
+  Height = 371
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Pesquisa de Vendas'
   Color = clBtnFace
@@ -19,20 +19,20 @@ object frmVendaPesqView: TfrmVendaPesqView
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 269
-    Width = 561
+    Top = 313
+    Width = 584
     Height = 19
     Panels = <>
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 229
-    Width = 561
+    Top = 273
+    Width = 584
     Height = 40
     Align = alBottom
     TabOrder = 1
     object btnConfirmar: TBitBtn
-      Left = 319
+      Left = 340
       Top = 8
       Width = 75
       Height = 25
@@ -68,7 +68,7 @@ object frmVendaPesqView: TfrmVendaPesqView
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnLimpar: TBitBtn
-      Left = 399
+      Left = 420
       Top = 8
       Width = 75
       Height = 25
@@ -104,7 +104,7 @@ object frmVendaPesqView: TfrmVendaPesqView
         AF8DC2AA84AA9161A98B5DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnSair: TBitBtn
-      Left = 479
+      Left = 500
       Top = 8
       Width = 75
       Height = 25
@@ -143,14 +143,14 @@ object frmVendaPesqView: TfrmVendaPesqView
   object pnlFiltro: TPanel
     Left = 0
     Top = 0
-    Width = 561
+    Width = 584
     Height = 57
     Align = alTop
     TabOrder = 2
     object grbFiltrar: TGroupBox
       Left = 1
       Top = 1
-      Width = 559
+      Width = 582
       Height = 55
       Align = alClient
       Caption = 'Filtrar'
@@ -192,7 +192,7 @@ object frmVendaPesqView: TfrmVendaPesqView
         TabOrder = 0
       end
       object btnFiltrar: TBitBtn
-        Left = 475
+        Left = 499
         Top = 21
         Width = 75
         Height = 25
@@ -252,23 +252,23 @@ object frmVendaPesqView: TfrmVendaPesqView
   object pnlArea: TPanel
     Left = 0
     Top = 57
-    Width = 561
-    Height = 172
+    Width = 584
+    Height = 216
     Align = alClient
     TabOrder = 3
     object grbResultado: TGroupBox
       Left = 1
       Top = 1
-      Width = 559
-      Height = 170
+      Width = 582
+      Height = 214
       Align = alClient
       Caption = 'Resultado Busca'
       TabOrder = 0
       object dbgPesquisaVenda: TDBGrid
         Left = 2
         Top = 15
-        Width = 555
-        Height = 153
+        Width = 578
+        Height = 197
         Align = alClient
         DataSource = dtsVendaPesq
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]

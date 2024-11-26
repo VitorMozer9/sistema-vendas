@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, DB, DBClient, Grids,
-  DBGrids, Mask,uMessageUtil, UVenda, UVendaController;
+  DBGrids, Mask,uMessageUtil, UVenda, UVendaController, UClassFuncoes;
 
 type
   TfrmVendaPesqView = class(TForm)
@@ -118,18 +118,21 @@ end;
 procedure TfrmVendaPesqView.ProcessaPesquisa;
 var
    xListaVenda : TColVenda;
-   xID_Cliente : Integer;
+   xID_Venda : Integer;
    xAux        : Integer;
 begin
    try
       try
          xListaVenda := TColVenda.Create;
 
-//          if TryStrToInt(edtCodigo.Text, xID_Cliente) then
-//          begin
+         if (TFuncoes.SoNumero(mskDataInicio.Text) = EmptyStr) then
+            mskDataInicio.Text := '01/01/1999';
+
+         if (TFuncoes.SoNumero(mskDataFim.Text) = EmptyStr) then
+            mskDataFim.Text := '01/01/2999';
+
              xListaVenda :=
-               TVendaController.getInstancia.PesquisaVenda(xID_Cliente, mskDataInicio.Text, mskDataFim.Text);
-//          end;
+               TVendaController.getInstancia.PesquisaVenda(xID_Venda, mskDataInicio.Text, mskDataFim.Text);
 
          cdsVendaPesq.EmptyDataSet;
 

@@ -111,7 +111,7 @@ begin
          xVendaDAO :=
             TVendaDAO.Create(TConexao.getInstance.getConn);
 
-         xVendaDAO.RetornaColVenda();
+         xVendaDAO.RetornaColVenda(pDataInicio, pDataFim, pCodigoCliente);
 
 
          Result := xVendaDAO.RetornaLista(xCondicao);

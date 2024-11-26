@@ -607,15 +607,15 @@ begin
      if vEstadoTela = etAlterar then
         xID_Pessoa := StrToIntDef(edtCodigo.Text , 0);
 
-     xEndereco               := TEndereco.Create; //obj de apenas endereco
-     xEndereco.ID_Pessoa     := xID_Pessoa;
-     xEndereco.Tipo_Endereco := 0;
-     xEndereco.Endereco      := edtEndereco.Text;
-     xEndereco.Numero        := edtNumero.Text;
-     xEndereco.Complemento   := edtComplemento.Text;
-     xEndereco.Bairro        := edtBairro.Text;
-     xEndereco.UF            := cmbUF.Text;
-     xEndereco.Cidade        := edtCidade.Text;
+      xEndereco               := TEndereco.Create; //obj de apenas endereco
+      xEndereco.ID_Pessoa     := xID_Pessoa;
+      xEndereco.Tipo_Endereco := 0;
+      xEndereco.Endereco      := edtEndereco.Text;
+      xEndereco.Numero        := edtNumero.Text;
+      xEndereco.Complemento   := edtComplemento.Text;
+      xEndereco.Bairro        := edtBairro.Text;
+      xEndereco.UF            := cmbUF.Text;
+      xEndereco.Cidade        := edtCidade.Text;
 
      vObjColEndereco.Adiciona(xEndereco);
 
