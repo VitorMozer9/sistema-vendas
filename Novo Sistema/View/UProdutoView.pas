@@ -473,7 +473,7 @@ begin
    if CompareValue(edtQuantidadeEstoque.Value,0,0.001) = EqualsValue then
    begin
       TMessageUtil.Alerta(
-         'A Quantidade de estoque do produto não pode ficae em branco. ');
+         'A Quantidade de estoque do produto não pode ficar em branco. ');
 
       if (edtQuantidadeEstoque.CanFocus) then
          edtQuantidadeEstoque.SetFocus;

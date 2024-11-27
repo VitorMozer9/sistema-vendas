@@ -123,6 +123,7 @@ var
 begin
    try
       try
+         xID_Venda := 0;
          xListaVenda := TColVenda.Create;
 
          if (edtCodigo.Text <> EmptyStr) then

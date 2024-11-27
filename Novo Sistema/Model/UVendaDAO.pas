@@ -96,7 +96,7 @@ begin
                xVenda := TVenda.Create;
                xVenda.ID          := xQryColVenda.FieldByName('ID').AsInteger;
                xVenda.NomeCliente := xQryColVenda.FieldByName('NOMECLIENTE').AsString;
-               xVenda.DataVenda   := xQryColVenda.FieldByName('DATAVENDA').AsDateTime;
+               xVenda.DataVenda   := StrToDate(xQryColVenda.FieldByName('DATAVENDA').AsString);
                xVenda.TotalVenda  := xQryColVenda.FieldByName('TOTALVENDA').AsFloat;
 
                xColVenda.Adiciona(xVenda);
