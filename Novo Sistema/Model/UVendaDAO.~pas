@@ -95,8 +95,8 @@ begin
             begin
                xVenda := TVenda.Create;
                xVenda.ID          := xQryColVenda.FieldByName('ID').AsInteger;
-               xVenda.NomeCliente := xQryColVenda.FieldByName('NOMECLIENTE').AsString;
-               xVenda.DataVenda   := xQryColVenda.FieldByName('DATAVENDA').AsDateTime;
+               xVenda.NomeCliente := xQryColVenda.FieldByName('NOMECLIENTE').AsString;     // DateTimeToStr(xVenda.DataVenda)
+               xVenda.DataVenda   := (xQryColVenda.FieldByName('DATAVENDA').AsDateTime);
                xVenda.TotalVenda  := xQryColVenda.FieldByName('TOTALVENDA').AsFloat;
 
                xColVenda.Adiciona(xVenda);
@@ -117,8 +117,8 @@ begin
          FreeAndNil(xQryColVenda);
       end;
 
-      if (xVenda <> nil) then
-         FreeAndNil(xVenda);
+//      if (xVenda <> nil) then
+//         FreeAndNil(xVenda);
    end;
 end;
 

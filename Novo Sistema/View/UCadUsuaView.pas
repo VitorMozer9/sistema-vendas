@@ -41,6 +41,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure edtNomeKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     vKey : Word;
@@ -469,6 +470,17 @@ begin
          exit;
    end;
 
+   if (chkAtivo.Checked = False) then
+   begin
+      TMessageUtil.Alerta(
+         'Não é possivel cadastrar usuários inativos.');
+
+      if (chkAtivo.CanFocus) then
+         chkAtivo.SetFocus;
+         exit;
+
+   end;
+
    Result := True;
 end;
 
@@ -657,6 +669,12 @@ begin
 
    if (edtUsuario.CanFocus) then
       edtUsuario.SetFocus;
+end;
+
+procedure TfrmCadUsua.edtNomeKeyPress(Sender: TObject; var Key: Char);
+begin
+   if (Key in['0','1','2','3','4','5','6','7','8','9']) then
+      Key := #0;
 end;
 
 end.

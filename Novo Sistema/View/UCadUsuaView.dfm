@@ -430,6 +430,7 @@ object frmCadUsua: TfrmCadUsua
       Top = 20
       Width = 90
       Height = 21
+      CharCase = ecUpperCase
       TabOrder = 0
     end
     object chkAtivo: TCheckBox
@@ -460,12 +461,14 @@ object frmCadUsua: TfrmCadUsua
       Height = 21
       CharCase = ecUpperCase
       TabOrder = 3
+      OnKeyPress = edtNomeKeyPress
     end
     object edtSenha: TEdit
       Left = 56
       Top = 50
       Width = 90
       Height = 21
+      CharCase = ecUpperCase
       TabOrder = 4
     end
   end

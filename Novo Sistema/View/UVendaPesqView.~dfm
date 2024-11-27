@@ -162,12 +162,12 @@ object frmVendaPesqView: TfrmVendaPesqView
         Height = 13
         Caption = 'Data in'#237'cio '
       end
-      object lblCodigoDoCliente: TLabel
+      object lblCodigoDaVenda: TLabel
         Left = 23
         Top = 11
-        Width = 83
+        Width = 82
         Height = 13
-        Caption = 'C'#243'digo do Cliente'
+        Caption = 'C'#243'digo da Venda'
       end
       object lblDataFim: TLabel
         Left = 284
@@ -319,15 +319,37 @@ object frmVendaPesqView: TfrmVendaPesqView
   object cdsVendaPesq: TClientDataSet
     Active = True
     Aggregates = <>
+    FieldDefs = <
+      item
+        Name = 'CodigoVenda'
+        DataType = ftInteger
+      end
+      item
+        Name = 'NomeCliente'
+        DataType = ftString
+        Size = 60
+      end
+      item
+        Name = 'TotalVenda'
+        DataType = ftFloat
+      end
+      item
+        Name = 'DataVenda'
+        DataType = ftString
+        Size = 20
+      end>
+    IndexDefs = <>
     Params = <>
+    StoreDefs = True
     BeforeDelete = cdsVendaPesqBeforeDelete
     Left = 36
     Top = 111
     Data = {
-      730000009619E0BD01000000180000000400000000000300000073000B436F64
+      7F0000009619E0BD0100000018000000040000000000030000007F000B436F64
       69676F56656E646104000100000000000B4E6F6D65436C69656E746501004900
-      00000100055749445448020002003C00094461746156656E6461040006000000
-      00000A546F74616C56656E646108000400000000000000}
+      00000100055749445448020002003C000A546F74616C56656E64610800040000
+      000000094461746156656E646101004900000001000557494454480200020014
+      000000}
     object cdsVendaPesqCodigoVenda: TIntegerField
       DisplayWidth = 13
       FieldName = 'CodigoVenda'
@@ -337,13 +359,12 @@ object frmVendaPesqView: TfrmVendaPesqView
       FieldName = 'NomeCliente'
       Size = 60
     end
-    object cdsVendaPesqDataVenda: TDateField
-      DisplayWidth = 12
-      FieldName = 'DataVenda'
-    end
     object cdsVendaPesqTotalVenda: TFloatField
       DisplayWidth = 12
       FieldName = 'TotalVenda'
+    end
+    object cdsVendaPesqDataVenda: TStringField
+      FieldName = 'DataVenda'
     end
   end
 end

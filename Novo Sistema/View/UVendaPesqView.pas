@@ -19,7 +19,7 @@ type
     grbFiltrar: TGroupBox;
     grbResultado: TGroupBox;
     lblDataInicio: TLabel;
-    lblCodigoDoCliente: TLabel;
+    lblCodigoDaVenda: TLabel;
     edtCodigo: TEdit;
     btnFiltrar: TBitBtn;
     mskDataInicio: TMaskEdit;
@@ -31,8 +31,8 @@ type
     cdsVendaPesq: TClientDataSet;
     cdsVendaPesqCodigoVenda: TIntegerField;
     cdsVendaPesqNomeCliente: TStringField;
-    cdsVendaPesqDataVenda: TDateField;
     cdsVendaPesqTotalVenda: TFloatField;
+    cdsVendaPesqDataVenda: TStringField;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnFiltrarClick(Sender: TObject);
@@ -118,7 +118,7 @@ end;
 procedure TfrmVendaPesqView.ProcessaPesquisa;
 var
    xListaVenda : TColVenda;
-   xID_Venda : Integer;
+   xID_Venda   : Integer;
    xAux        : Integer;
 begin
    try
@@ -144,12 +144,16 @@ begin
          begin
             for xAux := 0 to pred(xListaVenda.Count) do
             begin
-               cdsVendaPesq.Append;
-               cdsVendaPesqCodigoVenda.Value := xListaVenda.Retorna(xAux).ID;
-               cdsVendaPesqNomeCliente.Value := xListaVenda.Retorna(xAux).NomeCliente;
-               cdsVendaPesqDataVenda.Value := xListaVenda.Retorna(xAux).DataVenda;
-               cdsVendaPesqTotalVenda.Value := xListaVenda.Retorna(xAux).TotalVenda;
-               cdsVendaPesq.Post;
+               if xListaVenda.Retorna(xAux).ID <> 0 then
+               begin
+                  cdsVendaPesq.Append;
+                  cdsVendaPesqCodigoVenda.Value := xListaVenda.Retorna(xAux).ID;
+                  cdsVendaPesqNomeCliente.Value := xListaVenda.Retorna(xAux).NomeCliente;
+                  cdsVendaPesqDataVenda.Text :=
+                     FormatDateTime('dd/mm/yyyy',xListaVenda.Retorna(xAux).DataVenda);
+                  cdsVendaPesqTotalVenda.Value := xListaVenda.Retorna(xAux).TotalVenda;
+                  cdsVendaPesq.Post;
+               end;
             end;
          end;
 

@@ -79,13 +79,10 @@ begin
             '   AND VENDA.ID = :CODVENDA';
             xQryColVenda.ParamByName('CODVENDA').AsString:= IntToStr(pCodVenda);
          end;
-//         pDataIni := '19/11/2024';
-//         pDataFim := '19/11/2024';
 
          xQryColVenda.ParamByName('DATAINIC').AsDate := StrToDate(pDataIni);
          xQryColVenda.ParamByName('DATAFIM').AsDate := StrToDate(pDataFim);
 
-//         xQryColVenda.Prepared := True;
          xQryColVenda.Open;
 
          if not xQryColVenda.IsEmpty then
@@ -95,8 +92,8 @@ begin
             begin
                xVenda := TVenda.Create;
                xVenda.ID          := xQryColVenda.FieldByName('ID').AsInteger;
-               xVenda.NomeCliente := xQryColVenda.FieldByName('NOMECLIENTE').AsString;
-               xVenda.DataVenda   := StrToDate(xQryColVenda.FieldByName('DATAVENDA').AsString);
+               xVenda.NomeCliente := xQryColVenda.FieldByName('NOMECLIENTE').AsString;     // DateTimeToStr(xVenda.DataVenda)
+               xVenda.DataVenda   := (xQryColVenda.FieldByName('DATAVENDA').AsDateTime);
                xVenda.TotalVenda  := xQryColVenda.FieldByName('TOTALVENDA').AsFloat;
 
                xColVenda.Adiciona(xVenda);
@@ -117,8 +114,8 @@ begin
          FreeAndNil(xQryColVenda);
       end;
 
-      if (xVenda <> nil) then
-         FreeAndNil(xVenda);
+//      if (xVenda <> nil) then
+//         FreeAndNil(xVenda);
    end;
 end;
 

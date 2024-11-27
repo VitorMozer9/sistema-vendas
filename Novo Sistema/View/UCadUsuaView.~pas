@@ -70,7 +70,7 @@ var
 
 implementation
 
-uses UCadUsuaController;
+uses UCadUsuaController, UCadUsuaPesqView;
 
 {$R *.dfm}
 
@@ -467,6 +467,17 @@ begin
       if (edtNome.CanFocus) then
          edtNome.SetFocus;
          exit;
+   end;
+
+   if (chkAtivo.Checked = False) then
+   begin
+      TMessageUtil.Alerta(
+         'Não é possivel cadastrar usuários inativos.');
+
+      if (chkAtivo.CanFocus) then
+         chkAtivo.SetFocus;
+         exit;
+
    end;
 
    Result := True;

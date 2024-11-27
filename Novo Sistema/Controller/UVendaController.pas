@@ -122,8 +122,8 @@ begin
          if (xVendaDAO <> nil) then
             FreeAndNil(xVendaDAO);
 
-         if (xListaVendaC <> nil) then
-            FreeAndNil(xListaVendaC);
+//         if (xListaVendaC <> nil) then
+//            FreeAndNil(xListaVendaC);
       end;
    except
       on E : Exception do
