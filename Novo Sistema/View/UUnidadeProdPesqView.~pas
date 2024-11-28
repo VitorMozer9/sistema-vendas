@@ -61,9 +61,6 @@ implementation
 
 {$R *.dfm}
 
-
-
-
 procedure TfrmUnidadePesq.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
@@ -174,7 +171,6 @@ end;
 
 procedure TfrmUnidadePesq.btnFiltrarClick(Sender: TObject);
 begin
-   mUnidadeID := 0;
    mUnidade := EmptyStr;
    ProcessaPesquisa;
 end;
@@ -204,7 +200,6 @@ end;
 
 procedure TfrmUnidadePesq.btnLimparClick(Sender: TObject);
 begin
-   mUnidadeID := 0;
    mUnidade := EmptyStr;
    LimpaTela;
 end;

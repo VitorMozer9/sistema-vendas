@@ -1,8 +1,8 @@
 object frmVendasView: TfrmVendasView
   Left = 326
-  Top = 170
-  Width = 828
-  Height = 478
+  Top = 167
+  Width = 831
+  Height = 481
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Venda'
   Color = clBtnFace
@@ -22,8 +22,8 @@ object frmVendasView: TfrmVendasView
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 420
-    Width = 812
+    Top = 423
+    Width = 815
     Height = 19
     Panels = <
       item
@@ -35,8 +35,8 @@ object frmVendasView: TfrmVendasView
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 350
-    Width = 812
+    Top = 353
+    Width = 815
     Height = 70
     Align = alBottom
     TabOrder = 1
@@ -149,7 +149,7 @@ object frmVendasView: TfrmVendasView
         A780BBA077A890608D652DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnConfirmar: TBitBtn
-      Left = 648
+      Left = 650
       Top = 8
       Width = 75
       Height = 25
@@ -186,7 +186,7 @@ object frmVendasView: TfrmVendasView
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnCancelar: TBitBtn
-      Left = 728
+      Left = 730
       Top = 8
       Width = 75
       Height = 25
@@ -223,7 +223,7 @@ object frmVendasView: TfrmVendasView
         79F47179F47279F47178F4727AF4727AF47279F49499F6FFFFFF}
     end
     object btnSair: TBitBtn
-      Left = 728
+      Left = 730
       Top = 40
       Width = 75
       Height = 25
@@ -259,7 +259,7 @@ object frmVendasView: TfrmVendasView
         A851CF9D4EC59346B98A40B38139CE9A47DFAB53E8B863E4B25F}
     end
     object btnLimpar: TBitBtn
-      Left = 648
+      Left = 650
       Top = 40
       Width = 75
       Height = 25
@@ -297,14 +297,14 @@ object frmVendasView: TfrmVendasView
   end
   object pnlPagamentos: TPanel
     Left = 0
-    Top = 286
-    Width = 812
+    Top = 289
+    Width = 815
     Height = 64
     Align = alBottom
     TabOrder = 2
     object lblPagamento: TLabel
       Left = 9
-      Top = 25
+      Top = 38
       Width = 120
       Height = 13
       Caption = 'Forma de Pagamento'
@@ -316,15 +316,15 @@ object frmVendasView: TfrmVendasView
       ParentFont = False
     end
     object lblDesconto: TLabel
-      Left = 303
-      Top = 22
+      Left = 283
+      Top = 36
       Width = 63
       Height = 13
       Caption = 'Desconto (%)'
     end
     object lblValor: TLabel
-      Left = 461
-      Top = 20
+      Left = 452
+      Top = 36
       Width = 85
       Height = 13
       Caption = 'Valor Descontado'
@@ -336,7 +336,7 @@ object frmVendasView: TfrmVendasView
       ParentFont = False
     end
     object lblValorTotal: TLabel
-      Left = 720
+      Left = 726
       Top = 9
       Width = 78
       Height = 16
@@ -350,11 +350,13 @@ object frmVendasView: TfrmVendasView
     end
     object cmbPagamento: TComboBox
       Left = 136
-      Top = 17
+      Top = 30
       Width = 129
       Height = 21
       ItemHeight = 13
       TabOrder = 0
+      OnChange = cmbPagamentoChange
+      OnKeyPress = cmbPagamentoKeyPress
       Items.Strings = (
         'Cart'#227'o de Cr'#233'dito'
         'Cart'#227'o de D'#233'bito'
@@ -362,8 +364,8 @@ object frmVendasView: TfrmVendasView
         'Pix')
     end
     object edtDesconto: TNumEdit
-      Left = 376
-      Top = 16
+      Left = 356
+      Top = 30
       Width = 81
       Height = 21
       Alignment = taRightJustify
@@ -375,8 +377,8 @@ object frmVendasView: TfrmVendasView
       OnExit = edtDescontoExit
     end
     object edtValor: TNumEdit
-      Left = 549
-      Top = 14
+      Left = 540
+      Top = 30
       Width = 81
       Height = 21
       Alignment = taRightJustify
@@ -385,7 +387,7 @@ object frmVendasView: TfrmVendasView
       TabOrder = 2
     end
     object edtTotalValor: TNumEdit
-      Left = 720
+      Left = 726
       Top = 30
       Width = 81
       Height = 21
@@ -398,34 +400,21 @@ object frmVendasView: TfrmVendasView
   object pnlPedidos: TPanel
     Left = 0
     Top = 0
-    Width = 812
-    Height = 65
+    Width = 815
+    Height = 97
     Align = alTop
     TabOrder = 3
     object gbrPedidos: TGroupBox
       Left = 1
       Top = 1
-      Width = 810
-      Height = 63
+      Width = 813
+      Height = 95
       Align = alClient
       Caption = 'Pedido'
       TabOrder = 0
-      object lblNome: TLabel
-        Left = 448
-        Top = 28
-        Width = 33
-        Height = 13
-        Caption = 'Nome'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'MS Sans Serif'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
       object btnCliente: TSpeedButton
-        Left = 415
-        Top = 20
+        Left = 428
+        Top = 53
         Width = 25
         Height = 23
         Glyph.Data = {
@@ -482,12 +471,12 @@ object frmVendasView: TfrmVendasView
         NumGlyphs = 2
         OnClick = btnClienteClick
       end
-      object lblCodigo: TLabel
-        Left = 325
-        Top = 31
+      object lblCliente: TLabel
+        Left = 12
+        Top = 63
         Width = 40
         Height = 13
-        Caption = 'C'#243'digo'
+        Caption = 'Cliente'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -496,40 +485,112 @@ object frmVendasView: TfrmVendasView
         ParentFont = False
       end
       object lblData: TLabel
-        Left = 155
-        Top = 30
+        Left = 115
+        Top = 22
         Width = 23
         Height = 13
         Caption = 'Data'
       end
       object lblNumeroVenda: TLabel
-        Left = 16
-        Top = 32
+        Left = 7
+        Top = 24
         Width = 46
         Height = 13
         Caption = 'N'#176' Venda'
       end
+      object lblVendedor: TLabel
+        Left = 461
+        Top = 60
+        Width = 55
+        Height = 13
+        Caption = 'Vendedor'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object btnVendedor: TSpeedButton
+        Left = 772
+        Top = 53
+        Width = 25
+        Height = 23
+        Glyph.Data = {
+          36060000424D3606000000000000360000002800000020000000100000000100
+          180000000000000600003A0B00003A0B00000000000000000000FF00FFFF00FF
+          FF00FFFF00FFFF00FFB58C8C8C5A5A8C5A5A8C5A5A8C5A5A8C5A5A8C5A5A8C5A
+          5A8C5A5A8C5A5AFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF9090905F5F5F5F
+          5F5F5F5F5F5F5F5F5F5F5F5F5F5F5F5F5F5F5F5F5F5F5FFF00FFFF00FFFF00FF
+          FF00FFFF00FFFF00FFB58C8CFFF7E7F7EFDEF7EFDEF7EFDEF7EFDEF7EFDEF7EF
+          DEF7E7CE8C5A5AFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF909090F3F3F3EA
+          EAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAE1E1E15F5F5FFF00FFFF00FFFF00FF
+          FF00FFFF00FFFF00FFB58C8CF7EFDEF7DECEF7DEC6F7DEC6F7DEC6F7DEC6EFDE
+          CEEFDECE8C5A5AFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF909090EAEAEADB
+          DBDBD9D9D9D9D9D9D9D9D9D9D9D9DADADADADADA5F5F5FFF00FFFF00FFFF00FF
+          FF00FFFF00FFFF00FFB58C8CFFF7E7FFD6A5FFD6A5FFD6A5FFD6A5FFD6A5FFD6
+          A5EFDECE8C5A5AFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF909090F3F3F3CB
+          CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBDADADA5F5F5FFF00FFFF00FFB58C8C
+          8C5A5A8C5A5A8C5A5AB58C8CFFF7EFF7DEC6F7DEC6F7DEC6F7DEC6F7DEBDF7E7
+          CEEFDECE9C6B63FF00FFFF00FF9090905F5F5F5F5F5F5F5F5F909090F5F5F5D9
+          D9D9D9D9D9D9D9D9D9D9D9D6D6D6E1E1E1DADADA6D6D6DFF00FFFF00FFB58C8C
+          FFF7E7F7EFDEF7EFDEB58C8CFFF7EFF7E7CEF7DEC6F7DEC6F7DEC6F7DEC6F7E7
+          D6EFDECE9C6B6BFF00FFFF00FF909090F3F3F3EAEAEAEAEAEA909090F5F5F5E1
+          E1E1D9D9D9D9D9D9D9D9D9D9D9D9E3E3E3DADADA6F6F6FFF00FFFF00FFB58C8C
+          F7EFDEF7DECEF7DEC6B58C8CFFFFF7FFD6A5FFD6A5FFD6A54C804C4C804C4C80
+          4C4C804CA57B73FF00FFFF00FF909090EAEAEADBDBDBD9D9D9909090FCFCFCCB
+          CBCBCBCBCBCBCBCB6B6B6B6B6B6B6B6B6B6B6B6B7C7C7CFF00FFFF00FFB58C8C
+          FFF7E7FFD6A5FFD6A5B58C8CFFFFF7FFE7D6FFE7D6F7E7D64C804C52AE5752AE
+          574C804CA57B73FF00FFFF00FF909090F3F3F3CBCBCBCBCBCB909090FCFCFCE4
+          E4E4E4E4E4E3E3E36B6B6B8A8A8A8A8A8A6B6B6B7C7C7CFF00FFFF00FFB58C8C
+          FFF7EFF7DEC6F7DEC6B58C8CFFFFFFFFFFFF4C804C4C804C4C804C52AE5752AE
+          574C804C4C804C4C804CFF00FF909090F5F5F5D9D9D9D9D9D9909090FFFFFFFF
+          FFFF6B6B6B6B6B6B6B6B6B8A8A8A8A8A8A6B6B6B6B6B6B6B6B6BFF00FFB58C8C
+          FFF7EFF7E7CEF7DEC6B58C8CFFFFFFFFFFFF4C804C52AE5752AE5752AE5752AE
+          5752AE5752AE574C804CFF00FF909090F5F5F5E1E1E1D9D9D9909090FFFFFFFF
+          FFFF6B6B6B8A8A8A8A8A8A8A8A8A8A8A8A8A8A8A8A8A8A6B6B6BFF00FFB58C8C
+          FFFFF7FFD6A5FFD6A5B58C8CFFFFFFFFFFFF4C804C69CA8069CA8069CA8052AE
+          5752AE5752AE574C804CFF00FF909090FCFCFCCBCBCBCBCBCB909090FFFFFFFF
+          FFFF6B6B6BAAAAAAAAAAAAAAAAAA8A8A8A8A8A8A8A8A8A6B6B6BFF00FFB58C8C
+          FFFFF7FFE7D6FFE7D6B58C8CB58C8CB58C8C4C804C4C804C4C804C69CA8052AE
+          574C804C4C804C4C804CFF00FF909090FCFCFCE4E4E4E4E4E490909090909090
+          90906B6B6B6B6B6B6B6B6BAAAAAA8A8A8A6B6B6B6B6B6B6B6B6BFF00FFB58C8C
+          FFFFFFFFFFFFFFFFFFFFFFF7FFFFF7EFDEDED6C6C6BDADAD4C804C69CA8052AE
+          574C804CFF00FFFF00FFFF00FF909090FFFFFFFFFFFFFFFFFFFCFCFCFCFCFCDF
+          DFDFC7C7C7AEAEAE6B6B6BAAAAAA8A8A8A6B6B6BFF00FFFF00FFFF00FFB58C8C
+          FFFFFFFFFFFFFFFFFFFFFFF7FFFFF7B58C8CB58C8CB58C8C4C804C4C804C4C80
+          4C4C804CFF00FFFF00FFFF00FF909090FFFFFFFFFFFFFFFFFFFCFCFCFCFCFC90
+          90909090909090906B6B6B6B6B6B6B6B6B6B6B6BFF00FFFF00FFFF00FFB58C8C
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB58C8CEFB56BC68C7BFF00FFFF00FFFF00
+          FFFF00FFFF00FFFF00FFFF00FF909090FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF90
+          9090A4A4A48C8C8CFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFB58C8C
+          B58C8CB58C8CB58C8CB58C8CB58C8CB58C8CBD8484FF00FFFF00FFFF00FFFF00
+          FFFF00FFFF00FFFF00FFFF00FF90909090909090909090909090909090909090
+          9090898989FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
+        NumGlyphs = 2
+        OnClick = btnVendedorClick
+      end
       object edtNome: TEdit
-        Left = 486
-        Top = 21
+        Left = 110
+        Top = 54
         Width = 313
         Height = 21
         CharCase = ecUpperCase
         TabOrder = 3
       end
       object edtCodigo: TEdit
-        Left = 369
-        Top = 24
-        Width = 37
-        Height = 21
+        Left = 62
+        Top = 54
+        Width = 46
+        Height = 22
         TabOrder = 2
         OnChange = edtCodigoChange
         OnExit = edtCodigoExit
         OnKeyDown = edtCodigoKeyDown
       end
       object mskData: TMaskEdit
-        Left = 184
-        Top = 24
+        Left = 142
+        Top = 15
         Width = 86
         Height = 21
         EditMask = '##/##/####;1;_'
@@ -538,34 +599,47 @@ object frmVendasView: TfrmVendasView
         Text = '  /  /    '
       end
       object edtNumeroVenda: TEdit
-        Left = 70
-        Top = 24
-        Width = 56
+        Left = 62
+        Top = 16
+        Width = 46
         Height = 21
         TabOrder = 0
+        OnChange = edtNumeroVendaChange
+      end
+      object cmbVendedor: TComboBox
+        Left = 520
+        Top = 54
+        Width = 245
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 4
+        OnChange = cmbVendedorChange
+        OnEnter = cmbVendedorEnter
+        OnKeyDown = cmbVendedorKeyDown
+        OnKeyPress = cmbVendedorKeyPress
       end
     end
   end
   object pnlProdutos: TPanel
     Left = 0
-    Top = 65
-    Width = 812
-    Height = 221
+    Top = 97
+    Width = 815
+    Height = 192
     Align = alClient
     TabOrder = 4
     object gbrProdutos: TGroupBox
       Left = 1
       Top = 1
-      Width = 810
-      Height = 219
+      Width = 813
+      Height = 190
       Align = alClient
       Caption = 'Produtos'
       TabOrder = 0
       object dbgProdutos: TDBGrid
         Left = 2
         Top = 15
-        Width = 806
-        Height = 202
+        Width = 809
+        Height = 173
         Align = alClient
         DataSource = dtsProdutos
         Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgCancelOnExit]
@@ -590,7 +664,7 @@ object frmVendasView: TfrmVendasView
             Expanded = False
             FieldName = 'Descricao'
             Title.Caption = 'Descri'#231#227'o'
-            Width = 410
+            Width = 377
             Visible = True
           end
           item
@@ -626,17 +700,18 @@ object frmVendasView: TfrmVendasView
   object dtsProdutos: TDataSource
     DataSet = cdsProdutos
     Left = 6
-    Top = 119
+    Top = 151
   end
   object cdsProdutos: TClientDataSet
     Active = True
     Aggregates = <>
     Params = <>
     AfterOpen = cdsProdutosAfterOpen
+    AfterEdit = cdsProdutosAfterEdit
     AfterPost = cdsProdutosAfterPost
     BeforeDelete = cdsProdutosBeforeDelete
     Left = 36
-    Top = 119
+    Top = 151
     Data = {
       970000009619E0BD010000001800000006000000000003000000970002494404
       000100000000000944657363726963616F010049000000010005574944544802

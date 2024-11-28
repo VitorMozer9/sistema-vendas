@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, Mask, NumEdit, DB,
   DBClient, Grids, DBGrids, UEnumerationUtil, uMessageUtil, UVenda, UVendaController,
-  UPessoaController, UVendaItem;
+  UPessoaController, UVendaItem, UClassFuncoes;
 
 type
   TfrmVendasView = class(TForm)
@@ -23,10 +23,9 @@ type
     gbrPedidos: TGroupBox;
     pnlProdutos: TPanel;
     gbrProdutos: TGroupBox;
-    lblNome: TLabel;
     edtNome: TEdit;
     btnCliente: TSpeedButton;
-    lblCodigo: TLabel;
+    lblCliente: TLabel;
     edtCodigo: TEdit;
     mskData: TMaskEdit;
     lblData: TLabel;
@@ -50,6 +49,9 @@ type
     cdsProdutosTotalPreco: TFloatField;
     btnLimpar: TBitBtn;
     dbgProdutos: TDBGrid;
+    lblVendedor: TLabel;
+    cmbVendedor: TComboBox;
+    btnVendedor: TSpeedButton;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnIncluirClick(Sender: TObject);
@@ -77,6 +79,16 @@ type
       Shift: TShiftState);
     procedure dbgProdutosExit(Sender: TObject);
     procedure cdsProdutosAfterOpen(DataSet: TDataSet);
+    procedure edtNumeroVendaChange(Sender: TObject);
+    procedure cmbPagamentoChange(Sender: TObject);
+    procedure cmbPagamentoKeyPress(Sender: TObject; var Key: Char);
+    procedure cmbVendedorEnter(Sender: TObject);
+    procedure cmbVendedorChange(Sender: TObject);
+    procedure cmbVendedorKeyPress(Sender: TObject; var Key: Char);
+    procedure btnVendedorClick(Sender: TObject);
+    procedure cmbVendedorKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure cdsProdutosAfterEdit(DataSet: TDataSet);
 
   private
     { Private declarations }
@@ -94,6 +106,7 @@ type
    procedure CarregaProduto;
    procedure ProcessaProdutoVenda;
    procedure AtualizaVenda;
+   procedure carregaCMB;
 
 
    function CarregaCliente      : Boolean;
@@ -116,7 +129,8 @@ var
 implementation
 
 uses Types, Math, UClientesPesqView, UClienteView,UPessoa,UProduto,UProdutoController,
-   UVendaItemController, UProdutoPesqView, UVendaPesqView;
+   UVendaItemController, UProdutoPesqView, UVendaPesqView,UUsuario, UCadUsuaController,
+  UCadUsuaView;
 
 {$R *.dfm}
 
@@ -164,7 +178,10 @@ begin
          cmbPagamento.Enabled := False;
          btnLimpar.Enabled := False;
          btnCliente.Enabled := False;
+         btnVendedor.Enabled := False;
+         cmbVendedor.ItemIndex := -1;
          LimpaTela;
+
 
          stbBarraStatus.Panels[0].Text := EmptyStr;
          stbBarraStatus.Panels[1].Text := EmptyStr;
@@ -186,6 +203,7 @@ begin
 
          btnLimpar.Enabled      := True;
          btnCliente.Enabled     := True;
+          btnVendedor.Enabled := True;
          cmbPagamento.Enabled   := True;
          edtTotalValor.Enabled  := False;
          edtNumeroVenda.Enabled := False;
@@ -293,6 +311,7 @@ begin
    edtValor.Value := 0;
    mskData.Text := EmptyStr;
    edtDesconto.Value := 0;
+   cmbVendedor.ItemIndex := -1;
 
    for xI := 0 to pred(ComponentCount) do
    begin
@@ -429,6 +448,7 @@ begin
       vObjVenda.TotalVenda     := edtTotalValor.Value;
       vObjVenda.FormaPagamento := cmbPagamento.Text;
       vObjVenda.NomeCliente    := edtNome.Text;
+      vObjVenda.Vendedor       := cmbVendedor.Text;
 
       TVendaController.getInstancia.GravaVenda(vObjVenda);
 
@@ -477,6 +497,16 @@ begin
          exit;
    end;
 
+   if (cmbVendedor.Text = EmptyStr) then
+   begin
+      TMessageUtil.Alerta(
+         'O vendedor não pode ficar em branco. ');
+
+      if (cmbVendedor.CanFocus) then
+         cmbVendedor.SetFocus;
+         exit;
+   end;
+
    if (dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger = 0) then
    begin
       TMessageUtil.Alerta(
@@ -504,6 +534,7 @@ begin
    cmbPagamento.Items.Add('Cartão de Débito');
    cmbPagamento.Items.Add('Dinheiro');
    cmbPagamento.Items.Add('Pix');
+   carregaCMB;
 
    cdsProdutos.Open;
 end;
@@ -576,6 +607,7 @@ begin
       edtCodigo.Text             := IntToStr(vObjVenda.ID_Cliente);
       mskData.Text               := DateTimeToStr(vObjVenda.DataVenda);
       cmbPagamento.Text          := vObjVenda.FormaPagamento;
+      cmbVendedor.Text           := vObjVenda.Vendedor;
       edtValor.Value             := vObjVenda.ValorVenda;
       edtDesconto.Value          := vObjVenda.TotalDesconto;
       edtTotalValor.Value        := vObjVenda.TotalVenda;
@@ -639,11 +671,12 @@ begin
          CarregaCliente;
          if (edtCodigo.Text <> EmptyStr) then
          begin
-            dbgProdutos.SelectedIndex := 0;
-            dbgProdutos.SetFocus;
+            if (cmbVendedor.CanFocus) then
+               cmbVendedor.SetFocus;
          end;
       end;
    end;
+
    vKey := VK_CLEAR;
 end;
 
@@ -887,8 +920,14 @@ end;
 
 procedure TfrmVendasView.edtCodigoChange(Sender: TObject);
 begin
+   edtCodigo.Text := TFuncoes.removeCaracterEspecial(edtCodigo.Text, true);
+   edtCodigo.Text := TFuncoes.SoNumero(edtCodigo.Text);
+
    if (edtCodigo.Text = EmptyStr) then
       edtNome.Text := EmptyStr;
+
+//   if (edtNome.Text <> EmptyStr) and  then
+//      edtCodigo.Text := EmptyStr;
 end;
 
 function TfrmVendasView.PesquisaProduto(pKey : Word;
@@ -1082,7 +1121,7 @@ end;
 procedure TfrmVendasView.dbgProdutosExit(Sender: TObject);
 begin
    cdsProdutos.Last;
-   if (cdsProdutosDescricao.Value = EmptyStr) then
+   if (cdsProdutosDescricao.Value = EmptyStr) and (cdsProdutos.RecordCount <> 0) then
       dbgProdutos.DataSource.DataSet.Delete;
 end;
 
@@ -1090,6 +1129,103 @@ procedure TfrmVendasView.cdsProdutosAfterOpen(DataSet: TDataSet);
 begin
    (dbgProdutos.DataSource.DataSet.FieldByName('UniPreco') as TFloatField).DisplayFormat := 'R$ ##,##0.00';
    (dbgProdutos.DataSource.DataSet.FieldByName('TotalPreco') as TFloatField).DisplayFormat := 'R$ ##,##0.00';
+end;
+
+procedure TfrmVendasView.edtNumeroVendaChange(Sender: TObject);
+begin
+   edtNumeroVenda.Text := TFuncoes.removeCaracterEspecial(edtNumeroVenda.Text, true);
+   edtNumeroVenda.Text := TFuncoes.SoNumero(edtNumeroVenda.Text);
+end;
+
+procedure TfrmVendasView.cmbPagamentoChange(Sender: TObject);
+begin
+   cmbPagamento.Text := TFuncoes.removeCaracterEspecial(cmbPagamento.Text, true);
+   cmbPagamento.Text := TFuncoes.SoNumero(cmbPagamento.Text);
+end;
+
+procedure TfrmVendasView.cmbPagamentoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+    if (Key in['0','1','2','3','4','5','6','7','8','9']) then
+      Key := #0;
+end;
+
+procedure TfrmVendasView.carregaCMB;
+var
+   xListaVendedor   : TColUsuario;
+   xAux             : Integer;
+   xCadUsua         : TUsuario;
+begin
+   try
+      xListaVendedor := TColUsuario.Create;
+
+      xListaVendedor :=
+         TCadUsuaController.getInstancia.PesquisaUsuario('');
+
+      cmbVendedor.Items.Clear;
+
+      for xAux := 0 to pred(xListaVendedor.Count) do
+      begin
+         xCadUsua := xListaVendedor[xAux];
+
+         cmbVendedor.Items.AddObject(xCadUsua.Nome, xCadUsua);
+      end;
+
+   finally
+      if(xListaVendedor <> nil) then
+         FreeAndNil(xListaVendedor);
+   end;
+end;
+
+procedure TfrmVendasView.cmbVendedorEnter(Sender: TObject);
+begin
+   carregaCMB;
+end;
+
+procedure TfrmVendasView.cmbVendedorChange(Sender: TObject);
+begin
+   cmbVendedor.Text := TFuncoes.removeCaracterEspecial(cmbVendedor.Text, true);
+   cmbVendedor.Text := TFuncoes.SoNumero(cmbVendedor.Text);
+end;
+
+procedure TfrmVendasView.cmbVendedorKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if (Key in['0','1','2','3','4','5','6','7','8','9']) then
+      Key := #0;
+end;
+
+procedure TfrmVendasView.btnVendedorClick(Sender: TObject);
+begin
+   try
+      Screen.Cursor := crHourGlass;
+
+      if frmCadUsua  = nil then
+            frmCadUsua := TfrmCadUsua.Create(Application);
+
+         frmCadUsua.Show;
+
+   finally
+      Screen.Cursor := crDefault;
+   end;
+end;
+
+procedure TfrmVendasView.cmbVendedorKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   if vKey = VK_RETURN then
+   begin
+      if (edtCodigo.Text <> EmptyStr) then
+      begin
+         dbgProdutos.SelectedIndex := 0;
+         dbgProdutos.SetFocus;
+      end;
+   end;
+end;
+
+procedure TfrmVendasView.cdsProdutosAfterEdit(DataSet: TDataSet);
+begin
+   //validações
 end;
 
 end.

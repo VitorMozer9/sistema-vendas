@@ -508,7 +508,7 @@ object frmProdutoView: TfrmProdutoView
       TabOrder = 4
     end
     object cmbUnidade: TComboBox
-      Left = 71
+      Left = 69
       Top = 36
       Width = 51
       Height = 21

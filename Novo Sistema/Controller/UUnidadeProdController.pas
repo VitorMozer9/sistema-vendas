@@ -164,7 +164,7 @@ begin
             IfThen(pUnidade <> EmptyStr,
             'WHERE                                            '#13 +
             '    (UNIDADE LIKE UPPER(''%' + pUnidade + '%'' ))'#13 +
-               'ORDER BY UNIDADE, ID ', EmptyStr);
+               'ORDER BY UNIDADE, DESCRICAO ', EmptyStr);
 
          Result := xUnidadeDAO.RetornaLista(xCondicao);
 

@@ -461,6 +461,7 @@ object frmCadUsua: TfrmCadUsua
       Height = 21
       CharCase = ecUpperCase
       TabOrder = 3
+      OnKeyPress = edtNomeKeyPress
     end
     object edtSenha: TEdit
       Left = 56

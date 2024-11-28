@@ -469,7 +469,7 @@ begin
       if (edtUnidade.Text = EmptyStr) and not(vEstadoTela = etConsultar) then
       begin
          TMessageUtil.Alerta(
-            'A Unidade de Produto não pode ficar em branco');
+            'A Unidade de Produto não pode ficar em branco.');
 
          if (edtUnidade.CanFocus) then
             edtUnidade.SetFocus;
@@ -484,7 +484,7 @@ begin
          CarregaDadosTela
       else
       begin
-         TMessageUtil.Alerta('Nenhum dado de unidade encontrado');
+         TMessageUtil.Alerta('Nenhum dado de unidade de produto encontrado.');
 
          edtUnidade.Clear;
 
@@ -498,7 +498,7 @@ begin
       on E : Exception do
       begin
          Raise Exception.Create(
-         'Falha ao consultar dados de unidade de produto [View]: '+#13 +
+         'Falha ao consultar dados da unidade de produto [View]: '+#13 +
          e.Message);
       end;
    end;  
@@ -551,7 +551,7 @@ begin
       on E: Exception do
       begin
          raise Exception.Create(
-            'Falha ao alterar os dados de Unidade [View]: '#13+
+            'Falha ao alterar dados de Unidade. [View]: '#13+
             e.Message);
       end;
    end;
@@ -571,7 +571,7 @@ begin
       if (vObjUnidadeProduto = nil) then
       begin
          TMessageUtil.Alerta(
-            'Não foi possível carregar os dados de unidade ');
+            'Não foi possível carregar os dados de unidade. ');
 
          LimpaTela;
          vEstadoTela := etPadrao;

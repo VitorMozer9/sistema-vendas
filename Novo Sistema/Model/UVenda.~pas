@@ -10,7 +10,7 @@ type
       private
          vID             : Integer;
          vID_Cliente     : Integer;
-         vDataVenda      : String;
+         vDataVenda      : TDateTime;
          vValorVenda     : Double;
          vTotalDesconto  : Double;
          vTotalVenda     : Double;
@@ -23,7 +23,7 @@ type
       published
          property ID             : Integer read vID write vID;
          property ID_Cliente     : Integer read vID_Cliente write vID_Cliente;
-         property DataVenda      : String read vDataVenda write vDataVenda;
+         property DataVenda      : TDateTime read vDataVenda write vDataVenda;
          property ValorVenda     : Double read vValorVenda write vValorVenda;
          property TotalDesconto  : Double read vTotalDesconto write vTotalDesconto;
          property TotalVenda     : Double read vTotalVenda write vTotalVenda;
@@ -58,7 +58,7 @@ constructor TVenda.Create;
 begin
    Self.vID              := 0;
    Self.vID_Cliente      := 0;
-   Self.vDataVenda       := EmptyStr;
+   Self.vDataVenda       := 0;
    Self.vValorVenda      := 0;
    Self.vTotalDesconto   := 0;
    Self.vTotalVenda      := 0;
