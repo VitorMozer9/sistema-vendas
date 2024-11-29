@@ -43,6 +43,8 @@ type
     procedure dbgPesquisaVendaDblClick(Sender: TObject);
     procedure dbgPesquisaVendaKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -129,10 +131,12 @@ begin
          if (edtCodigo.Text <> EmptyStr) then
             xID_Venda := StrToInt(edtCodigo.Text);
 
-         if (TFuncoes.SoNumero(mskDataInicio.Text) = EmptyStr) then
+         if (TFuncoes.SoNumero(mskDataInicio.Text) = EmptyStr) or
+            ( Length(TFuncoes.SoNumero(mskDataInicio.Text)) <> 8 )  then
             mskDataInicio.Text := '01/01/1999';
 
-         if (TFuncoes.SoNumero(mskDataFim.Text) = EmptyStr) then
+         if (TFuncoes.SoNumero(mskDataFim.Text) = EmptyStr) or
+            ( Length(TFuncoes.SoNumero(mskDataFim.Text)) <> 8 ) then
             mskDataFim.Text := '01/01/2999';
 
              xListaVenda :=
@@ -246,6 +250,19 @@ begin
    if (Key = VK_RETURN) and
       (btnConfirmar.CanFocus) then
       btnConfirmar.SetFocus;
+end;
+
+procedure TfrmVendaPesqView.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   //frmVendaPesqView := nil;
+   LimpaTela;
+end;
+
+procedure TfrmVendaPesqView.FormShow(Sender: TObject);
+begin
+   if (edtCodigo.CanFocus) then
+      edtCodigo.SetFocus;
 end;
 
 end.

@@ -39,11 +39,10 @@ type
   end;
 
 var
-  fmPrincipal: TfmPrincipal;    //variavel do formulario
+  fmPrincipal: TfmPrincipal;
 
-implementation    //codigo fonte
+implementation
   uses
-     //exemplo de herança, chamou a "classe" Uconexoes
     UConexao, UClienteView, UUnidadeProdView, UProdutoView, UCadUsuaView,
   UVendaView;
 
@@ -51,7 +50,7 @@ implementation    //codigo fonte
 
 procedure TfmPrincipal.menSairClick(Sender: TObject);
 begin
-  Close; //fecha o sistema
+  Close; 
 end;
 
 procedure TfmPrincipal.FormShow(Sender: TObject);

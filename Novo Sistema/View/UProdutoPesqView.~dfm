@@ -1,6 +1,6 @@
 object frmProdutoPesq: TfrmProdutoPesq
-  Left = 1545
-  Top = 173
+  Left = 642
+  Top = 172
   Width = 654
   Height = 327
   BorderIcons = [biSystemMenu, biMinimize]

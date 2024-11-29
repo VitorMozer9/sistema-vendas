@@ -14,6 +14,7 @@ object frmVendasView: TfrmVendasView
   KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
+  OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
@@ -582,7 +583,7 @@ object frmVendasView: TfrmVendasView
         Left = 62
         Top = 54
         Width = 46
-        Height = 22
+        Height = 21
         TabOrder = 2
         OnChange = edtCodigoChange
         OnExit = edtCodigoExit

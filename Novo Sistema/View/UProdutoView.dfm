@@ -15,6 +15,7 @@ object frmProdutoView: TfrmProdutoView
   KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
+  OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
@@ -514,6 +515,7 @@ object frmProdutoView: TfrmProdutoView
       Height = 21
       CharCase = ecUpperCase
       ItemHeight = 13
+      MaxLength = 2
       TabOrder = 5
       OnChange = cmbUnidadeChange
       OnEnter = cmbUnidadeEnter

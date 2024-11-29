@@ -89,6 +89,7 @@ type
     procedure cmbVendedorKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure cdsProdutosAfterEdit(DataSet: TDataSet);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
 
   private
     { Private declarations }
@@ -225,6 +226,7 @@ begin
          btnCliente.Enabled := False;
          btnLimpar.Enabled := True;
 
+
          if (edtNumeroVenda.Text <> EmptyStr) then
          begin
             edtNumeroVenda.Enabled  := False;
@@ -245,6 +247,8 @@ begin
 
       etPesquisar:
       begin
+         stbBarraStatus.Panels[0].Text := 'Pesquisa';
+
          if (frmVendaPesqView = nil) then
          frmVendaPesqView := TfrmVendaPesqView.Create(Application);
 
@@ -273,12 +277,11 @@ begin
    case vKey of
       VK_RETURN:
       begin
-//         if (edtNome.Text <> EmptyStr) then
-//         begin
-//            dbgProdutos.SetFocus;
-//            dbgProdutos.SelectedIndex := 0;
-//         end;
-         //Perform(WM_NEXTDLGCTL,0,0);
+//         if (edtCodigo.Text <> EmptyStr) and (cmbVendedor.Text <> EmptyStr)
+//            and (dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger <> 0) then
+//            Perform(WM_NEXTDLGCTL,0,0);
+//         if (btnConfirmar.CanFocus) then
+//            btnConfirmar.SetFocus;
       end;
 
       VK_ESCAPE:
@@ -500,7 +503,7 @@ begin
    if (cmbVendedor.Text = EmptyStr) then
    begin
       TMessageUtil.Alerta(
-         'O vendedor não pode ficar em branco. ');
+         'O nome do vendedor não pode ficar em branco. ');
 
       if (cmbVendedor.CanFocus) then
          cmbVendedor.SetFocus;
@@ -698,7 +701,7 @@ begin
       else
       begin
          TMessageUtil.Alerta('Nenhum cliente encontrado para o código informado.');
-         LimpaTela;
+         edtCodigo.Text := EmptyStr;
          if (edtCodigo.CanFocus) then
             edtCodigo.SetFocus;
 
@@ -729,6 +732,8 @@ end;
 procedure TfrmVendasView.btnLimparClick(Sender: TObject);
 begin
    LimpaTela;
+   vEstadoTela := etPadrao;
+   DefineestadoTela;
 end;
 
 Procedure TfrmVendasView.ProcessaProdutoVenda;
@@ -982,7 +987,6 @@ begin
       end;
 
       dbgProdutos.DataSource.DataSet.First;
-
       while not dbgProdutos.DataSource.DataSet.Eof do
       begin
          if (dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger = xIDProduto)
@@ -1002,10 +1006,15 @@ begin
                dbgProdutos.DataSource.DataSet.Append;
                dbgProdutos.SelectedIndex := 0;
             end;
-
             exit;
          end;
          dbgProdutos.DataSource.DataSet.Next;
+      end;
+
+      if (dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString <> EmptyStr)
+            and (dbgProdutos.SelectedIndex = 0) then
+      begin
+         dbgProdutos.DataSource.DataSet.Append;
       end;
 
       if(xProduto <> nil) then
@@ -1020,13 +1029,6 @@ begin
             dbgProdutos.DataSource.DataSet.FieldByName('UniPreco').AsFloat *
             dbgProdutos.DataSource.DataSet.FieldByName('Quantidade').AsFloat;
          dbgProdutos.DataSource.DataSet.Post;
-
-         if (dbgProdutos.DataSource.DataSet.FieldByName('Descricao').AsString <> EmptyStr)
-            and (dbgProdutos.SelectedIndex = 0) then
-         begin
-            dbgProdutos.DataSource.DataSet.Append;
-         end;
-
          exit;
       end;
    finally
@@ -1226,6 +1228,15 @@ end;
 procedure TfrmVendasView.cdsProdutosAfterEdit(DataSet: TDataSet);
 begin
    //validações
+end;
+
+procedure TfrmVendasView.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+//   LimpaTela;
+//   vEstadoTela := etPadrao;
+//   DefineEstadoTela;
+   frmVendasView := nil;
 end;
 
 end.

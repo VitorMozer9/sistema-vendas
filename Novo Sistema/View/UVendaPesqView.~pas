@@ -43,6 +43,8 @@ type
     procedure dbgPesquisaVendaDblClick(Sender: TObject);
     procedure dbgPesquisaVendaKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -144,18 +146,15 @@ begin
          begin
             for xAux := 0 to pred(xListaVenda.Count) do
             begin
-               if Assigned(xListaVenda.Retorna(xAux)) then
+               if xListaVenda.Retorna(xAux).ID <> 0 then
                begin
-                  if xListaVenda.Retorna(xAux).ID <> 0 then
-                  begin
-                     cdsVendaPesq.Append;
-                     cdsVendaPesqCodigoVenda.Value := xListaVenda.Retorna(xAux).ID;
-                     cdsVendaPesqNomeCliente.Value := xListaVenda.Retorna(xAux).NomeCliente;
-                     cdsVendaPesqDataVenda.Text :=
-                        FormatDateTime('dd/mm/yyyy',xListaVenda.Retorna(xAux).DataVenda);
-                     cdsVendaPesqTotalVenda.Value := xListaVenda.Retorna(xAux).TotalVenda;
-                     cdsVendaPesq.Post;
-                  end;
+                  cdsVendaPesq.Append;
+                  cdsVendaPesqCodigoVenda.Value := xListaVenda.Retorna(xAux).ID;
+                  cdsVendaPesqNomeCliente.Value := xListaVenda.Retorna(xAux).NomeCliente;
+                  cdsVendaPesqDataVenda.Text :=
+                     FormatDateTime('dd/mm/yyyy',xListaVenda.Retorna(xAux).DataVenda);
+                  cdsVendaPesqTotalVenda.Value := xListaVenda.Retorna(xAux).TotalVenda;
+                  cdsVendaPesq.Post;
                end;
             end;
          end;
@@ -249,6 +248,19 @@ begin
    if (Key = VK_RETURN) and
       (btnConfirmar.CanFocus) then
       btnConfirmar.SetFocus;
+end;
+
+procedure TfrmVendaPesqView.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   //frmVendaPesqView := nil;
+   LimpaTela;
+end;
+
+procedure TfrmVendaPesqView.FormShow(Sender: TObject);
+begin
+   if (edtCodigo.CanFocus) then
+      edtCodigo.SetFocus;
 end;
 
 end.

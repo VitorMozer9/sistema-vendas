@@ -52,6 +52,7 @@ type
     procedure cmbUnidadeChange(Sender: TObject);
     procedure btnUnidadeProdutoClick(Sender: TObject);
     procedure cmbUnidadeEnter(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
 
   private
     { Private declarations }
@@ -490,6 +491,16 @@ begin
          exit;
    end;
 
+   if (cmbUnidade.Text <> EmptyStr) and (edtUnidadeDesc.Text = EmptyStr) then
+   begin
+      TMessageUtil.Alerta(
+         'A descrição da unidade do produto não pode ficar em branco.  ');
+
+      if (cmbUnidade.CanFocus) then
+         cmbUnidade.SetFocus;
+         exit;
+   end;
+
    Result := True;
 end;
 
@@ -775,6 +786,12 @@ begin
       if xDescricaoUnidade <> nil then
          FreeAndNil(xDescricaoUnidade);
    end
+end;
+
+procedure TfrmProdutoView.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   frmProdutoView := nil;
 end;
 
 end.

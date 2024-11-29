@@ -4,7 +4,7 @@ object frmCadUsua: TfrmCadUsua
   Width = 403
   Height = 239
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Cadastro de Usu'#225'rio'
+  Caption = 'Cadastro de Vendedor'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

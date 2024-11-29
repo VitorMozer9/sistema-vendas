@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons,UEnumerationUtil, UUnidadeProduto;
+  Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons,UEnumerationUtil, UUnidadeProduto, UProdutoController;
 
 type
   TfrmUnidadeProd = class(TForm)
@@ -183,6 +183,7 @@ begin
          CamposEnable(True);
 
          chkAtivo.Checked := True;
+         chkAtivo.Enabled := False;
 
          if (edtUnidade.CanFocus) then
             edtUnidade.SetFocus;
@@ -359,33 +360,47 @@ begin
 end;
 
 function TfrmUnidadeProd.ProcessaInclusao: Boolean;
+var
+   xUnidadeProduto : TUnidadeProduto;
 begin
-  try
-     try
-        Result := False;
+   try
+      try
+         Result   := False;
+         xUnidadeProduto := nil;
 
-        if ProcessaUnidadeProd then
-        begin
-           TMessageUtil.Informacao('Unidade cadastrada com sucesso');
+         xUnidadeProduto := TUnidadeProduto.Create;
+         xUnidadeProduto :=
+           TUnidadeProdController.getInstancia.BuscaUnidade(Trim(edtUnidade.Text));
 
-           vEstadoTela := etPadrao;
-           DefineEstadoTela;
+         if (xUnidadeProduto <> nil) then
+         begin
+            TMessageUtil.Alerta('Unidade de Produto já existente.');
+            if (edtUnidade.CanFocus) then
+               edtUnidade.SetFocus;
+            exit;
+         end;
 
-           Result := True;
-        end;
-     except
-        on E : Exception do
-        begin
-           Raise Exception.Create(
-              'Falha ao incluir dados da Unidade de Produto [View]:'+ #13 +
-              e.Message);
-        end;
-     end;
+         if ProcessaUnidadeProd then
+         begin
+            TMessageUtil.Informacao('Unidade cadastrada com sucesso');
 
-  finally
-     if (vObjUnidadeProduto <> nil) then
-        FreeAndNil(vObjUnidadeProduto);
-  end;
+            vEstadoTela := etPadrao;
+            DefineEstadoTela;
+
+            Result := True;
+         end;
+      except
+         on E : Exception do
+         begin
+          Raise Exception.Create(
+             'Falha ao incluir dados da Unidade de Produto [View]:'+ #13 +
+             e.Message);
+         end;
+      end;
+   finally
+      if (vObjUnidadeProduto <> nil) then
+         FreeAndNil(vObjUnidadeProduto);
+   end;
 end;
 
 function TfrmUnidadeProd.ProcessaUnidadeProd: Boolean;

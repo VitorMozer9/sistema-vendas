@@ -3,7 +3,7 @@ object frmVendaPesqView: TfrmVendaPesqView
   Top = 113
   Width = 600
   Height = 378
-  BorderIcons = [biSystemMenu, biMinimize]
+  BorderIcons = [biSystemMenu]
   Caption = 'Pesquisa de Vendas'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,7 +14,9 @@ object frmVendaPesqView: TfrmVendaPesqView
   KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
+  OnClose = FormClose
   OnKeyDown = FormKeyDown
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object stbBarraStatus: TStatusBar
@@ -197,7 +199,7 @@ object frmVendaPesqView: TfrmVendaPesqView
         Width = 75
         Height = 25
         Caption = '&Filtrar'
-        TabOrder = 1
+        TabOrder = 3
         OnClick = btnFiltrarClick
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
@@ -234,7 +236,7 @@ object frmVendaPesqView: TfrmVendaPesqView
         Height = 21
         EditMask = '##/##/####;1;_'
         MaxLength = 10
-        TabOrder = 2
+        TabOrder = 1
         Text = '  /  /    '
       end
       object mskDataFim: TMaskEdit
@@ -244,7 +246,7 @@ object frmVendaPesqView: TfrmVendaPesqView
         Height = 21
         EditMask = '##/##/####;1;_'
         MaxLength = 10
-        TabOrder = 3
+        TabOrder = 2
         Text = '  /  /    '
       end
     end
