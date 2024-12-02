@@ -23,15 +23,15 @@ type
     stbBarraStatus: TStatusBar;
     Image1: TImage;
     MenUniProduto: TMenuItem;
-    menUsuario: TMenuItem;
+    V1: TMenuItem;
     //Métodos criados ate o momento
     procedure menSairClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure menClientesClick(Sender: TObject);
     procedure MenUniProdutoClick(Sender: TObject);
     procedure menProdutosClick(Sender: TObject);
-    procedure menUsuarioClick(Sender: TObject);
     procedure menRelVendasClick(Sender: TObject);
+    procedure V1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -105,21 +105,6 @@ begin
    end;
 end;
 
-procedure TfmPrincipal.menUsuarioClick(Sender: TObject);
-begin
-   try
-      Screen.Cursor := crHourGlass;
-
-      if frmCadUsua  = nil then
-         frmCadUsua := TfrmCadUsua.Create(Application);
-
-      frmCadUsua.Show;
-
-   finally
-      Screen.Cursor := crDefault;
-   end;
-end;
-
 procedure TfmPrincipal.menRelVendasClick(Sender: TObject);
 begin
    try
@@ -129,6 +114,21 @@ begin
          frmVendasView := TfrmVendasView.Create(Application);
 
       frmVendasView.Show;
+
+   finally
+      Screen.Cursor := crDefault;
+   end;
+end;
+
+procedure TfmPrincipal.V1Click(Sender: TObject);
+begin
+   try
+      Screen.Cursor := crHourGlass;
+
+      if frmCadUsua  = nil then
+         frmCadUsua := TfrmCadUsua.Create(Application);
+
+      frmCadUsua.Show;
 
    finally
       Screen.Cursor := crDefault;

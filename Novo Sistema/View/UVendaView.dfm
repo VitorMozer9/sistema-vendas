@@ -606,6 +606,8 @@ object frmVendasView: TfrmVendasView
         Height = 21
         TabOrder = 0
         OnChange = edtNumeroVendaChange
+        OnExit = edtNumeroVendaExit
+        OnKeyDown = edtNumeroVendaKeyDown
       end
       object cmbVendedor: TComboBox
         Left = 520

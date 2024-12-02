@@ -382,7 +382,7 @@ begin
 
          if ProcessaUnidadeProd then
          begin
-            TMessageUtil.Informacao('Unidade cadastrada com sucesso');
+            TMessageUtil.Informacao('Unidade cadastrada com sucesso.');
 
             vEstadoTela := etPadrao;
             DefineEstadoTela;
@@ -393,7 +393,7 @@ begin
          on E : Exception do
          begin
           Raise Exception.Create(
-             'Falha ao incluir dados da Unidade de Produto [View]:'+ #13 +
+             'Falha ao incluir dados da Unidade de Produto. [View]:'+ #13 +
              e.Message);
          end;
       end;
@@ -444,7 +444,7 @@ begin
       on E : Exception do
       begin
          raise Exception.Create(
-         'Falha ao processar os dados da Unidade de produto[View]'#13 +
+         'Falha ao processar os dados da Unidade de produto. [View]'#13 +
          e.Message);
       end;
    end;
@@ -513,7 +513,7 @@ begin
       on E : Exception do
       begin
          Raise Exception.Create(
-         'Falha ao consultar dados da unidade de produto [View]: '+#13 +
+         'Falha ao consultar dados da unidade de produto. [View]: '+#13 +
          e.Message);
       end;
    end;  

@@ -183,6 +183,7 @@ begin
          CamposEnable(True);
 
          chkAtivo.Checked := True;
+         chkAtivo.Enabled := False;
 
          if (edtUnidade.CanFocus) then
             edtUnidade.SetFocus;
@@ -360,39 +361,46 @@ end;
 
 function TfrmUnidadeProd.ProcessaInclusao: Boolean;
 var
-   xUnidadeProduto : TUnidadeProdController;
+   xUnidadeProduto : TUnidadeProduto;
 begin
-  try
-     try
-        Result   := False;
-        xUnidadeProduto := nil;
+   try
+      try
+         Result   := False;
+         xUnidadeProduto := nil;
 
-        xUnidadeProduto := TUnidadeProdController.Create;
+         xUnidadeProduto := TUnidadeProduto.Create;
+         xUnidadeProduto :=
+           TUnidadeProdController.getInstancia.BuscaUnidade(Trim(edtUnidade.Text));
 
-        xUnidadeProduto
+         if (xUnidadeProduto <> nil) then
+         begin
+            TMessageUtil.Alerta('Unidade de Produto já existente.');
+            if (edtUnidade.CanFocus) then
+               edtUnidade.SetFocus;
+            exit;
+         end;
 
-        if ProcessaUnidadeProd then
-        begin
-           TMessageUtil.Informacao('Unidade cadastrada com sucesso');
+         if ProcessaUnidadeProd then
+         begin
+            TMessageUtil.Informacao('Unidade cadastrada com sucesso');
 
-           vEstadoTela := etPadrao;
-           DefineEstadoTela;
+            vEstadoTela := etPadrao;
+            DefineEstadoTela;
 
-           Result := True;
-        end;
-     except
-        on E : Exception do
-        begin
-           Raise Exception.Create(
-              'Falha ao incluir dados da Unidade de Produto [View]:'+ #13 +
-              e.Message);
-        end;
-     end;
-
-  finally
-     if (vObjUnidadeProduto <> nil) then
-        FreeAndNil(vObjUnidadeProduto);
-  end;
+            Result := True;
+         end;
+      except
+         on E : Exception do
+         begin
+          Raise Exception.Create(
+             'Falha ao incluir dados da Unidade de Produto [View]:'+ #13 +
+             e.Message);
+         end;
+      end;
+   finally
+      if (vObjUnidadeProduto <> nil) then
+         FreeAndNil(vObjUnidadeProduto);
+   end;
 end;
 
 function TfrmUnidadeProd.ProcessaUnidadeProd: Boolean;

@@ -90,6 +90,9 @@ type
       Shift: TShiftState);
     procedure cdsProdutosAfterEdit(DataSet: TDataSet);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure edtNumeroVendaExit(Sender: TObject);
+    procedure edtNumeroVendaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
 
   private
     { Private declarations }
@@ -98,7 +101,6 @@ type
    vObjVenda     : TVenda;
    vObjColVendaItem : TColVendaItem;
    vTotalPreco   : Double;
-//   vObjColVendaItem : TColVendaItem;
 
    procedure CamposEnable(pOpcao : Boolean);
    procedure LimpaTela;
@@ -310,7 +312,6 @@ var
    xI : Integer;
 begin
    vTotalPreco := 0;
-//   edtTotalValor.Value := 0;
    edtValor.Value := 0;
    mskData.Text := EmptyStr;
    edtDesconto.Value := 0;
@@ -404,7 +405,7 @@ begin
       try
         if (ProcessaVenda) and (ProcessaVendaItem)  then
         begin
-           TMessageUtil.Informacao('Venda cadastrada com sucesso'#13 +
+           TMessageUtil.Informacao('Venda cadastrada com sucesso.'#13 +
              'Código cadastrado: ' + IntToStr(vObjVenda.ID));
 
            vEstadoTela := etPadrao;
@@ -460,7 +461,7 @@ begin
       on E : Exception do
       begin
          raise Exception.Create(
-         'Falha ao processar os dados da venda[View]'#13 +
+         'Falha ao processar os dados da venda. [View]'#13 +
          e.Message);
       end;
    end;
@@ -555,7 +556,7 @@ begin
 
       if (edtNumeroVenda.Text = EmptyStr) and (frmClientesPesq.mClienteID = 0) then
       begin
-         TMessageUtil.Alerta('Número da venda não pode ficar em branco.');
+         TMessageUtil.Alerta('Número da venda não pode ficar em branco. ');
 
          if (edtNumeroVenda.CanFocus) then
             edtNumeroVenda.SetFocus;
@@ -761,7 +762,7 @@ begin
 
          if xProduto = nil then
          begin
-            TMessageUtil.Alerta('Nenhum Produto encontrado');
+            TMessageUtil.Alerta('Nenhum Produto encontrado.');
             exit;
          end;
 
@@ -807,7 +808,7 @@ begin
       on E : Exception do
       begin
          raise Exception.Create(
-            'Falha ao processar dados da venda do item [View]'+#13 +
+            'Falha ao processar dados da venda do item. [View]'+#13 +
             e.Message);
       end;
    end;
@@ -930,9 +931,6 @@ begin
 
    if (edtCodigo.Text = EmptyStr) then
       edtNome.Text := EmptyStr;
-
-//   if (edtNome.Text <> EmptyStr) and  then
-//      edtCodigo.Text := EmptyStr;
 end;
 
 function TfrmVendasView.PesquisaProduto(pKey : Word;
@@ -982,7 +980,7 @@ begin
 
       if xProduto = nil then
       begin
-         TMessageUtil.Alerta('Nenhum produto encontrado');
+         TMessageUtil.Alerta('Nenhum produto encontrado. ');
          exit;
       end;
 
@@ -1093,7 +1091,7 @@ begin
       on E : Exception do
       begin
          raise Exception.Create(
-         'Falha ao processar os dados do produto vendido[View]'#13 +
+         'Falha ao processar os dados do produto vendido. [View]'#13 +
          e.Message);
       end;
    end;
@@ -1233,10 +1231,26 @@ end;
 procedure TfrmVendasView.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
-//   LimpaTela;
-//   vEstadoTela := etPadrao;
-//   DefineEstadoTela;
    frmVendasView := nil;
+end;
+
+procedure TfrmVendasView.edtNumeroVendaExit(Sender: TObject);
+begin
+//   if vKey = VK_RETURN then
+//   begin
+//      ProcessaConsulta;
+//   end;
+//   vKey := VK_CLEAR;
+end;
+
+procedure TfrmVendasView.edtNumeroVendaKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+   if vKey = VK_RETURN then
+   begin
+      ProcessaConsulta;
+   end;
+   vKey := VK_CLEAR;
 end;
 
 end.

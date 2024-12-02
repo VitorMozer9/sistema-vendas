@@ -870,9 +870,9 @@ object fmPrincipal: TfmPrincipal
         Caption = 'Clientes'
         OnClick = menClientesClick
       end
-      object menUsuario: TMenuItem
-        Caption = 'Usu'#225'rio'
-        OnClick = menUsuarioClick
+      object V1: TMenuItem
+        Caption = 'Vendedor'
+        OnClick = V1Click
       end
       object menProdutos: TMenuItem
         Caption = 'Produtos'

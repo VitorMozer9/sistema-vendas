@@ -391,7 +391,7 @@ begin
 
         if ProcessaProduto then
         begin
-           TMessageUtil.Informacao('Produto cadastrado com sucesso'#13 +
+           TMessageUtil.Informacao('Produto cadastrado com sucesso.'#13 +
              'Código cadastrado: ' + IntToStr(vObjProduto.ID));
 
            vEstadoTela := etPadrao;
@@ -451,7 +451,7 @@ begin
       on E : Exception do
       begin
          raise Exception.Create(
-         'Falha ao processar os dados de produto[View]'#13 +
+         'Falha ao processar os dados de produto.[View]'#13 +
          e.Message);
       end;
    end;
@@ -642,7 +642,7 @@ begin
 
       try
          if TMessageUtil.Pergunta(
-               'Confirma a exclusão dos dados do Produto?') then
+               'Confirma a exclusão dos dados do produto?') then
          begin
             Screen.Cursor := crHourGlass;
 

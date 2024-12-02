@@ -15,8 +15,6 @@ type
     menCadastros: TMenuItem;
     menClientes: TMenuItem;
     menProdutos: TMenuItem;
-    menRelatorios: TMenuItem;
-    menVendas: TMenuItem;
     menMovimentos: TMenuItem;
     menRelVendas: TMenuItem;
     menSair: TMenuItem;
