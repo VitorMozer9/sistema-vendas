@@ -159,7 +159,7 @@ end;
 procedure TfrmClientes.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
-   Action := caFree;  //limpar
+   Action := caFree;
    frmClientes := nil;
 end;
 

@@ -18,9 +18,9 @@ type
          procedure Adiciona(pUnidadeProd : TUnidadeProduto);
 
       published
-       property Unidade   : String  read vUnidade write vUnidade;
-       property Ativo     : Boolean read vAtivo write vAtivo;
-       property Descricao : String  read vDescricao write vDescricao;
+         property Unidade   : String  read vUnidade write vUnidade;
+         property Ativo     : Boolean read vAtivo write vAtivo;
+         property Descricao : String  read vDescricao write vDescricao;
 
 
 

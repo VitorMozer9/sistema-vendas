@@ -18,7 +18,6 @@ type
 end;
 
 implementation
-
 { TUnidadeProdutoDAO }
 
 function TUnidadeProdutoDAO.Atualiza(pUnidadeProduto: TUnidadeProduto;
@@ -33,7 +32,6 @@ begin
    vEntidade := 'UNIDADEPRODUTO';
    vConexao  := pConexao;
    vClass    := TUnidadeProduto;
-
 end;
 
 function TUnidadeProdutoDAO.Insere(

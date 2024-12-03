@@ -82,15 +82,12 @@ type
     procedure edtNumeroVendaChange(Sender: TObject);
     procedure cmbPagamentoChange(Sender: TObject);
     procedure cmbPagamentoKeyPress(Sender: TObject; var Key: Char);
-    procedure cmbVendedorEnter(Sender: TObject);
     procedure cmbVendedorChange(Sender: TObject);
     procedure cmbVendedorKeyPress(Sender: TObject; var Key: Char);
     procedure btnVendedorClick(Sender: TObject);
     procedure cmbVendedorKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure cdsProdutosAfterEdit(DataSet: TDataSet);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure edtNumeroVendaExit(Sender: TObject);
     procedure edtNumeroVendaKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
 
@@ -108,7 +105,6 @@ type
    procedure CarregaDadosTela;
    procedure CarregaProduto;
    procedure ProcessaProdutoVenda;
-   procedure AtualizaVenda;
    procedure carregaCMB;
 
 
@@ -119,7 +115,7 @@ type
    function ProcessaVendaItem   : Boolean;
    function ProcessaConsulta    : Boolean;
    function ValidaCampos        : Boolean;
-   function PesquisaProduto(pKey : Word; pIDproduto : Integer) : Boolean;
+   function PesquisaProduto(pIDproduto : Integer) : Boolean;
 
   public
     { Public declarations }
@@ -182,7 +178,6 @@ begin
          btnLimpar.Enabled := False;
          btnCliente.Enabled := False;
          btnVendedor.Enabled := False;
-         cmbVendedor.ItemIndex := -1;
          LimpaTela;
 
 
@@ -195,6 +190,7 @@ begin
             btnConfirmar.SetFocus;
 
          cmbPagamento.Text := EmptyStr;
+          cmbVendedor.Text := EmptyStr;
 
          Application.ProcessMessages;
       end;
@@ -277,15 +273,6 @@ begin
    vKey := Key;
 
    case vKey of
-      VK_RETURN:
-      begin
-//         if (edtCodigo.Text <> EmptyStr) and (cmbVendedor.Text <> EmptyStr)
-//            and (dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger <> 0) then
-//            Perform(WM_NEXTDLGCTL,0,0);
-//         if (btnConfirmar.CanFocus) then
-//            btnConfirmar.SetFocus;
-      end;
-
       VK_ESCAPE:
       begin
          if vEstadoTela <> etPadrao then
@@ -315,7 +302,6 @@ begin
    edtValor.Value := 0;
    mskData.Text := EmptyStr;
    edtDesconto.Value := 0;
-   cmbVendedor.ItemIndex := -1;
 
    for xI := 0 to pred(ComponentCount) do
    begin
@@ -753,7 +739,7 @@ begin
 
          if xIDProduto = 0 then
          begin
-            PesquisaProduto(vKey ,xIDProduto);
+            PesquisaProduto(xIDProduto);
             exit;
          end;
 
@@ -933,15 +919,14 @@ begin
       edtNome.Text := EmptyStr;
 end;
 
-function TfrmVendasView.PesquisaProduto(pKey : Word;
-   pIDproduto: Integer): Boolean;
+function TfrmVendasView.PesquisaProduto(pIDproduto: Integer): Boolean;
 begin
-   pKey := vKey;
    Result := False;
    pIDproduto := 0;
 
    pIDproduto :=
                dbgProdutos.DataSource.DataSet.FieldByName('ID').AsInteger;
+
    if (vKey = VK_RETURN) then
    begin
 
@@ -1113,10 +1098,6 @@ begin
    end;
 end;
 
-procedure TfrmVendasView.AtualizaVenda;
-begin
-   //atualizavenda
-end;
 
 procedure TfrmVendasView.dbgProdutosExit(Sender: TObject);
 begin
@@ -1164,22 +1145,19 @@ begin
 
       cmbVendedor.Items.Clear;
 
+      if (xListaVendedor = nil) then
+         Exit;
+
       for xAux := 0 to pred(xListaVendedor.Count) do
       begin
          xCadUsua := xListaVendedor[xAux];
 
          cmbVendedor.Items.AddObject(xCadUsua.Nome, xCadUsua);
       end;
-
    finally
       if(xListaVendedor <> nil) then
          FreeAndNil(xListaVendedor);
    end;
-end;
-
-procedure TfrmVendasView.cmbVendedorEnter(Sender: TObject);
-begin
-   carregaCMB;
 end;
 
 procedure TfrmVendasView.cmbVendedorChange(Sender: TObject);
@@ -1203,8 +1181,9 @@ begin
       if frmCadUsua  = nil then
             frmCadUsua := TfrmCadUsua.Create(Application);
 
-         frmCadUsua.Show;
+         frmCadUsua.ShowModal;
 
+       carregaCMB;
    finally
       Screen.Cursor := crDefault;
    end;
@@ -1223,24 +1202,11 @@ begin
    end;
 end;
 
-procedure TfrmVendasView.cdsProdutosAfterEdit(DataSet: TDataSet);
-begin
-   //validações
-end;
-
 procedure TfrmVendasView.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
+   Action := caFree;
    frmVendasView := nil;
-end;
-
-procedure TfrmVendasView.edtNumeroVendaExit(Sender: TObject);
-begin
-//   if vKey = VK_RETURN then
-//   begin
-//      ProcessaConsulta;
-//   end;
-//   vKey := VK_CLEAR;
 end;
 
 procedure TfrmVendasView.edtNumeroVendaKeyDown(Sender: TObject;

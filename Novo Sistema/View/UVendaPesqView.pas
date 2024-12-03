@@ -256,7 +256,6 @@ end;
 procedure TfrmVendaPesqView.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
-   //frmVendaPesqView := nil;
    LimpaTela;
 end;
 

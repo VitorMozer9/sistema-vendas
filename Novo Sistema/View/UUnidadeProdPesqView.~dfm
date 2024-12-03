@@ -168,6 +168,7 @@ object frmUnidadePesq: TfrmUnidadePesq
         Width = 455
         Height = 21
         CharCase = ecUpperCase
+        MaxLength = 2
         TabOrder = 0
       end
       object btnFiltrar: TBitBtn

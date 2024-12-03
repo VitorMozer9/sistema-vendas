@@ -1,13 +1,13 @@
-unit UPrincipalView;   //nome da unit
+unit UPrincipalView;
 
 interface
 
-uses //units q serão utilizadas na classe
+uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Menus, ComCtrls, ExtCtrls, pngimage;
 
 type
-  TfmPrincipal = class(TForm)//nome da classe
+  TfmPrincipal = class(TForm)
   { componentes visuais
     lembre-se de renomear todos os componentes que forem adicionados
   }
@@ -22,7 +22,7 @@ type
     Image1: TImage;
     MenUniProduto: TMenuItem;
     V1: TMenuItem;
-    //Métodos criados ate o momento
+
     procedure menSairClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure menClientesClick(Sender: TObject);
@@ -48,25 +48,24 @@ implementation
 
 procedure TfmPrincipal.menSairClick(Sender: TObject);
 begin
-  Close; 
+   Close;
 end;
 
 procedure TfmPrincipal.FormShow(Sender: TObject);
 begin
-  stbBarraStatus.Panels[0].Text :=
+   stbBarraStatus.Panels[0].Text :=
       'Caminho BD: ' + TConexao.get.getCaminhoBanco;
 end;
 
 procedure TfmPrincipal.menClientesClick(Sender: TObject);
 begin
-  try       // try e finally são usados para executar um bloco
-           //de codigos com segurança
+  try
      Screen.Cursor := crHourGlass; 
 
       if frmClientes  = nil then
          frmClientes := TfrmClientes.Create(Application);
 
-      frmClientes.Show;  //mostra a tela de clientes
+      frmClientes.Show;
   finally
       Screen.Cursor := crDefault;
   end;
@@ -78,7 +77,7 @@ begin
    try
       Screen.Cursor := crHourGlass;
 
-       if frmUnidadeProd  = nil then
+      if frmUnidadeProd  = nil then
          frmUnidadeProd := TfrmUnidadeProd.Create(Application);
 
       frmUnidadeProd.Show;

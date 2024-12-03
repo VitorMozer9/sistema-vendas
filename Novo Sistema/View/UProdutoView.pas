@@ -163,7 +163,6 @@ begin
          begin
             CamposEnable(True);
 
-//            edtUnidade.Enabled := False;
             edtUnidadeDesc.Enabled := False;
             edtCodigo.Enabled := False;
             btnAlterar.Enabled := False;
@@ -389,17 +388,16 @@ begin
    try
       try
 
-        if ProcessaProduto then
-        begin
-           TMessageUtil.Informacao('Produto cadastrado com sucesso.'#13 +
-             'Código cadastrado: ' + IntToStr(vObjProduto.ID));
+         if ProcessaProduto then
+         begin
+            TMessageUtil.Informacao('Produto cadastrado com sucesso.'#13 +
+               'Código cadastrado: ' + IntToStr(vObjProduto.ID));
 
-           vEstadoTela := etPadrao;
-           DefineEstadoTela;
+            vEstadoTela := etPadrao;
+            DefineEstadoTela;
 
-           Result := True;
-        end;
-
+            Result := True;
+         end;
       except
          on E : Exception do
          begin
@@ -442,11 +440,9 @@ begin
       vObjProduto.PrecoVenda        := edtPreco.Value;
       vObjProduto.Unidade           := cmbUnidade.Text;
 
-      //Gravação no banco
       TProdutoController.getInstancia.GravaProduto(vObjProduto);
 
       Result := True;
-
    except
       on E : Exception do
       begin
@@ -503,8 +499,6 @@ begin
 
    Result := True;
 end;
-
-
 
 function TfrmProdutoView.ProcessaConsulta: Boolean;
 begin
@@ -581,8 +575,8 @@ begin
    begin
       ProcessaConsulta;
    end;
-   //else
-      vKey := VK_CLEAR;
+
+   vKey := VK_CLEAR;
 end;
 
 function TfrmProdutoView.ProcessaAlteracao: Boolean;
@@ -668,7 +662,6 @@ begin
       LimpaTela;
       vEstadoTela := etPadrao;
       DefineEstadoTela;
-
    except
       on E : Exception do
       begin
@@ -720,7 +713,6 @@ begin
 
          cmbUnidade.Items.AddObject(xUnidadeProduto.Unidade, xUnidadeProduto);
       end;
-
    finally
       if(xListaUnidade <> nil) then
          FreeAndNil(xListaUnidade);
@@ -756,7 +748,6 @@ begin
             frmUnidadeProd := TfrmUnidadeProd.Create(Application);
 
          frmUnidadeProd.Show;
-
    finally
       Screen.Cursor := crDefault;
    end;

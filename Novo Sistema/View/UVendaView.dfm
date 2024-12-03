@@ -606,7 +606,6 @@ object frmVendasView: TfrmVendasView
         Height = 21
         TabOrder = 0
         OnChange = edtNumeroVendaChange
-        OnExit = edtNumeroVendaExit
         OnKeyDown = edtNumeroVendaKeyDown
       end
       object cmbVendedor: TComboBox
@@ -617,7 +616,6 @@ object frmVendasView: TfrmVendasView
         ItemHeight = 13
         TabOrder = 4
         OnChange = cmbVendedorChange
-        OnEnter = cmbVendedorEnter
         OnKeyDown = cmbVendedorKeyDown
         OnKeyPress = cmbVendedorKeyPress
       end
@@ -710,7 +708,6 @@ object frmVendasView: TfrmVendasView
     Aggregates = <>
     Params = <>
     AfterOpen = cdsProdutosAfterOpen
-    AfterEdit = cdsProdutosAfterEdit
     AfterPost = cdsProdutosAfterPost
     BeforeDelete = cdsProdutosBeforeDelete
     Left = 36

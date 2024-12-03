@@ -343,6 +343,7 @@ object frmVendaPesqView: TfrmVendaPesqView
     IndexDefs = <>
     Params = <>
     StoreDefs = True
+    AfterOpen = cdsVendaPesqAfterOpen
     BeforeDelete = cdsVendaPesqBeforeDelete
     Left = 36
     Top = 111

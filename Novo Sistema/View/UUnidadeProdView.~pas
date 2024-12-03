@@ -3,11 +3,11 @@ unit UUnidadeProdView;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons,UEnumerationUtil, UUnidadeProduto, UProdutoController;
+   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+   Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons,UEnumerationUtil, UUnidadeProduto, UProdutoController;
 
 type
-  TfrmUnidadeProd = class(TForm)
+   TfrmUnidadeProd = class(TForm)
     stbBarraStatus: TStatusBar;
     pnlBotoes: TPanel;
     btnIncluir: TBitBtn;
@@ -45,7 +45,6 @@ type
     { Private declarations }
     vKey : Word;
 
-    //variáveis de tela
     vEstadoTela : TEstadoTela;
     vObjUnidadeProduto : TUnidadeProduto;
 
@@ -61,8 +60,6 @@ type
     function ProcessaUnidadeProd : Boolean;
     function ProcessaAlteracao   : Boolean;
     function ProcessaExclusao    : Boolean;
-
-
     function ValidaCampos        : Boolean;
 
   public
@@ -92,8 +89,7 @@ begin
       begin
          if vEstadoTela <> etPadrao then
          begin
-            if (TMessageUtil.Pergunta(
-               'Deseja abortar esta operação?')) then
+            if (TMessageUtil.Pergunta('Deseja abortar esta operação?')) then
             begin
                vEstadoTela := etPadrao;
                DefineEstadoTela;
@@ -101,8 +97,7 @@ begin
          end
          else
          begin
-            if (TMessageUtil.Pergunta(
-               'Deseja sair da rotina?')) then
+            if (TMessageUtil.Pergunta('Deseja sair da rotina?')) then
                Close;
          end;
       end;
@@ -173,7 +168,7 @@ begin
             (btnIncluir.CanFocus) then
                btnIncluir.SetFocus;
 
-            Application.ProcessMessages;
+         Application.ProcessMessages;
       end;
 
       etIncluir:
@@ -234,7 +229,7 @@ begin
       begin
          stbBarraStatus.Panels[0].Text := 'Consulta';
 
-          CamposEnable(False);
+         CamposEnable(False);
 
          if (edtUnidade.Text <> EmptyStr) then
          begin
@@ -261,7 +256,6 @@ begin
          stbBarraStatus.Panels[0].Text := 'Pesquisa';
          ConsultaPesquisa;
       end;
-
    end;
 end;
 
@@ -355,7 +349,6 @@ begin
       on E : Exception do
          TMessageUtil.Alerta(e.Message);
    end;
-
    Result := True;
 end;
 
@@ -370,7 +363,7 @@ begin
 
          xUnidadeProduto := TUnidadeProduto.Create;
          xUnidadeProduto :=
-           TUnidadeProdController.getInstancia.BuscaUnidade(Trim(edtUnidade.Text));
+            TUnidadeProdController.getInstancia.BuscaUnidade(Trim(edtUnidade.Text));
 
          if (xUnidadeProduto <> nil) then
          begin
@@ -382,7 +375,7 @@ begin
 
          if ProcessaUnidadeProd then
          begin
-            TMessageUtil.Informacao('Unidade cadastrada com sucesso');
+            TMessageUtil.Informacao('Unidade cadastrada com sucesso.');
 
             vEstadoTela := etPadrao;
             DefineEstadoTela;
@@ -392,9 +385,9 @@ begin
       except
          on E : Exception do
          begin
-          Raise Exception.Create(
-             'Falha ao incluir dados da Unidade de Produto [View]:'+ #13 +
-             e.Message);
+            Raise Exception.Create(
+               'Falha ao incluir dados da Unidade de Produto. [View]:'+ #13 +
+               e.Message);
          end;
       end;
    finally
@@ -419,7 +412,7 @@ begin
          if vObjUnidadeProduto = nil then
             vObjUnidadeProduto := TUnidadeProduto.create;
 
-          xInclusao := True;
+         xInclusao := True;
       end
       else
       if vEstadoTela = etAlterar then
@@ -439,13 +432,12 @@ begin
          vObjUnidadeProduto, xInclusao);
 
       Result := True;
-
    except
       on E : Exception do
       begin
          raise Exception.Create(
-         'Falha ao processar os dados da Unidade de produto[View]'#13 +
-         e.Message);
+            'Falha ao processar os dados da Unidade de produto. [View]'#13 +
+            e.Message);
       end;
    end;
 end;
@@ -454,7 +446,7 @@ function TfrmUnidadeProd.ValidaCampos: Boolean;
 begin
    Result := False;
 
-    if (Trim(edtUnidade.Text) = EmptyStr) then
+   if (Trim(edtUnidade.Text) = EmptyStr) then
    begin
       TMessageUtil.Alerta('Unidade do produto não pode ficar em branco.');
 
@@ -472,7 +464,6 @@ begin
          edtDescricao.SetFocus;
       exit;
    end;
-
    Result := True;
 end;
 
@@ -513,8 +504,8 @@ begin
       on E : Exception do
       begin
          Raise Exception.Create(
-         'Falha ao consultar dados da unidade de produto [View]: '+#13 +
-         e.Message);
+            'Falha ao consultar dados da unidade de produto. [View]: '+#13 +
+            e.Message);
       end;
    end;  
 end;

@@ -132,6 +132,7 @@ begin
          CamposEnable(True);
 
          chkAtivo.Checked := True;
+         chkAtivo.Enabled := False;
 
          if (edtUsuario.CanFocus) then
             edtUsuario.SetFocus;
@@ -270,10 +271,10 @@ begin
 
    try
       case vEstadoTela of
-           etIncluir:   Result := ProcessaInclusao;
-           etAlterar:   Result := ProcessaAlteracao;
-           etExcluir:   Result := ProcessaExclusao;
-           etConsultar: Result := ProcessaConsulta;
+        etIncluir:   Result := ProcessaInclusao;
+        etAlterar:   Result := ProcessaAlteracao;
+        etExcluir:   Result := ProcessaExclusao;
+        etConsultar: Result := ProcessaConsulta;
       end;
 
       if not Result then
@@ -422,7 +423,6 @@ begin
       vObjUsuario.Cargo   := rdgCargo.ItemIndex;
       vObjUsuario.Ativo   := chkAtivo.Checked;
 
-      //Gravação no banco
       TCadUsuaController.getInstancia.GravaUsuario(vObjUsuario, xInclusao);
 
       Result := True;

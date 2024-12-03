@@ -103,8 +103,8 @@ begin
    if (not cdsUnidade.IsEmpty) then
       cdsUnidade.EmptyDataSet;
 
-   if (edtUnidade.CanFocus) then
-      (edtUnidade.SetFocus);
+   if edtUnidade.CanFocus then
+      edtUnidade.SetFocus;
 
 end;
 

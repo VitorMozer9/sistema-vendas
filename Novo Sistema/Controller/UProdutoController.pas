@@ -113,7 +113,6 @@ begin
          TConexao.get.iniciaTransacao;
 
          xProdutoDAO := TProdutoDAO.Create(TConexao.get.getConn);
-//         pProduto.ID := 2;
 
          if pProduto.ID = 0 then
          begin

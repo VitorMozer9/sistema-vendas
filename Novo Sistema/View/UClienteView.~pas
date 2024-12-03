@@ -500,7 +500,7 @@ begin
         if ProcessaCliente then
         begin
            TMessageUtil.Informacao(
-           'Cliente cadastrado com sucesso'#13+
+           'Cliente cadastrado com sucesso.'#13+
               'Código cadastrado: ' + IntToStr(vObjCliente.Id));
 
            vEstadoTela := etPadrao;
@@ -566,7 +566,7 @@ begin
       if vObjCliente = nil then
          exit;
 
-      vObjCliente.Tipo_Pessoa         := 0; //representa um cliente
+      vObjCliente.Tipo_Pessoa         := 0;
       vObjCliente.Nome                := edtNome.Text;
       vObjCliente.Fisica_Juridica     :=  rdgTipoPessoa.ItemIndex;
       vObjCliente.Ativo               := chkAtivo.Checked;
@@ -578,7 +578,7 @@ begin
       on E : Exception do
       begin
          raise Exception.Create(
-         'Falha ao processar os dados da Pessoa[View]'#13 +
+         'Falha ao processar os dados da Pessoa. [View]'#13 +
          e.Message);
       end;
    end;
@@ -624,7 +624,7 @@ begin
      on E : Exception do
      begin
         Raise Exception.Create(
-        'Falha ao preencher os dados de endereço do cliente[View]'#13 +
+        'Falha ao preencher os dados de endereço do cliente. [View]'#13 +
         e.Message);
      end;
 
@@ -788,7 +788,7 @@ begin
             Screen.Cursor := crHourGlass;
             TPessoaController.getInstancia.ExcluiPessoa(vObjCliente);
 
-            TMessageUtil.Informacao('Cliente excluído com sucesso');
+            TMessageUtil.Informacao('Cliente excluído com sucesso. ');
 
          end
          else
@@ -906,7 +906,7 @@ begin
       exit
    end
    else
-      TMessageUtil.Alerta('CPF inválido, Favor informar um novo número');
+      TMessageUtil.Alerta('CPF inválido, favor informar um novo número.');
 
    if (rdgTipoPessoa.ItemIndex = 1) then
    if (TPessoaController.getInstancia.ValidaCNPJ(TFuncoes.SoNumero(edtCPFCNPJ.Text))) then
@@ -915,7 +915,7 @@ begin
       exit;
    end
    else
-     TMessageUtil.Alerta('CNPJ inválido, Favor informar um novo número');
+     TMessageUtil.Alerta('CNPJ inválido, favor informar um novo número.');
 
    edtCPFCNPJ.Text := '';
 

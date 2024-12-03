@@ -111,17 +111,10 @@ begin
                   IfThen(
                      xListaUsuarios.Retorna(xAux).Ativo, 'Sim', 'Não');
 
-//               cdsUsuarioCargo.Value :=
-//                  IfThen(xListaUsuarios.Retorna(xAux).Cargo,1, 0);
-
                if (xListaUsuarios.Retorna(xAux).Cargo = 0) then
                   cdsUsuarioCargo.Value := 1
                else
                   cdsUsuarioCargo.Value := 0;
-
-//               cdsUsuarioCargoDesc.Value :=
-//                  IfThen(
-//                     xListaUsuarios.Retorna(xAux).Cargo, 'Gerente', 'Vendedor');
 
                if (xListaUsuarios.Retorna(xAux).Cargo = 0) then
                   cdsUsuarioCargoDesc.Text := 'Gerente'
@@ -147,7 +140,6 @@ begin
             if dbgResultadoBusca.CanFocus then
                dbgResultadoBusca.SetFocus;
          end;
-
       finally
          if (xListaUsuarios <> nil) then
             FreeAndNil(xListaUsuarios);
@@ -159,7 +151,7 @@ begin
          'Falha ao pesquisar dados de Unidade de Produto. [View]:' + #13 +
          e.Message);
       end;
-   end
+   end;
 end;
 
 procedure TfrmCadUsuaPesq.FormKeyDown(Sender: TObject; var Key: Word;

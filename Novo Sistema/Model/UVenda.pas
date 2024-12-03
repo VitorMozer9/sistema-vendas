@@ -31,14 +31,12 @@ type
          property FormaPagamento : String read vFormaPagamento write vFormaPagamento;
          property NomeCliente    : String read vNomeCliente write vNomeCliente;
          property Vendedor       : String read vVendedor write vVendedor;
-
-
    end;
 
    TColVenda = class(TList)
       public
-       function Retorna(pIndex : Integer) : TVenda;
-       procedure Adiciona(pVenda : TVenda);
+         function Retorna(pIndex : Integer) : TVenda;
+         procedure Adiciona(pVenda : TVenda);
    end;
 
 implementation

@@ -132,6 +132,7 @@ begin
          CamposEnable(True);
 
          chkAtivo.Checked := True;
+         chkAtivo.Enabled := False;
 
          if (edtUsuario.CanFocus) then
             edtUsuario.SetFocus;
@@ -366,7 +367,7 @@ begin
 
         if ProcessaUsuario then
         begin
-           TMessageUtil.Informacao('Usuario cadastrado com sucesso');
+           TMessageUtil.Informacao('Vendedor cadastrado com sucesso.');
 
            vEstadoTela := etPadrao;
            DefineEstadoTela;
@@ -378,7 +379,7 @@ begin
          on E : Exception do
          begin
             Raise Exception.Create(
-               'Falha ao incluir os dados de Usuario[View]: '#13 +
+               'Falha ao incluir os dados de vendedor[View]: '#13 +
                e.Message);
          end;
       end;
@@ -431,7 +432,7 @@ begin
       on E : Exception do
       begin
          raise Exception.Create(
-         'Falha ao processar os dados de produto[View]'#13 +
+         'Falha ao processar os dados de produto. [View]'#13 +
          e.Message);
       end;
    end;
@@ -454,7 +455,7 @@ begin
    if (edtSenha.Text = EmptyStr) then
    begin
       TMessageUtil.Alerta(
-         'A senha do Usuário não pode ficar em branco.  ');
+         'A senha do vendedor não pode ficar em branco.  ');
 
       if (edtSenha.CanFocus) then
          edtSenha.SetFocus;
@@ -464,7 +465,7 @@ begin
    if (edtNome.Text = EmptyStr) then
    begin
       TMessageUtil.Alerta(
-         'O nome do usuário não pode ficar em branco.  ');
+         'O nome do vendedor não pode ficar em branco.  ');
 
       if (edtNome.CanFocus) then
          edtNome.SetFocus;
@@ -474,7 +475,7 @@ begin
    if (chkAtivo.Checked = False) then
    begin
       TMessageUtil.Alerta(
-         'Não é possivel cadastrar usuários inativos.');
+         'Não é possivel cadastrar vendedor inativos.');
 
       if (chkAtivo.CanFocus) then
          chkAtivo.SetFocus;
@@ -493,7 +494,7 @@ begin
       if (edtUsuario.Text = EmptyStr) then
       begin
          TMessageUtil.Alerta(
-            'O campo Usuário não pode ficar em branco');
+            'O campo Usuário não pode ficar em branco.');
 
          if (edtUsuario.CanFocus) then
             edtUsuario.SetFocus;
@@ -508,7 +509,7 @@ begin
          CarregaDadosTela
       else
       begin
-         TMessageUtil.Alerta('Nenhum usuáro encontrado');
+         TMessageUtil.Alerta('Nenhum vendedor encontrado.');
 
          edtUsuario.Clear;
 
@@ -581,7 +582,7 @@ begin
       on E: Exception do
       begin
          raise Exception.Create(
-            'Falha ao alterar os dados do usuário [View]: '#13+
+            'Falha ao alterar os dados do vendedor [View]: '#13+
             e.Message);
       end;
    end;
@@ -600,7 +601,7 @@ begin
 
       if (vObjUsuario = nil) then
       begin
-         TMessageUtil.Alerta('Não foi possível carregar os dados do usuário. ');
+         TMessageUtil.Alerta('Não foi possível carregar os dados do vendedor. ');
 
          LimpaTela;
          vEstadoTela := etPadrao;
@@ -610,14 +611,14 @@ begin
 
       try
          if TMessageUtil.Pergunta(
-            'Confirma a exclusão dos dados do Usuário?') then
+            'Confirma a exclusão dos dados do vendedor?') then
          begin
             Screen.Cursor := crHourGlass;
 
             TCadUsuaController.getInstancia.ExcluiUsuario(
                vObjUsuario);
 
-            TMessageUtil.Informacao('Usuário excluído com sucesso. ');
+            TMessageUtil.Informacao('Vendedor excluído com sucesso. ');
          end
          else
          begin
@@ -641,7 +642,7 @@ begin
       on E : Exception do
       begin
          raise Exception.Create(
-            'Falha ao excluir dados do usuário. [View]: '#13 +
+            'Falha ao excluir dados do vendedor. [View]: '#13 +
             e.Message);
       end;
    end;
