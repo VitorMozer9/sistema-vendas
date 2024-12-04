@@ -59,16 +59,16 @@ end;
 
 procedure TfmPrincipal.menClientesClick(Sender: TObject);
 begin
-  try
-     Screen.Cursor := crHourGlass; 
+   try
+      Screen.Cursor := crHourGlass;
 
       if frmClientes  = nil then
          frmClientes := TfrmClientes.Create(Application);
 
       frmClientes.Show;
-  finally
+   finally
       Screen.Cursor := crDefault;
-  end;
+   end;
 
 end;
 

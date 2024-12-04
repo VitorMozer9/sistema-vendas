@@ -42,10 +42,9 @@ uses
   UVendaItemController in 'Controller\UVendaItemController.pas',
   UVendaPesqView in 'View\UVendaPesqView.pas' {frmVendaPesqView};
 
-{$R *.res}
-
 begin
   Application.Initialize;
+  Application.HelpFile := '';
   Application.CreateForm(TfmPrincipal, fmPrincipal);
   Application.Run;
 end.
