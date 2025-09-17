@@ -1,6 +1,6 @@
 # Sistema-Vendas
 
-Sistema de vendas simples com interface gráfica, desenvolvido em Pascal.  
+Sistema de vendas com interface gráfica, desenvolvido em Pascal.  
 
 ---
 
@@ -16,7 +16,7 @@ Este é um sistema para controle de vendas, utilizando Pascal. Ele permite regis
 - Cadastro de **clientes**  
 - Registro de **vendas** com vínculo entre cliente e produto(s)  
 - Visualização de histórico de vendas  
-- Geração de relatórios/resumos simples (por exemplo: vendas por data, por produto)  
+- Geração de relatórios/resumos simples
 - Interface gráfica para facilitar uso  
 
 ---
@@ -34,10 +34,9 @@ Embora seja um sistema menor, é possível observar boas práticas como:
 ## 🛠 Tecnologias / Ferramentas
 
 - **Linguagem**: Pascal  
-- Ambiente de desenvolvimento: (ex: Lazarus / Delphi)  
-- Banco de dados: (informe o tipo utilizado, por ex: SQLite, MySQL, ou arquivos DB)  
-- Dependências ou bibliotecas: (caso use alguma)  
-
+- Ambiente de desenvolvimento: (Delphi)  
+- Banco de dados: (FirebirdSQL)
+- 
 ---
 Estrutura de pastas (exemplo):  
 
