@@ -69,7 +69,3 @@ src/ <br>
 
 [GitHub - sistema-vendas](https://github.com/VitorMozer9/sistema-vendas)
 
-
-
-## 📂 Estrutura de pastas (exemplo)
-
